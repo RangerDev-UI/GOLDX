@@ -11,7 +11,7 @@ function fake(routes){
   const name=String(url),matched=routes.find(([part])=>name.includes(part));
   if(!matched)throw Error('blocked '+name);
   const result=typeof matched[1]==='function'?matched[1](url,options):matched[1];
-  return {ok:!(result?._httpError),status:result?._httpError||200,json:async()=>result};
+  return {ok:!(result?._httpError),status:result?._httpError||200,json:async()=>result,text:async()=>typeof result==='string'?result:JSON.stringify(result)};
  };
 }
 function event(params={}){return {httpMethod:'GET',queryStringParameters:params};}
@@ -86,8 +86,8 @@ test('Thai daily history strips estimated rows, sorts chronologically, validates
 });
 test('Thai 1D intraday announced series works without official token',async()=>{
  fake([['/gold/today',{data:[
-  {source:'gta',as_time:'2026-11-19T09:05:00',bar_buy:'60150',bar_sell:'60350',seq:'1'},
-  {source:'gta',as_time:'2026-11-19T10:05:00',bar_buy:'60050',bar_sell:'60250',seq:'3'}
+  {source:'gta',as_time:thaiNow.slice(0,10)+'T09:05:00',bar_buy:'60150',bar_sell:'60350',seq:'1'},
+  {source:'gta',as_time:thaiNow.slice(0,10)+'T10:05:00',bar_buy:'60050',bar_sell:'60250',seq:'3'}
  ]}]]);
  const r=await handler(event({mode:'chart',market:'thai',period:'1D'})),d=JSON.parse(r.body);
  assert.equal(r.statusCode,200);assert.equal(d.isDaily,false);assert.equal(d.points.length,2);
@@ -98,3 +98,45 @@ test('World real OHLC chart points still work',async()=>{
  assert.equal(r.statusCode,200);assert.equal(d.points.length,2);assert.equal(d.points[0].c,4090);
 });
 test('Bad HTTP method is rejected',async()=>{assert.equal((await handler({httpMethod:'POST'})).statusCode,405)});
+test('FX USD/THB uses daily reference when quote providers omit rate',async()=>{
+ delete process.env.GTA_API_TOKEN;
+ const current=thaiNow.slice(0,10);
+ fake([
+  ['/gold/latest',{data:{source:'gta',bar_buy:'59,750',bar_sell:'59,950',as_time:current+'T13:00:00',seq:'9'}}],
+  ['/api/v1/spot',{spot_usd_oz:3725,updated_at:today}],
+  ['/v2/rate/usd/thb',{base:'USD',quote:'THB',date:current,rate:34.321}]
+ ]);
+ const r=await handler(event({mode:'quotes'})),d=JSON.parse(r.body);
+ assert.equal(r.statusCode,200);
+ assert.equal(d.fx.usdThb,34.321);
+ assert.equal(d.fx.rateType,'daily-reference');
+ assert.equal(d.fx.asOf,current);
+});
+test('Thai 1D never uses seven days of DAILY prices as intraday',async()=>{
+ fake([
+  ['/gold/today',{data:[{source:'gta',as_time:'2020-01-01T09:00:00',bar_buy:'60000',bar_sell:'60200',seq:'1'}]}],
+  ['/gold/daily',{data:[{source:'gta',date:'2026-11-19',rounds:2,open_sell:59900,close_sell:60100,high:60100,low:59900}]}]
+ ]);
+ const r=await handler(event({mode:'chart',market:'thai',period:'1D'})),d=JSON.parse(r.body);
+ assert.equal(r.statusCode,503);
+ assert.equal(d.error,'TODAY_ANNOUNCEMENTS_UNAVAILABLE');
+ assert.deepEqual(d.points,[]);
+});
+test('Official public table can supply recorded intraday prices today',async()=>{
+ const [y,m,d]=thaiNow.slice(0,10).split('-'),dateLabel=d+'/'+m+'/'+(Number(y)+543);
+ const row=(time,seq,buy,sell)=>'<tr><td>'+dateLabel+'</td><td>'+time+'</td><td>'+seq+
+  '</td><td>'+buy+'</td><td>'+sell+'</td><td>'+(buy-1000)+'</td><td>'+(sell+800)+'</td><td>3550</td><td>33.4</td></tr>';
+ const html='<html><body><table>'+row('09:05',1,57250,57450)+row('10:05',2,57350,57550)+'</table></body></html>';
+ fake([['/gold/today',{data:[]}],['UpdatePriceList.aspx',html]]);
+ const r=await handler(event({mode:'chart',market:'thai',period:'1D'})),result=JSON.parse(r.body);
+ assert.equal(r.statusCode,200);
+ assert.equal(result.quality,'reported-announcements');
+ assert.equal(result.isDaily,false);
+ assert.equal(result.points.length,2);
+ assert.equal(result.points[1].c,57550);
+});
+test('World 1W must not fall back to 48h observations',async()=>{
+ fake([['/api/v1/chart',{_httpError:503}],['/api/v1/intraday',{points:[{t:Math.floor(Date.now()/1000)-3600,c:3700},{t:Math.floor(Date.now()/1000)-1800,c:3720}]}]]);
+ const r=await handler(event({mode:'chart',market:'world',period:'1W'}));
+ assert.equal(r.statusCode,502);
+});
