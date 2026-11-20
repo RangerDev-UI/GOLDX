@@ -13,7 +13,7 @@ test('Design 02 is the public visible cream homepage with FX at the top',()=>{
  assert.match(html,/GOLD MARKET JOURNAL/);
  assert.match(html,/ราคาทองคำ<br>ที่ดูแล้วเข้าใจทันที/);
  assert.match(css,/background:#faf7ee/);
- assert.match(css,/body>\.site-shell\{display:none!important\}/);
+ assert.match(css,/body>\.site-shell,body>#toast,body>#mobileCover\{display:none!important\}/);
  assert.match(html,/<div class="site-shell" inert aria-hidden="true">/);
  assert.match(html,/<body class="ivory-enabled">/);
  assert.match(html,/\/ivory-ledger\.css/);
