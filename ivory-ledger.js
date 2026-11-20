@@ -18,7 +18,9 @@ const dayKey=value=>{
  return Number.isFinite(date.getTime())?new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit'}).format(date):null;
 };
 const write=(id,value)=>{const node=el(id);if(node)node.textContent=value};
-const state={busy:false,lastChecked:0,last:null};
+const state={busy:false,lastChecked:0,last:null,previous:null,previousDay:null,previousBusy:false,previousChecked:0,previousError:null};
+const THIRTY_MINUTES=1800000;
+const priceTH=n=>positive(n)?'฿'+fmt(n,Number.isInteger(n)?0:2):'—';
 function staleThai(q){
  return !q||!positive(q.sellBar)||q.stale===true||q.announcedToday===false||dayKey(q.updatedAt)!==dayKey(Date.now());
 }
@@ -43,21 +45,88 @@ function setStatus(label,tone){
  const node=el('ilStatus');if(node)node.textContent=label;
  const holder=el('ilApi');if(holder)holder.dataset.state=tone;
 }
+function setDelta(id,current,prior){
+ const node=el(id);if(!node)return;
+ if(!positive(current)||!positive(prior)){
+  node.textContent='เทียบวันก่อนหน้า —';node.dataset.tone='missing';return;
+ }
+ const diff=Math.round((current-prior)*100)/100;
+ const amount=fmt(Math.abs(diff),Number.isInteger(diff)?0:2);
+ node.textContent=diff===0?'เทียบวันก่อนหน้า 0 บาท':(diff>0?'↑ +':'↓ −')+amount+' บาท จากวันก่อนหน้า';
+ node.dataset.tone=diff===0?'flat':diff>0?'up':'down';
+}
+function renderPrevious(){
+ const t=state.last?.thai,prev=state.previous;
+ const fields=[
+  ['ilThaiBuyDelta',t?.buyBar,prev?.buyBar],
+  ['ilThaiSellDelta',t?.sellBar,prev?.sellBar],
+  ['ilOrnBuyDelta',t?.buyOrnament,prev?.buyOrnament],
+  ['ilOrnSellDelta',t?.sellOrnament,prev?.sellOrnament]
+ ];
+ fields.forEach(([id,current,prior])=>setDelta(id,current,prior));
+ if(prev){
+  write('ilThaiChange','เปรียบเทียบกับราคาปิดวันที่ '+dateTH(prev.updatedAt)+' ('+prev.date+')');
+  write('ilReferenceSource',prev.source+' · '+timeTH(prev.updatedAt)+' · ข้อมูลย้อนหลังที่ตรวจสอบได้');
+ }else if(state.previousBusy){
+  write('ilThaiChange','กำลังตรวจสอบราคาวันก่อนหน้า');
+  write('ilReferenceSource','เปรียบเทียบกับประกาศของวันที่ก่อนหน้าราคาปัจจุบัน');
+ }else{
+  write('ilThaiChange','เทียบกับวันก่อนหน้า: ไม่มีข้อมูลอ้างอิง');
+  write('ilReferenceSource',state.previousError||'ไม่มีบันทึกครบทั้ง 4 ราคาสำหรับวันก่อนหน้า');
+ }
+}
+async function loadPrevious(quote){
+ const before=dayKey(quote?.updatedAt);
+ if(!before||!positive(quote?.sellBar)){
+  state.previous=null;state.previousDay=null;state.previousError='ไม่มีวันที่ประกาศทองไทยที่ตรวจสอบได้';
+  renderPrevious();return;
+ }
+ if(state.previousDay!==before){
+  state.previous=null;state.previousDay=before;state.previousChecked=0;
+  state.previousError=null;renderPrevious();
+ }
+ if(state.previousBusy||state.previousChecked&&Date.now()-state.previousChecked<THIRTY_MINUTES)return;
+ state.previousBusy=true;state.previousError=null;renderPrevious();
+ const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),12000);
+ try{
+  const response=await fetch('/api/market?mode=previous-thai&before='+encodeURIComponent(before),
+   {signal:controller.signal,headers:{Accept:'application/json'},cache:'no-store'});
+  if(!response.ok)throw new Error('Historical HTTP '+response.status);
+  const data=await response.json();
+  if(!data||data.before!==before)throw new Error('Comparison period mismatch');
+  const record=data.previous;
+  if(record&&(!['buyBar','sellBar','buyOrnament','sellOrnament'].every(k=>positive(record[k]))||
+    record.date>=before||dayKey(record.updatedAt)!==record.date))throw new Error('Unverified prior announcement');
+  if(state.previousDay===before){
+   state.previous=record||null;
+   state.previousError=record?null:(data.message||'ไม่พบราคาของวันก่อนหน้าในแหล่งที่ตรวจสอบได้');
+  }
+ }catch(_err){
+  if(state.previousDay===before){
+   state.previous=null;
+   state.previousError='ดึงข้อมูลเปรียบเทียบย้อนหลังไม่ได้ จึงไม่แสดงส่วนต่าง';
+  }
+ }finally{
+  clearTimeout(timeout);
+  state.previousBusy=false;
+  state.previousChecked=Date.now();
+  renderPrevious();
+ }
+}
 function paint(d){
  const thai=d?.thai,world=d?.world,fx=fxQuote(d);
- write('ilThaiSell',positive(thai?.sellBar)?'฿'+fmt(thai.sellBar):'—');
- write('ilThaiBuy',positive(thai?.buyBar)?fmt(thai.buyBar):'—');
+ write('ilThaiSell',priceTH(thai?.sellBar));
+ write('ilThaiBuy',priceTH(thai?.buyBar));
  write('ilWorldSpot',positive(world?.price)?'$'+fmt(world.price,2):'—');
  write('ilWorldGram',positive(world?.perGram)?'$'+fmt(world.perGram,2):positive(world?.price)?'$'+fmt(world.price/31.1034768,2):'—');
- write('ilOrnSell',positive(thai?.sellOrnament)?fmt(thai.sellOrnament):'—');
- write('ilOrnBuy',positive(thai?.buyOrnament)?fmt(thai.buyOrnament):'—');
+ write('ilOrnSell',priceTH(thai?.sellOrnament));
+ write('ilOrnBuy',priceTH(thai?.buyOrnament));
  write('ilThaiOrigin',sourceLabel(thai));
  write('ilWorldOrigin',sourceLabel(world));
  write('ilFX',fx?fmt(fx.value,3):'—');
  write('ilFXSource',fx?((fx.daily?'อ้างอิงรายวัน':'จากผู้ให้บริการ')+' · '+(fx.asOf?(String(fx.asOf).length===10?dateTH(fx.asOf+'T12:00:00+07:00'):dateTH(fx.asOf)+' '+timeTH(fx.asOf)):'ไม่ระบุเวลา')):'ยังไม่มีข้อมูลค่าเงิน');
  el('ilFX')?.setAttribute('title',fx?fx.source:'ยังไม่มีแหล่งข้อมูล');
- const changed=thai?.change;
- write('ilThaiChange',finite(changed)?(changed===0?'ไม่เปลี่ยนแปลงจากรอบก่อน':(changed>0?'+':'−')+fmt(Math.abs(changed))+' บาท · เปลี่ยนแปลงตามต้นทาง'):'ไม่มีข้อมูลการเปลี่ยนแปลง');
+
  write('ilWorldChange','Spot Gold · ราคาอ้างอิง ไม่ใช่ราคาซื้อขายจริง');
  const thValid=positive(thai?.sellBar),worldValid=positive(world?.price);
  if(!thValid&&!worldValid){
@@ -75,6 +144,7 @@ function paint(d){
   if(notice){notice.hidden=!warnings.length;if(warnings.length)notice.textContent=warnings.join(' · ')+' · ตรวจสอบเวลาและแหล่งข้อมูลก่อนนำไปใช้';}
  }
  state.last=d;
+ renderPrevious();
 }
 async function refresh(manual=false){
  if(state.busy||(!manual&&document.visibilityState==='hidden'))return;
@@ -89,6 +159,7 @@ async function refresh(manual=false){
   const data=await response.json();
   if(!data||typeof data!=='object')throw new Error('Invalid quote data');
   paint(data);
+  void loadPrevious(data.thai);
  }catch(error){
   setStatus(state.last?'เชื่อมต่อไม่ได้ · ข้อมูลเก่า':'เชื่อมต่อไม่ได้','bad');
   const warning=el('ilNotice');
