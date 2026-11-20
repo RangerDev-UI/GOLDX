@@ -192,11 +192,11 @@ async function history(period,json,response){
  if(period==='1D'){
    try{
      const d=await json(`${RAKHA}/today`),points=verifiedToday(d.data);
-     if(points.length>=2)return response({market:'thai',period,source,isDaily:false,quality:'reported-announcements',points,fetchedAt:new Date().toISOString()},200,180);
+     if(points.length>=2)return response({market:'thai',period,source,isDaily:false,quality:'reported-announcements',points,fetchedAt:new Date().toISOString()},200,60);
    }catch(e){console.warn('Thai relay intraday unavailable:',e.message);}
    try{
      const points=await officialTodayHistory();
-     if(points.length>=2)return response({market:'thai',period,source:'สมาคมค้าทองคำ · ตารางประกาศสาธารณะ',isDaily:false,quality:'reported-announcements',points,fetchedAt:new Date().toISOString()},200,180);
+     if(points.length>=2)return response({market:'thai',period,source:'สมาคมค้าทองคำ · ตารางประกาศสาธารณะ',isDaily:false,quality:'reported-announcements',points,fetchedAt:new Date().toISOString()},200,60);
    }catch(e){console.warn('Thai public table intraday unavailable:',e.message);}
    return response({error:'TODAY_ANNOUNCEMENTS_UNAVAILABLE',message:'ยังไม่พบประกาศราคาทองไทยวันนี้อย่างน้อย 2 รายการจากแหล่งที่ตรวจสอบได้',market:'thai',period:'1D',points:[]},503,60);
  }
