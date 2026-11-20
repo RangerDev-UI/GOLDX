@@ -9,7 +9,7 @@ const set=(id,v)=>{const x=$(id);if(x)x.textContent=v};
 const day=t=>new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(t));
 const today=()=>day(Date.now());
 const dateText=t=>new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',day:'numeric',month:'short',year:'numeric'}).format(new Date(t));
-const S={quote:null,ticks:[],tickSource:'',chart:null,indicator:null,history:[],source:'',status:'idle',month:null,selected:null,page:0};
+const S={quote:null,ticks:[],tickSource:'',dayBar:null,previousClose:null,dailySource:'',chart:null,indicator:null,history:[],source:'',status:'idle',month:null,selected:null,page:0};
 const PAGE=12;
 async function getJSON(url){
  const c=new AbortController(),timer=setTimeout(()=>c.abort(),12000);
@@ -22,34 +22,60 @@ async function getJSON(url){
 function fresh(q){return !!(q&&q.updatedAt&&!q.stale&&q.announcedToday!==false&&day(q.updatedAt)===today())}
 function renderToday(){
  const q=S.quote&&S.quote.thai,valid=!!(q&&isNum(q.sellBar)&&q.sellBar>0),current=S.ticks.filter(p=>day(p.t)===today()),measured=current.length>=2;
+ const bar=S.dayBar,freshToday=fresh(q);
  set('gxTodaySell',valid?'฿'+fmt(q.sellBar):'—');
- set('gxTodayPriceSub',fresh(q)?'ทองแท่งขายออก · ประกาศวันนี้':'ราคาประกาศล่าสุด · อาจเป็นวันก่อนหน้า');
- set('gxTodayRound',fresh(q)&&isNum(q.round)?'ครั้งที่ '+fmt(q.round):'—');
+ set('gxTodayPriceSub',freshToday?'ทองแท่งขายออก · ประกาศวันนี้':'ราคาประกาศล่าสุด · อาจเป็นวันก่อนหน้า');
+ set('gxTodayRound',freshToday&&isNum(q.round)?'ครั้งที่ '+fmt(q.round):'—');
  set('gxQuoteUpdated',valid?dateText(q.updatedAt):'ยังไม่มีข้อมูล');
  set('gxDailySource',q&&q.source?q.source:'ไม่พบแหล่งข้อมูลราคาทองไทย');
- const status=$('gxTodayStatus');status.textContent=!valid?'ยังไม่มีข้อมูล':fresh(q)?'ประกาศวันนี้':'ประกาศก่อนหน้า';status.classList.toggle('is-warning',!fresh(q));
- if(measured){
-  const first=current[0].c,last=current.at(-1).c,delta=last-first;
-  set('gxTodayHigh','฿'+fmt(Math.max(...current.map(p=>p.c))));
-  set('gxTodayLow','฿'+fmt(Math.min(...current.map(p=>p.c))));
-  set('gxTodayChange',(delta>0?'+':delta<0?'−':'')+'฿'+fmt(Math.abs(delta)));
-  $('gxTodayChange').classList.toggle('gx-up',delta>0);$('gxTodayChange').classList.toggle('gx-down',delta<0);
- }else{
-  for(const id of ['gxTodayHigh','gxTodayLow','gxTodayChange'])set(id,'—');
-  $('gxTodayChange').classList.remove('gx-up','gx-down');
- }
- set('gxTodayChangeSub',measured?'เทียบประกาศแรก–ล่าสุดในชุดข้อมูล':'ต้องมีอย่างน้อยสองประกาศของวันนี้');
- set('gxTodayRangeSub',measured?'ช่วงราคาจากข้อมูลที่เข้าถึงได้':'ยังไม่มีข้อมูลรายรอบเพียงพอ');
- set('gxDayDataNote',measured?current.length+' จุดข้อมูล · '+S.tickSource:'กราฟรายวันไม่พร้อม หรือแหล่งข้อมูลส่งเฉพาะราคาปิด · ไม่แสดงค่าประมาณ');
+ const status=$('gxTodayStatus');status.textContent=!valid?'ยังไม่มีข้อมูล':freshToday?'ประกาศวันนี้':'ประกาศก่อนหน้า';status.classList.toggle('is-warning',!freshToday);
+ const fromDaily=bar&&[bar.o,bar.h,bar.l,bar.c].every(v=>isNum(v)&&v>0);
+ const displayHigh=measured?Math.max(...current.map(p=>p.c)):fromDaily?bar.h:null;
+ const displayLow=measured?Math.min(...current.map(p=>p.c)):fromDaily?bar.l:null;
+ set('gxTodayHigh',isNum(displayHigh)?'฿'+fmt(displayHigh):'—');
+ set('gxTodayLow',isNum(displayLow)?'฿'+fmt(displayLow):'—');
+ set('gxTodayRangeSub',measured?'ช่วงราคาจากประกาศรายรอบที่เข้าถึงได้':fromDaily?'สูง–ต่ำจากชุดข้อมูล OHLC รายวัน':'ยังไม่มีข้อมูลช่วงราคาที่ตรวจสอบได้');
+ let delta=null,source='';
+ if(measured){delta=current.at(-1).c-current[0].c;source='เทียบประกาศแรกกับล่าสุดในชุดข้อมูล';}
+ else if(fromDaily){delta=bar.c-bar.o;source='เทียบเปิดกับปิดในชุดข้อมูล OHLC รายวัน';}
+ else if(freshToday&&isNum(S.previousClose)){delta=q.sellBar-S.previousClose;source='เทียบราคาล่าสุดกับราคาปิดวันทำการก่อน';}
+ set('gxTodayChange',isNum(delta)?(delta>0?'+':delta<0?'−':'')+'฿'+fmt(Math.abs(delta)):'—');
+ $('gxTodayChange').classList.toggle('gx-up',isNum(delta)&&delta>0);
+ $('gxTodayChange').classList.toggle('gx-down',isNum(delta)&&delta<0);
+ set('gxTodayChangeSub',source||'ไม่มีราคาฐานเปรียบเทียบที่ยืนยันได้');
+ set('gxDayDataNote',measured?'อ้างอิงประกาศรายรอบวันนี้ '+current.length+' ครั้ง · '+S.tickSource:
+  fromDaily?'อ้างอิงข้อมูลรายวัน · '+S.dailySource+' · ไม่ใช่กราฟรายรอบ':
+  'ไม่มีประกาศรายรอบหรือข้อมูล OHLC วันนี้เพียงพอ · ไม่แสดงตัวเลขประมาณการ');
 }
 async function loadToday(){
- try{
-  const d=await getJSON('/api/market?mode=chart&market=thai&period=1D');
+ const outcomes=await Promise.allSettled([
+  getJSON('/api/market?mode=chart&market=thai&period=1D'),
+  getJSON('/api/market?mode=chart&market=thai&period=1W')
+ ]);
+ S.ticks=[];S.tickSource='';S.dayBar=null;S.previousClose=null;S.dailySource='';
+ if(outcomes[0].status==='fulfilled'){
+  const d=outcomes[0].value;
   if(d.market==='thai'&&d.quality==='reported-announcements'&&d.isDaily===false&&Array.isArray(d.points)){
-   S.ticks=d.points.map(p=>({t:p.t,c:Number(p.c)})).filter(p=>p.t&&isNum(p.c)&&p.c>0&&day(p.t)===today()).sort((a,b)=>Date.parse(a.t)-Date.parse(b.t));
-   S.tickSource=d.source||'ประวัติประกาศจริง';
-  }else{S.ticks=[];S.tickSource='';}
- }catch(e){S.ticks=[];S.tickSource='';}
+   S.ticks=d.points.map(p=>({t:p.t,c:Number(p.c)})).filter(p=>p.t&&isNum(p.c)&&p.c>0&&day(p.t)===today())
+    .sort((a,b)=>Date.parse(a.t)-Date.parse(b.t));
+   S.tickSource=d.source||'ประวัติประกาศวันนี้';
+  }
+ }
+ if(outcomes[1].status==='fulfilled'){
+  const d=outcomes[1].value,rows=Array.isArray(d.points)?d.points:[];
+  if(d.market==='thai'&&d.isDaily===true&&d.quality==='reported-daily-ohlc'){
+   const valid=rows.map(p=>({day:p.t?day(p.t):'',o:p.o,h:p.h,l:p.l,c:p.c}))
+    .filter(p=>[p.o,p.h,p.l,p.c].every(v=>isNum(v)&&v>0)&&p.h>=Math.max(p.o,p.c,p.l)&&p.l<=Math.min(p.o,p.c))
+    .sort((a,b)=>a.day.localeCompare(b.day));
+   S.dayBar=valid.find(p=>p.day===today())||null;
+   S.previousClose=valid.filter(p=>p.day<today()).at(-1)?.c??null;
+   S.dailySource=d.source||'ข้อมูลรายวัน';
+  }else if(d.market==='thai'&&d.isDaily===false&&d.quality==='official-announcements'){
+   const valid=rows.filter(p=>p.t&&isNum(p.c)&&p.c>0).sort((a,b)=>Date.parse(a.t)-Date.parse(b.t));
+   S.previousClose=valid.filter(p=>day(p.t)<today()).at(-1)?.c??null;
+   S.dailySource=d.source||'บันทึกประกาศย้อนหลัง';
+  }
+ }
  renderToday();
 }
 /* ===== Indicator panels and EMA overlays aligned to the existing chart ===== */
@@ -158,7 +184,7 @@ function renderCalendar(){
  }
  set('gxCalCoverage',S.history.length+' วันมีข้อมูลที่ตรวจสอบได้');
  const item=S.selected?entries.get(S.selected):null;
- set('gxCalDetail',item?'วันที่ '+dayLabel(item.day)+' · ขายออกปิดวัน ฿'+fmt(item.c)+' · สูงสุด ฿'+fmt(item.h)+' · ต่ำสุด ฿'+fmt(item.l):'แตะวันที่สีทองเพื่อดูราคาที่บันทึกไว้ในวันนั้น');
+ set('gxCalDetail',item?'วันที่ '+dayLabel(item.day)+' · ราคาขายออกล่าสุดที่บันทึก ฿'+fmt(item.c)+(isNum(item.h)?' · สูงสุด ฿'+fmt(item.h)+' · ต่ำสุด ฿'+fmt(item.l):' · ไม่มีค่า OHLC รายวัน'):'แตะวันที่สีทองเพื่อดูราคาที่บันทึกไว้ในวันนั้น');
 }
 function renderTable(){
  const tbody=$('gxHistoryRows');tbody.replaceChildren();
@@ -170,9 +196,9 @@ function renderTable(){
   const tr=document.createElement('tr'),td=document.createElement('td');td.colSpan=7;td.className='gx-table-empty';
   td.textContent=S.status==='loading'?'กำลังโหลดข้อมูลย้อนหลัง…':S.status==='error'?'ยังไม่สามารถโหลดประวัติราคาที่ตรวจสอบได้':'เดือนนี้ไม่มีวันราคาที่ตรวจสอบได้';tr.append(td);tbody.append(tr);
  }else for(const p of records){
-  const tr=document.createElement('tr'),delta=p.c-p.o;
+  const tr=document.createElement('tr'),delta=isNum(p.o)?p.c-p.o:null;
   cell(tr,dayLabel(p.day));cell(tr,fmt(p.o));cell(tr,fmt(p.h));cell(tr,fmt(p.l));cell(tr,fmt(p.c));cell(tr,isNum(p.buy)?fmt(p.buy):'—');
-  cell(tr,(delta>0?'+':delta<0?'−':'')+fmt(Math.abs(delta)),delta>0?'gx-num-up':delta<0?'gx-num-down':'');tbody.append(tr);
+  cell(tr,isNum(delta)?(delta>0?'+':delta<0?'−':'')+fmt(Math.abs(delta)):'—',isNum(delta)&&delta>0?'gx-num-up':isNum(delta)&&delta<0?'gx-num-down':'');tbody.append(tr);
  }
  set('gxHistoryCount',S.status==='ready'?filtered.length+' วันในเดือนนี้ · รวม '+S.history.length+' วัน':'สถานะ: '+(S.status==='error'?'โหลดข้อมูลไม่ได้':'กำลังตรวจสอบ'));
  set('gxTablePage',(S.page+1)+' / '+pages);
@@ -185,21 +211,33 @@ async function loadHistory(){
  S.status='loading';renderTable();
  try{
   const d=await getJSON('/api/market?mode=chart&market=thai&period=1Y');
-  if(d.market!=='thai'||d.quality!=='reported-daily-ohlc'||d.isDaily!==true||!Array.isArray(d.points))throw new Error('ไม่มีชุดข้อมูล OHLC รายวันที่ยืนยันได้');
+  if(d.market!=='thai'||!Array.isArray(d.points)||!['reported-daily-ohlc','official-announcements'].includes(d.quality))
+   throw new Error('ไม่มีชุดข้อมูลประวัติราคาที่ยืนยันได้');
   const found=new Map();
-  for(const p of d.points){
-   if(!p.t||Number.isNaN(Date.parse(p.t)))continue;
-   const o=Number(p.o),h=Number(p.h),l=Number(p.l),c=Number(p.c);
-   if(![o,h,l,c].every(v=>isNum(v)&&v>0)||h<Math.max(o,c,l)||l>Math.min(o,c))continue;
-   const key=day(p.t);found.set(key,{day:key,o,h,l,c,buy:p.buy==null?null:Number(p.buy)});
+  if(d.quality==='reported-daily-ohlc'&&d.isDaily===true){
+   for(const p of d.points){
+    if(!p.t||Number.isNaN(Date.parse(p.t)))continue;
+    const o=p.o,h=p.h,l=p.l,c=p.c;
+    if(![o,h,l,c].every(v=>isNum(v)&&v>0)||h<Math.max(o,c,l)||l>Math.min(o,c))continue;
+    const key=day(p.t);found.set(key,{day:key,o,h,l,c,buy:isNum(p.buy)?p.buy:null});
+   }
+  }else if(d.quality==='official-announcements'&&d.isDaily===false){
+   const records=d.points.filter(p=>p.t&&!Number.isNaN(Date.parse(p.t))&&isNum(p.c)&&p.c>0)
+     .sort((a,b)=>Date.parse(a.t)-Date.parse(b.t));
+   // Official announcement snapshots contain closing observations, not verified daily OHLC.
+   for(const p of records){
+    const key=day(p.t);found.set(key,{day:key,o:null,h:null,l:null,c:p.c,buy:isNum(p.buy)?p.buy:null});
+   }
   }
   S.history=[...found.values()].sort((a,b)=>a.day.localeCompare(b.day));
   if(!S.history.length)throw new Error('ยังไม่มีรายการประวัติที่ตรวจสอบได้');
-  S.source=(d.source||'ประวัติราคาทองไทย')+' · แสดงเฉพาะวันที่มีราคาที่ผ่านการตรวจสอบ ไม่ใช้รายการประมาณการ';
+  S.source=(d.source||'ประวัติราคาทองไทย')+
+    (d.quality==='official-announcements'?' · ข้อมูลประกาศรายรอบ แสดงราคาล่าสุดที่พบในแต่ละวัน; ไม่มี OHLC รายวัน':
+     ' · OHLC รายวันที่ตรวจสอบได้จากแหล่งข้อมูล');
   S.month=monthKey(S.history.at(-1).day);S.selected=null;S.page=0;S.status='ready';redrawHistory();
  }catch(error){
   S.history=[];S.month=null;S.selected=null;S.status='error';
-  S.source='ข้อมูลย้อนหลังจากต้นทางยังไม่พร้อม: '+String(error.message||'ไม่ทราบสาเหตุ');
+  S.source='ยังไม่มีข้อมูลประวัติราคาที่ตรวจสอบได้: '+String(error.message||'ไม่ทราบสาเหตุ');
   redrawHistory();
  }
 }
