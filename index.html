@@ -78,6 +78,7 @@
           <div class="quote-top"><span class="quote-icon quote-icon-thai">฿</span><div class="quote-title"><span class="quote-name">THAILAND GOLD</span><h3>ทองคำไทย <span>96.5%</span></h3></div><span class="small-tag">THB / BAHT</span></div>
           <div class="quote-sub-label">ทองคำแท่ง · ราคาขายออก / 1 บาททองคำ</div>
           <div class="quote-hero-price"><span class="currency-sign">฿</span><strong id="thaiMainPrice">—</strong><span class="price-suffix">THB</span></div>
+          <div id="thaiFreshnessNotice" role="status" aria-live="polite" hidden style="margin:10px 0;padding:11px 12px;border-radius:10px;background:#2d2519;border:1px solid #947347;color:#f5d5a1;font:600 12px/1.5 sans-serif"></div>
           <div class="quote-info-row"><span id="thaiChange" class="price-change neutral">รอข้อมูลราคา</span><span class="quote-caption">ประกาศครั้งที่ <strong id="thaiRound">—</strong></span></div>
           <div class="quote-divider"></div><div class="bidask"><div><small>ราคารับซื้อ</small><strong id="thaiBuy">—</strong></div><span class="bidask-bar"></span><div><small>ส่วนต่างซื้อ–ขาย</small><strong id="thaiSpread">—</strong></div></div>
           <div class="source-line"><span class="tiny-dot" id="thaiDot"></span><span id="thaiSource">กำลังตรวจสอบแหล่งข้อมูล</span><span id="thaiTime" class="time-right">—</span></div>
@@ -216,11 +217,21 @@
       setText('thaiMainPrice',fmt(thai.sellBar,2));setText('thaiBuy',fmt(thai.buyBar,2));
       setText('thaiSpread',isNum(thai.buyBar)?fmt(thai.sellBar-thai.buyBar,2):'—');
       setText('thaiRound',isNum(+thai.round)?fmt(+thai.round,0):'—');
-      setChange('thaiChange',thai.change,'บาท',' / รอบก่อน');
+      const thaiAgeUnknown=!thai.updatedAt||Number.isNaN(Date.parse(thai.updatedAt));
+      const todayTH=d=>new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(d));
+      const previousAnnouncement=thai.stale===true||thai.announcedToday===false||thaiAgeUnknown||todayTH(thai.updatedAt)!==todayTH(Date.now());
+      const warning=$('thaiFreshnessNotice');
+      warning.hidden=!previousAnnouncement;
+      warning.textContent=previousAnnouncement?`⚠ ประกาศก่อนหน้า (${thai.updatedAt?timeTH(thai.updatedAt):'ไม่ทราบเวลา'}) — ไม่ใช่ราคาประกาศวันนี้ ตรวจสอบสมาคมค้าทองคำก่อนซื้อขาย`:'';
+      if(previousAnnouncement){
+        setText('thaiChange','ราคาเก่า · รอประกาศล่าสุด');
+        $('thaiChange').className='price-change neutral';
+      }else setChange('thaiChange',thai.change,'บาท',' / รอบก่อน');
       setText('ornamentSell',thai.sellOrnament>0?fmt(thai.sellOrnament):'—');
       setText('ornamentBuy',thai.buyOrnament>0?fmt(thai.buyOrnament):'—');
-      noteSource('thai',thai.source+(thai.stale?' · ประกาศก่อนหน้า':''),thai.updatedAt,thai.stale===true||!thai.updatedAt);
+      noteSource('thai',thai.source+(previousAnnouncement?' · ประกาศก่อนหน้า':''),thai.updatedAt,previousAnnouncement);
     } else {
+      $('thaiFreshnessNotice').hidden=false;$('thaiFreshnessNotice').textContent='⚠ ไม่พบราคาทองไทยที่ตรวจสอบได้ กรุณาตรวจสอบเว็บไซต์สมาคมค้าทองคำ';
       indicateUnavailable('thai');setText('ornamentSell','—');setText('ornamentBuy','—');
     }
     if(world&&world.price>0) {
@@ -240,7 +251,7 @@
       setText('heroLastSync',timeTH(state.lastSync));
       const freshWorld=world&&!world.stale;
       const both=data.thai&&data.world;
-      const thaiNotOld=thai?.updatedAt && thai.stale===false;
+      const thaiNotOld=thai?.updatedAt && thai.stale!==true && thai.announcedToday!==false && new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Bangkok'}).format(new Date(thai.updatedAt))===new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Bangkok'}).format(new Date());
       setStatus(both&&freshWorld&&thaiNotOld?'ราคาเชื่อมต่อแล้ว':freshWorld&&thai?.stale?'ทองโลกออนไลน์ · ทองไทยประกาศก่อนหน้า':freshWorld?'ทองโลกออนไลน์':thai?.stale?'ทองไทยประกาศก่อนหน้า':both?'ข้อมูลอาจล่าช้า':'เชื่อมต่อบางส่วน',both&&freshWorld&&thaiNotOld?'ok':'warn');
     } else setStatus('ข้อมูลไม่พร้อมใช้งาน','error');
     const activeQuote=state.quotes?.[state.market];
@@ -477,7 +488,7 @@
     const a=JSON.parse(localStorage.getItem('aurum-live-alerts-v1')||'[]');
     state.alertList=Array.isArray(a)?a.filter(x=>x&&['thai','world'].includes(x.market)&&['above','below'].includes(x.direction)&&Number(x.target)>0).slice(0,20):[];
   }catch(e){state.alertList=[];}}
-  function currentAlertPrice(market){const q=state.quotes?.[market];return market==='thai'?q?.sellBar:q?.price;}
+  function currentAlertPrice(market){const q=state.quotes?.[market];return market==='thai'?(q?.stale||q?.announcedToday===false?null:q?.sellBar):(q?.stale?null:q?.price);}
   function checkAlerts(){
     let changed=false;
     for(const a of state.alertList){
