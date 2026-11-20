@@ -178,6 +178,7 @@ exports.handler = async (event) => {
   const q = event.queryStringParameters || {};
   try {
     if(q.mode==='quotes' || !q.mode) return await quotes();
+    if(q.mode==='previous-thai') return response(await thaiFeed.previousQuote(q.before,json),200,1800);
     if(q.mode==='chart') {
       if(q.market==='thai') return await thaiFeed.history(PERIODS[q.period] ? q.period : '1M',json,response);
       const period=PERIODS[q.period] ? q.period : '1M';
