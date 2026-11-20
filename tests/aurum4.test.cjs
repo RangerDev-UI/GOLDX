@@ -17,11 +17,11 @@ test('GOLDX 4 keeps native price chart and never loads external chart libraries'
  assert.doesNotThrow(()=>new Function(sw));
 });
 test('Aurum layout retains original market and analysis elements, new IDs are unique',()=>{
- for(const id of ['overview-section','thai-card','world-card','analysis-section','gx4-toolbox','gx4HealthThai','gx4HealthFX','gx4BriefBody','gx4PairWorld','gx4DefaultMarket','goldx-history-section','alerts-section'])assert.ok(html.includes('id="'+id+'"'),id);
+ for(const id of ['overview-section','thai-card','world-card','analysis-section','gx4-toolbox','gx4HealthThai','gx4HealthFX','gx4-brief-strip','gx4BriefBody','gx4-more','gx4-history-fold','gx4-tools-fold','gx4DefaultMarket','goldx-history-section','alerts-section'])assert.ok(html.includes('id="'+id+'"'),id);
  const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
  assert.equal(ids.length,new Set(ids).size);
  assert.match(css,/main>\.analysis-layout\{order:4/);
- assert.match(css,/main>\.hero\{order:8/);
+ assert.match(css,/main>\.gx4-more\{order:9/);
  assert.match(html,/goldx4\.js" defer/);
  assert.match(html,/goldx4\.css/);
  assert.match(html,/goldx4:set-market/);
@@ -82,8 +82,8 @@ test('UI identifies source freshness, summarizes crossed Pivot and saves preferr
  }});
  assert.match(get('gx4HealthThai').textContent,/ประกาศวันนี้/);
  assert.match(get('gx4HealthFX').textContent,/อัตราอ้างอิงรายวัน/);
- assert.equal(get('gx4PairThai').textContent,'฿57,500');
- assert.equal(get('gx4PairWorld').textContent,'$3,700.00');
+ assert.match(get('gx4HealthBadge').textContent,/ข้อมูลครบ 3 กลุ่ม/);
+ assert.doesNotMatch(html,/id="gx4PairWorld"/);
  windows.get('goldx:market-changed')({detail:{market:'thai'}});
  assert.match(get('gx4BriefTitle').textContent,/ต่ำกว่า Pivot S2/);
  assert.match(get('gx4BriefBody').textContent,/1,900/);
