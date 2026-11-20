@@ -268,6 +268,7 @@ async function loadHistory(){
  }
 }
 function init(){
+ if(document.body?.classList?.contains('ivory-enabled'))return; // Ivory home does not load hidden history/indicator data.
  // Start with all EMA lines hidden; users can explicitly enable available lines.
  for(const id of ['gxShowEma20','gxShowEma50','gxShowEma200'])$(id).checked=false;
  $('gxShowEma20').addEventListener('change',drawEMA);$('gxShowEma50').addEventListener('change',drawEMA);$('gxShowEma200').addEventListener('change',drawEMA);
