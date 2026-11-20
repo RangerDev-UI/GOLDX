@@ -684,7 +684,7 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
     if(state.market===market)return;
     state.market=market;
     window.dispatchEvent(new CustomEvent('goldx:market-changed',{detail:{market}}));
-    $('[data-market]').forEach(b=>{const active=b.dataset.market===market;b.classList.toggle('is-selected',active);b.setAttribute('aria-selected',String(active));});
+    $$('[data-market]').forEach(b=>{const active=b.dataset.market===market;b.classList.toggle('is-selected',active);b.setAttribute('aria-selected',String(active));});
     loadChart();renderTechnicals();
   }
   function activateNav(name){
