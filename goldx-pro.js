@@ -216,7 +216,12 @@ function renderTable(){
 }
 function redrawHistory(){renderCalendar();renderTable();}
 async function loadHistory(){
- S.status='loading';renderTable();
+ if(S.historyBusy)return;
+ S.historyBusy=true;S.historyLoaded=true;S.lastHistoryCheck=Date.now();
+ const previous={month:S.month,selected:S.selected,page:S.page,source:S.source};
+ $('gxHistoryRefresh').disabled=true;
+ S.status='loading';
+ if(!S.history.length)renderTable();
  try{
   const d=await getJSON('/api/market?mode=chart&market=thai&period=1Y');
   if(d.market!=='thai'||!Array.isArray(d.points)||!['reported-daily-ohlc','official-announcements'].includes(d.quality))
@@ -232,21 +237,34 @@ async function loadHistory(){
   }else if(d.quality==='official-announcements'&&d.isDaily===false){
    const records=d.points.filter(p=>p.t&&!Number.isNaN(Date.parse(p.t))&&isNum(p.c)&&p.c>0)
      .sort((a,b)=>Date.parse(a.t)-Date.parse(b.t));
-   // Official announcement snapshots contain closing observations, not verified daily OHLC.
+   // A public announcement is not a completed OHLC daily candle.
    for(const p of records){
     const key=day(p.t);found.set(key,{day:key,o:null,h:null,l:null,c:p.c,buy:isNum(p.buy)?p.buy:null});
    }
   }
-  S.history=[...found.values()].sort((a,b)=>a.day.localeCompare(b.day));
-  if(!S.history.length)throw new Error('ยังไม่มีรายการประวัติที่ตรวจสอบได้');
+  const history=[...found.values()].sort((a,b)=>a.day.localeCompare(b.day));
+  if(!history.length)throw new Error('ไม่มีวันราคาที่ตรวจสอบได้ในช่วงนี้');
+  S.history=history;
   S.source=(d.source||'ประวัติราคาทองไทย')+
-    (d.quality==='official-announcements'?' · ข้อมูลประกาศรายรอบ แสดงราคาล่าสุดที่พบในแต่ละวัน; ไม่มี OHLC รายวัน':
+    (d.quality==='official-announcements'?' · รายการประกาศ แสดงเฉพาะราคาล่าสุดแต่ละวัน ไม่ใช่ OHLC รายวัน':
      ' · OHLC รายวันที่ตรวจสอบได้จากแหล่งข้อมูล');
-  S.month=monthKey(S.history.at(-1).day);S.selected=null;S.page=0;S.status='ready';redrawHistory();
+  const first=monthKey(history[0].day),last=monthKey(history.at(-1).day);
+  S.month=previous.month&&previous.month>=first&&previous.month<=last?previous.month:last;
+  S.selected=previous.selected&&history.some(p=>p.day===previous.selected)&&monthKey(previous.selected)===S.month?previous.selected:null;
+  S.page=previous.page;S.status='ready';redrawHistory();
  }catch(error){
-  S.history=[];S.month=null;S.selected=null;S.status='error';
-  S.source='ยังไม่มีข้อมูลประวัติราคาที่ตรวจสอบได้: '+String(error.message||'ไม่ทราบสาเหตุ');
+  if(S.history.length){
+    // Keep previously verified observations, labelled as not freshly checked.
+    S.status='ready';
+    S.source='⚠ ตรวจข้อมูลใหม่ไม่สำเร็จ · แสดงชุดเดิมที่โหลดไว้ก่อนหน้า · '+previous.source;
+  }else{
+    S.history=[];S.month=null;S.selected=null;S.status='error';
+    S.source='ยังไม่มีข้อมูลราคาที่ตรวจสอบได้: '+String(error.message||'ไม่ทราบสาเหตุ');
+  }
   redrawHistory();
+ }finally{
+  S.historyBusy=false;$('gxHistoryRefresh').disabled=false;
+  set('gxHistoryCheckedAt','ตรวจประวัติราคาล่าสุด '+new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(S.lastHistoryCheck))+' น. · รายการย้อนหลังอาจไม่เปลี่ยนทุกครั้ง');
  }
 }
 function init(){
@@ -258,6 +276,7 @@ function init(){
  $('gxClearDay').addEventListener('click',()=>{S.selected=null;S.page=0;redrawHistory();});
  $('gxPagePrev').addEventListener('click',()=>{S.page=Math.max(0,S.page-1);renderTable();});
  $('gxPageNext').addEventListener('click',()=>{S.page++;renderTable();});
+ $('gxHistoryRefresh').addEventListener('click',()=>loadHistory());
  window.addEventListener('goldx:history-ready',onChart);
  window.addEventListener('goldx:history-error',clearChart);
  window.addEventListener('goldx:quotes-ready',event=>{S.quote=event.detail;renderToday();});
@@ -265,10 +284,16 @@ function init(){
  loadToday();
  const historySection=$('goldx-history-section');
  if('IntersectionObserver' in window){
-  const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){observer.disconnect();loadHistory();}},{rootMargin:'300px'});
+  const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){observer.disconnect();if(!S.historyLoaded)loadHistory();}},{rootMargin:'300px'});
   observer.observe(historySection);
  }else loadHistory();
- setInterval(()=>{if(document.visibilityState==='visible')loadToday();},300000);
+ // The main dashboard dispatches one shared sync tick, avoiding extra timers.
+ window.addEventListener('goldx:sync-tick',event=>{
+  if(document.visibilityState!=='visible')return;
+  const now=event.detail?.at||Date.now(),forced=event.detail?.forced===true;
+  if(forced||now-S.lastDailyCheck>=300000)loadToday();
+  if(S.historyLoaded&&(forced||now-S.lastHistoryCheck>=1800000))loadHistory();
+ });
 }
 document.addEventListener('DOMContentLoaded',init);
 })();
