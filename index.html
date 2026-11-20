@@ -121,15 +121,38 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
   </nav>
   <main class="il-main">
     <div class="il-intro">
-      <span class="il-eyebrow">GOLD MARKET / DAILY EDITION</span>
-      <h1>ราคาทองคำ<br>ที่ดูแล้วเข้าใจทันที</h1>
-      <p>อัปเดตจากแหล่งราคาที่ตรวจสอบได้ · อ่านง่าย โปร่งสบาย และไม่แสดงราคาจำลอง</p>
+      <div class="il-intro-title">
+        <span class="il-eyebrow">GOLD MARKET / DAILY EDITION</span>
+        <h1>ราคาทองคำ</h1>
+      </div>
+      <p>ข้อมูลราคาจากแหล่งที่ตรวจสอบได้ · อัปเดตตามรอบต้นทาง<br>แสดงเวลาประกาศและแจ้งเมื่อข้อมูลอาจล่าช้า</p>
     </div>
-    <section class="il-market" aria-label="ราคาทองคำแท่งและทองรูปพรรณ">
+    <section class="il-market" aria-label="ราคาทองโลกและราคาทองคำไทย">
+      <article class="il-world-feature" aria-labelledby="ilWorldTitle">
+        <div class="il-world-detail">
+          <span class="il-world-kicker">01 / GLOBAL GOLD MARKET</span>
+          <h2 id="ilWorldTitle">ทองโลก XAU/USD</h2>
+          <p>Spot Gold · ดอลลาร์สหรัฐ / ทรอยออนซ์</p>
+          <div class="il-world-facts">
+            <span>ราคาต่อกรัม <strong id="ilWorldGram">—</strong></span>
+            <span class="il-spot-badge">Spot Reference</span>
+          </div>
+          <small class="il-meta-source" id="ilWorldOrigin">กำลังตรวจสอบแหล่งข้อมูลทองโลก</small>
+        </div>
+        <div class="il-world-figure">
+          <strong id="ilWorldSpot">—</strong>
+          <span>USD / Troy oz</span>
+          <small id="ilWorldChange">ราคาอ้างอิงจากผู้ให้บริการ</small>
+        </div>
+      </article>
+      <div class="il-thai-heading">
+        <h2>ราคาทองคำไทย 96.5%</h2>
+        <span>บาท / 1 บาททองคำ</span>
+      </div>
       <div class="il-gold-grid">
         <article class="il-metal-card il-bullion-card" aria-labelledby="ilThaiTitle">
           <div class="il-metal-head">
-            <span class="il-card-number">01 / THAI GOLD</span>
+            <span class="il-card-number">02 / GOLD BAR</span>
             <span class="il-metal-tag">96.5%</span>
           </div>
           <h2 id="ilThaiTitle">ทองคำแท่ง</h2>
@@ -150,7 +173,7 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
         </article>
         <article class="il-metal-card il-ornament-panel" aria-labelledby="ilOrnTitle">
           <div class="il-metal-head">
-            <span class="il-card-number">02 / THAI ORNAMENT</span>
+            <span class="il-card-number">03 / GOLD ORNAMENT</span>
             <span class="il-metal-tag">96.5%</span>
           </div>
           <h2 id="ilOrnTitle">ทองรูปพรรณ</h2>
@@ -174,19 +197,7 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
         <span id="ilThaiChange">กำลังตรวจข้อมูลเปรียบเทียบวันก่อนหน้า</span>
         <span class="il-compare-source" id="ilReferenceSource">ข้อมูลย้อนหลังต้องตรงกับวันที่ประกาศ</span>
       </div>
-      <article class="il-quote il-world-quote" aria-labelledby="ilWorldTitle">
-        <span class="il-index" aria-hidden="true">03</span>
-        <div class="il-meta">
-          <h2 id="ilWorldTitle">ทองคำโลก XAU/USD</h2>
-          <p>Spot Gold · ดอลลาร์สหรัฐ / ทรอยออนซ์</p>
-          <div class="il-bid">ราคาอ้างอิงต่อกรัม <strong id="ilWorldGram">—</strong></div>
-          <small class="il-meta-source" id="ilWorldOrigin">กำลังตรวจสอบแหล่งข้อมูลทองโลก</small>
-        </div>
-        <div class="il-number world">
-          <strong id="ilWorldSpot">—</strong>
-          <small id="ilWorldChange">ราคาอ้างอิงจากผู้ให้บริการ</small>
-        </div>
-      </article>
+
     </section>
     <p class="il-notice" id="ilNotice" role="alert" hidden></p>
   </main>
