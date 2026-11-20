@@ -214,4 +214,50 @@ async function history(period,json,response){
    return response({market:'thai',period,source:'สมาคมค้าทองคำ · API ประกาศย้อนหลัง',isDaily:false,quality:'official-announcements',points,fetchedAt:new Date().toISOString()},200,300);
  }
 }
-module.exports={quote,history,verifiedDaily,verifiedToday,thaiTime,markQuote,officialWebQuote,officialTableQuote,officialTableHistory};
+
+/* Historical comparison — previous verified announcement, not a change since the last update.
+   Only one public relay request is made per query and CDN caches it for 30 minutes.
+   Official token history is used only when an authorized GTA_API_TOKEN exists. */
+function parsedPrevious(q,source,sourceUrl){
+ const buyBar=n(q.buyBar),sellBar=n(q.sellBar),buyOrnament=n(q.buyOrnament),sellOrnament=n(q.sellOrnament),t=iso(q.updatedAt);
+ if(!t||![buyBar,sellBar,buyOrnament,sellOrnament].every(positive))return null;
+ if(sellBar>300000||buyBar<5000||buyBar>sellBar||sellBar-buyBar>1000||
+     buyOrnament>buyBar||buyBar-buyOrnament>3000||
+     sellOrnament<sellBar||sellOrnament-sellBar>3000)return null;
+ return {date:dateTH(t),updatedAt:t,buyBar,sellBar,buyOrnament,sellOrnament,source,sourceUrl};
+}
+async function previousQuote(before,json){
+ if(!/^\d{4}-\d{2}-\d{2}$/.test(before||''))throw new Error('Invalid comparison date');
+ const base=new Date(before+'T00:00:00Z');
+ const delta=Date.now()-base.getTime();
+ if(!Number.isFinite(base.getTime())||base.toISOString().slice(0,10)!==before||delta< -172800000||delta>8*86400000)throw new Error('Comparison date outside recent range');
+ const prior=new Date(base);prior.setUTCDate(prior.getUTCDate()-1);
+ const target=prior.toISOString().slice(0,10);
+ // Prefer an authorized source: last actual prior-day announcement (up to seven days).
+ if(process.env.GTA_API_TOKEN){
+  try{
+   const d=await json('https://announce.goldtraders.or.th/api/v1/price/history?days=8',
+     {headers:{Authorization:'Bearer '+process.env.GTA_API_TOKEN}});
+   const found=(Array.isArray(d.items)?d.items:[]).map(row=>parsedPrevious({
+    updatedAt:row.announcedAt,buyBar:row.gold_bar?.buy,sellBar:row.gold_bar?.sell,
+    buyOrnament:row.ornament?.buy,sellOrnament:row.ornament?.sell
+   },'สมาคมค้าทองคำ · API ประวัติทางการ','https://www.goldtraders.or.th/'))
+    .filter(row=>row&&row.date<before&&row.date>=new Date(base.getTime()-8*86400000).toISOString().slice(0,10))
+    .sort((a,b)=>Date.parse(b.updatedAt)-Date.parse(a.updatedAt));
+   if(found.length)return {before,previous:found[0],referenceType:'previous-announcement-day'};
+  }catch(e){console.warn('Authorized previous quote unavailable:',e.message);}
+ }
+ // Public history date is explicit; do not guess the last announced day during holidays.
+ const d=await json(RAKHA+'/today?date='+target);
+ const rows=(Array.isArray(d.data)?d.data:[]).filter(row=>row?.source==='gta'&&row.date===target);
+ const found=rows.map(row=>parsedPrevious({
+  updatedAt:thaiTime(row.as_time),buyBar:row.bar_buy,sellBar:row.bar_sell,
+  buyOrnament:row.orn_buy,sellOrnament:row.orn_sell
+ },'Rakhagold · อ้างอิงประกาศสมาคมค้าทองคำ','https://rakhagold.com/api-docs/'))
+  .filter(row=>row&&row.date===target)
+  .sort((a,b)=>Date.parse(b.updatedAt)-Date.parse(a.updatedAt));
+ return {before,previous:found[0]||null,referenceType:'previous-calendar-day',
+  message:found.length?null:'ไม่พบราคาครบทั้ง 4 รายการจากประกาศของวันก่อนหน้า'};
+}
+
+module.exports={quote,history,previousQuote,parsedPrevious,verifiedDaily,verifiedToday,thaiTime,markQuote,officialWebQuote,officialTableQuote,officialTableHistory};
