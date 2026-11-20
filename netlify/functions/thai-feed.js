@@ -66,7 +66,7 @@ function officialWebQuote(html, pageUrl='https://www.goldtraders.or.th/'){
 
 // A public announcement-history table can be parsed without member credentials.
 // Only rows with a *date, time, round and coherent bar/ornament prices* are accepted.
-function officialTableQuote(html, pageUrl='https://classic.goldtraders.or.th/UpdatePriceList.aspx'){
+function officialTableHistory(html, pageUrl='https://classic.goldtraders.or.th/UpdatePriceList.aspx'){
  if(typeof html!=='string'||html.length<200)throw new Error('Official table missing HTML');
  const clean=(s)=>String(s).replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,' ')
    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi,' ')
@@ -95,7 +95,10 @@ function officialTableQuote(html, pageUrl='https://classic.goldtraders.or.th/Upd
  }
  if(!candidates.length)throw new Error('Official table has no verifiable announcement rows');
  candidates.sort((a,b)=>Date.parse(b.updatedAt)-Date.parse(a.updatedAt)||b.round-a.round);
- return candidates[0];
+ return candidates;
+}
+function officialTableQuote(html, pageUrl='https://classic.goldtraders.or.th/UpdatePriceList.aspx'){
+ return officialTableHistory(html,pageUrl)[0];
 }
 async function fetchOfficialPage(url, type){
  const controller=new AbortController();
@@ -161,7 +164,27 @@ function verifiedToday(rows){
  const points=rows.filter(r=>r?.source==='gta').map(r=>({t:thaiTime(r.as_time),c:n(r.bar_sell),buy:n(r.bar_buy),round:n(r.seq),observed:true})).filter(p=>p.t&&positive(p.c)&&positive(p.buy)&&p.c>=p.buy&&p.c<300000).sort((a,b)=>Date.parse(a.t)-Date.parse(b.t));
  if(!points.length)return [];
  const lastDay=dateTH(points.at(-1).t);
- return points.filter((p,i)=>dateTH(p.t)===lastDay&&(i===0||p.t!==points[i-1].t));
+ return points.filter((p,i)=>dateTH(p.t)===lastDay&&lastDay===dateTH(Date.now())&&(i===0||p.t!==points[i-1].t));
+}
+async function officialTodayHistory(){
+ const urls=['https://classic.goldtraders.or.th/UpdatePriceList.aspx','https://sideb.goldtraders.or.th/UpdatePriceList.aspx'];
+ const responses=await Promise.allSettled(urls.map(async url=>{
+  const ctrl=new AbortController(),tm=setTimeout(()=>ctrl.abort(),4500);
+  try{
+   const r=await fetch(url,{signal:ctrl.signal,headers:{Accept:'text/html,application/xhtml+xml','User-Agent':'GOLDX/1.2 (public market reference)'}});
+   if(!r.ok)throw new Error('Public table HTTP '+r.status);
+   return officialTableHistory(await r.text(),url);
+  }finally{clearTimeout(tm);}
+ }));
+ const today=dateTH(Date.now()),seen=new Map();
+ for(const r of responses){
+  if(r.status!=='fulfilled')continue;
+  for(const row of r.value){
+   if(dateTH(row.updatedAt)!==today)continue;
+   if(!seen.has(row.updatedAt))seen.set(row.updatedAt,{t:row.updatedAt,c:row.sellBar,buy:row.buyBar,round:row.round,observed:true});
+  }
+ }
+ return [...seen.values()].sort((a,b)=>Date.parse(a.t)-Date.parse(b.t));
 }
 async function history(period,json,response){
  const days=period==='1W'?7:period==='1M'?30:period==='3M'?90:period==='1Y'?365:7;
@@ -169,11 +192,16 @@ async function history(period,json,response){
  if(period==='1D'){
    try{
      const d=await json(`${RAKHA}/today`),points=verifiedToday(d.data);
-     if(points.length>=2)return response({market:'thai',period,source,isDaily:false,quality:'reported-announcements',points,fetchedAt:new Date().toISOString()},200,300);
-   }catch(e){console.warn('Thai announcement intraday unavailable:',e.message);}
+     if(points.length>=2)return response({market:'thai',period,source,isDaily:false,quality:'reported-announcements',points,fetchedAt:new Date().toISOString()},200,180);
+   }catch(e){console.warn('Thai relay intraday unavailable:',e.message);}
+   try{
+     const points=await officialTodayHistory();
+     if(points.length>=2)return response({market:'thai',period,source:'สมาคมค้าทองคำ · ตารางประกาศสาธารณะ',isDaily:false,quality:'reported-announcements',points,fetchedAt:new Date().toISOString()},200,180);
+   }catch(e){console.warn('Thai public table intraday unavailable:',e.message);}
+   return response({error:'TODAY_ANNOUNCEMENTS_UNAVAILABLE',message:'ยังไม่พบประกาศราคาทองไทยวันนี้อย่างน้อย 2 รายการจากแหล่งที่ตรวจสอบได้',market:'thai',period:'1D',points:[]},503,60);
  }
  try{
-   const d=await json(`${RAKHA}/daily?days=${period==='1D'?7:days}`),points=verifiedDaily(d.data);
+   const d=await json(`${RAKHA}/daily?days=${days}`),points=verifiedDaily(d.data);
    if(points.length<2)throw new Error('Insufficient recorded GTA daily prices');
    const first=dateTH(points[0].t),last=dateTH(points.at(-1).t);
    return response({market:'thai',period,source,isDaily:true,quality:'reported-daily-ohlc',points,coverage:{first,last,count:points.length},fetchedAt:new Date().toISOString()},200,300);
@@ -186,4 +214,4 @@ async function history(period,json,response){
    return response({market:'thai',period,source:'สมาคมค้าทองคำ · API ประกาศย้อนหลัง',isDaily:false,quality:'official-announcements',points,fetchedAt:new Date().toISOString()},200,300);
  }
 }
-module.exports={quote,history,verifiedDaily,verifiedToday,thaiTime,markQuote,officialWebQuote,officialTableQuote};
+module.exports={quote,history,verifiedDaily,verifiedToday,thaiTime,markQuote,officialWebQuote,officialTableQuote,officialTableHistory};
