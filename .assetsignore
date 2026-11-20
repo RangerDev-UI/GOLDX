@@ -1,4 +1,8 @@
-# Publish only the public website files, never server-side code.
+# Cloudflare Workers static assets: publish public UI files only.
+# API, tests, GitHub config and source modules remain private to Worker bundling.
 *
 !index.html
 !favicon.svg
+!goldx-indicators.js
+!goldx-pro.js
+!goldx-pro.css
