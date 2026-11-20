@@ -74,6 +74,7 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
 @media(prefers-reduced-motion:reduce){.hero-cta,.nav-link,.quote-card,.metric{transition:none}}
 
 </style>
+<link rel="stylesheet" href="/goldx-pro.css" />
 </head>
 <body>
 <svg width="0" height="0" aria-hidden="true" class="svg-defs" xmlns="http://www.w3.org/2000/svg"><defs>
@@ -101,6 +102,7 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
       <button class="nav-link" data-nav="thai"><svg><use href="#i-gold" /></svg><span>ทองคำไทย 96.5%</span></button>
       <button class="nav-link" data-nav="world"><svg><use href="#i-globe" /></svg><span>ทองคำโลก XAU/USD</span></button>
       <button class="nav-link" data-nav="analysis"><svg><use href="#i-chart" /></svg><span>กราฟย้อนหลังและเทคนิค</span></button>
+      <button class="nav-link" data-nav="history"><svg><use href="#i-clock" /></svg><span>ประวัติราคาทองไทย</span></button>
       <button class="nav-link" data-nav="calculator"><svg><use href="#i-calculator" /></svg><span>คำนวณทองคำ</span></button>
       <button class="nav-link" data-nav="alerts"><svg><use href="#i-bell" /></svg><span>แจ้งเตือนราคา</span></button>
     </nav>
@@ -144,21 +146,66 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
         </article>
       </section>
       <section class="quick-metrics" aria-label="ข้อมูลตลาดสำคัญ"><div class="metric"><span>USD / THB <span class="metric-slash">/</span> อัตราแลกเปลี่ยน</span><strong id="fxRate">—</strong><small id="fxDetail">อ้างอิงแหล่งข้อมูล</small></div><div class="metric"><span>ทองรูปพรรณ <span class="metric-slash">/</span> ขายออก</span><strong id="ornamentSell">—</strong><small>บาท / 1 บาททองคำ</small></div><div class="metric"><span>ทองรูปพรรณ <span class="metric-slash">/</span> รับซื้อ</span><strong id="ornamentBuy">—</strong><small>บาท / 1 บาททองคำ</small></div><div class="metric"><span>GOLD / SILVER <span class="metric-slash">/</span> RATIO</span><strong id="silverRatio">—</strong><small>อัตราส่วนราคา Spot</small></div></section>
+
+      <section class="gx-daily surface" id="goldx-daily-section" aria-label="ภาพรวมราคาทองวันนี้">
+        <div class="gx-section-head"><div><span class="gx-overline">DAILY GOLD PULSE / THAILAND</span><h2>ภาพรวมราคาทองคำวันนี้</h2><p>แยกข้อมูลประกาศล่าสุดออกจากสถิติรายรอบที่ตรวจสอบได้ · เขตเวลาไทย</p></div><span class="gx-chip" id="gxTodayStatus" role="status">กำลังตรวจข้อมูล</span></div>
+        <div class="gx-daily-grid">
+          <div class="gx-pulse-card"><span>ทองแท่ง 96.5% · ราคาขายออก</span><strong id="gxTodaySell">—</strong><small id="gxTodayPriceSub">รอข้อมูลประกาศ</small></div>
+          <div class="gx-pulse-card"><span>เปลี่ยนจากประกาศแรก</span><strong id="gxTodayChange">—</strong><small id="gxTodayChangeSub">รอข้อมูลรายรอบ</small></div>
+          <div class="gx-pulse-card"><span>สูงสุดจากประกาศที่เข้าถึงได้</span><strong id="gxTodayHigh">—</strong><small id="gxTodayRangeSub">รอข้อมูลช่วงราคา</small></div>
+          <div class="gx-pulse-card"><span>ต่ำสุดจากประกาศที่เข้าถึงได้</span><strong id="gxTodayLow">—</strong><small>ข้อมูลรายรอบอาจไม่ครบทุกประกาศ</small></div>
+        </div>
+        <div class="gx-daily-foot"><span>วันที่ประกาศ <strong id="gxQuoteUpdated">—</strong></span><i class="gx-bullet"></i><span>รอบที่ <strong id="gxTodayRound">—</strong></span><i class="gx-bullet"></i><span>แหล่งข้อมูล <strong id="gxDailySource">กำลังตรวจสอบ</strong></span></div>
+        <p class="gx-note" id="gxDayDataNote" style="margin-top:9px">สถิติรายรอบจะแสดงเมื่อมีประกาศย้อนหลังของวันนี้เพียงพอเท่านั้น</p>
+      </section>
       <section class="analysis-layout" id="analysis-section">
         <div class="chart-panel surface">
           <div class="panel-top"><div><span class="section-kicker">02 / GOLD HISTORY</span><h2>กราฟราคาทองย้อนหลัง</h2></div><div class="panel-top-mark">PRICE ACTION <span>↗</span></div></div>
           <div class="chart-controls"><div class="segmented" role="tablist" aria-label="ตลาดทองคำ"><button class="segment" id="tabThai" role="tab" aria-selected="false" data-market="thai">🇹🇭 ทองคำไทย</button><button class="segment is-selected" id="tabWorld" role="tab" aria-selected="true" data-market="world">🌐 ทองคำโลก</button></div><div class="periods" role="group" aria-label="ช่วงเวลาของกราฟ"><button data-period="1D">1D</button><button data-period="1W">1W</button><button class="is-selected" data-period="1M">1M</button><button data-period="3M">3M</button><button data-period="1Y">1Y</button></div></div>
           <div class="history-tools"><div class="history-modes" role="group" aria-label="ชนิดกราฟ"><button type="button" id="historyLine" class="selected" aria-pressed="true">กราฟเส้น</button><button type="button" id="historyCandles" aria-pressed="false" disabled title="ต้องมีราคา OHLC">แท่งเทียน</button></div><div class="history-buttons"><span id="historyDataBadge">กำลังตรวจข้อมูล</span><button type="button" id="historyRefresh">↻ โหลดใหม่</button><button type="button" id="historyCSV" disabled>↓ CSV</button></div></div>
            <div class="chart-info"><div><span class="chart-symbol" id="chartSymbol">XAU / USD</span><strong id="chartPrice">—</strong><small id="chartChange">—</small></div><span id="chartSource" class="chart-data-source">กำลังโหลดข้อมูลกราฟจริง</span></div>
-          <div class="chart-container" id="chartContainer"><div class="chart-loader" id="chartLoading"><span class="spinner"></span><span>กำลังโหลดประวัติราคาจริง…</span></div><svg id="priceChart" aria-label="กราฟราคาทองคำย้อนหลัง" role="img" viewBox="0 0 920 310" preserveAspectRatio="none"><defs><linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#dcb96c" stop-opacity=".23"/><stop offset="100%" stop-color="#dcb96c" stop-opacity="0"/></linearGradient></defs><g id="chartGrid"></g><path id="chartArea" fill="url(#chartFill)" d=""/><path id="chartLine" fill="none" stroke="#ebcb87" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d=""/><g id="historyCandleGroup" style="display:none"></g><g id="chartLastDot"></g></svg><div class="chart-tooltip" id="chartTooltip" hidden></div><div class="chart-empty" id="chartEmpty" hidden><span>◇</span><strong>ยังไม่มีข้อมูลกราฟที่ยืนยันได้</strong><p id="chartEmptyMessage">ไม่แสดงกราฟสมมติเพื่อหลีกเลี่ยงความเข้าใจผิด</p></div></div>
+          <div class="chart-container" id="chartContainer"><div class="chart-loader" id="chartLoading"><span class="spinner"></span><span>กำลังโหลดประวัติราคาจริง…</span></div><svg id="priceChart" aria-label="กราฟราคาทองคำย้อนหลัง" role="img" viewBox="0 0 920 310" preserveAspectRatio="none"><defs><linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#dcb96c" stop-opacity=".23"/><stop offset="100%" stop-color="#dcb96c" stop-opacity="0"/></linearGradient></defs><g id="chartGrid"></g><path id="chartArea" fill="url(#chartFill)" d=""/><path id="chartLine" fill="none" stroke="#ebcb87" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d=""/><g id="historyCandleGroup" style="display:none"></g><g id="chartLastDot"></g><g id="gxEmaOverlay" pointer-events="none"></g></svg><div class="chart-tooltip" id="chartTooltip" hidden></div><div class="chart-empty" id="chartEmpty" hidden><span>◇</span><strong>ยังไม่มีข้อมูลกราฟที่ยืนยันได้</strong><p id="chartEmptyMessage">ไม่แสดงกราฟสมมติเพื่อหลีกเลี่ยงความเข้าใจผิด</p></div></div>
           <div class="history-stats"><div><small>ราคาสูงสุดในช่วง</small><strong id="historyHigh">—</strong></div><div><small>ราคาต่ำสุดในช่วง</small><strong id="historyLow">—</strong></div><div><small>เปลี่ยนแปลง</small><strong id="historyDelta">—</strong></div><div><small>ข้อมูลย้อนหลัง</small><strong id="historyCount">—</strong></div></div><p class="history-dates" id="historyDates">กำลังโหลดข้อมูลย้อนหลัง…</p>
            <div class="chart-axis" id="chartXAxis"><span>—</span><span>—</span><span>—</span><span>—</span><span>—</span></div><div class="chart-footnote"><span class="chart-legend"><i></i> <span id="chartLegend">XAU/USD Price</span></span><span>ข้อมูลย้อนหลังจริง · อาจล่าช้าตามแหล่งข้อมูล</span></div>
+
+          <div class="gx-adv" id="goldx-indicators" aria-label="อินดิเคเตอร์เทคนิค">
+            <div class="gx-adv-head"><h3>Technical Indicators · RSI / MACD / EMA</h3><span class="gx-adv-caption">คำนวณจากประวัติราคาปิดจริง</span></div>
+            <div class="gx-ema-controls" role="group" aria-label="เลือกเส้น EMA บนกราฟ">
+              <label class="gx-toggle"><input id="gxShowEma20" type="checkbox" checked disabled/><i class="gx-ema-dot" aria-hidden="true"></i> EMA 20 <strong id="gxEma20Num">—</strong></label>
+              <label class="gx-toggle"><input id="gxShowEma50" type="checkbox" checked disabled/><i class="gx-ema-dot e50" aria-hidden="true"></i> EMA 50 <strong id="gxEma50Num">—</strong></label>
+              <label class="gx-toggle"><input id="gxShowEma200" type="checkbox" disabled/><i class="gx-ema-dot e200" aria-hidden="true"></i> EMA 200 <strong id="gxEma200Num">—</strong></label>
+            </div>
+            <div class="gx-indicator-grid">
+              <section class="gx-indicator" aria-label="RSI 14"><div class="gx-indicator-top"><strong class="gx-indicator-name">RSI (14)</strong><strong id="gxRSINum" class="gx-indicator-value">—</strong></div><svg id="gxRSIChart" viewBox="0 0 680 115" preserveAspectRatio="none" role="img" aria-label="กราฟ RSI ของช่วงเวลาที่เลือก"></svg><p id="gxRSIStatus">รอข้อมูลย้อนหลัง</p><small>เส้นอ้างอิง 30 / 50 / 70</small></section>
+              <section class="gx-indicator" aria-label="MACD 12 26 9"><div class="gx-indicator-top"><strong class="gx-indicator-name">MACD (12, 26, 9)</strong><strong id="gxMACDNum" class="gx-indicator-value">—</strong></div><svg id="gxMACDChart" viewBox="0 0 680 115" preserveAspectRatio="none" role="img" aria-label="กราฟ MACD เส้น Signal และ Histogram"></svg><p id="gxMACDStatus">รอข้อมูลย้อนหลัง</p><div class="gx-indicator-legend"><span><i></i> MACD</span><span><i class="signal"></i> Signal</span><span><i class="hist"></i> Histogram</span></div></section>
+            </div>
+            <p id="gxAdvDataNote" class="gx-adv-note">ข้อมูลอินดิเคเตอร์ต้องอาศัยประวัติราคาจริง ไม่ใช่ข้อมูลจำลอง</p>
+          </div>
         </div>
         <aside class="technical-panel surface" id="technical-panel"><div class="panel-top compact"><div><span class="section-kicker">03 / TECHNICAL OUTLOOK</span><h2>มุมมองเชิงเทคนิค</h2></div><span class="tech-star">✳</span></div><div class="tech-mode"><span id="techMarketLabel">ทองคำโลก · XAU/USD</span><span class="technical-badge" id="technicalBadge">รอข้อมูล</span></div>
           <div class="momentum-block"><span class="minor-label">MOMENTUM INDICATOR</span><strong id="momentumText">—</strong><div class="momentum-track"><span class="track-gradient"></span><i class="momentum-thumb" id="momentumThumb" style="left:50%"></i></div><div class="track-titles"><span>BEARISH</span><span>NEUTRAL</span><span>BULLISH</span></div></div>
           <div class="tech-levels"><div class="levels-head"><span>แนวรับ · แนวต้าน</span><span id="levelBasis">อิง Pivot รายวัน</span></div><div class="level-row resistance"><span><i class="level-mark"></i> แนวต้าน R2</span><strong id="r2">—</strong></div><div class="level-row resistance"><span><i class="level-mark"></i> แนวต้าน R1</span><strong id="r1">—</strong></div><div class="level-row pivot"><span><i class="level-mark"></i> Pivot</span><strong id="pivot">—</strong></div><div class="level-row support"><span><i class="level-mark"></i> แนวรับ S1</span><strong id="s1">—</strong></div><div class="level-row support"><span><i class="level-mark"></i> แนวรับ S2</span><strong id="s2">—</strong></div></div>
           <div class="tech-indicators"><div><small>RSI (14)</small><strong id="rsiValue">—</strong></div><div><small>ATR (14)</small><strong id="atrValue">—</strong></div><div><small>EMA 20 / 50</small><strong id="emaValue">—</strong></div></div><p class="tech-disclaimer" id="techDisclaimer">คำนวณจากข้อมูลตลาดย้อนหลังจริง ไม่ใช่การทำนายราคาที่รับประกันผล</p>
         </aside>
+      </section>
+
+      <section class="gx-history-section" id="goldx-history-section" aria-label="ปฏิทินและตารางราคาทองย้อนหลัง">
+        <div class="gx-section-head"><div><span class="gx-overline">THAI GOLD / VERIFIED HISTORY</span><h2>ปฏิทินและตารางราคาทองย้อนหลัง</h2><p>ทองแท่งไทย 96.5% · ราคาเปิด สูงสุด ต่ำสุด และปิดจากข้อมูลที่ตรวจสอบได้</p></div><span class="gx-chip">ข้อมูลย้อนหลังสูงสุด 1 ปีตามต้นทาง</span></div>
+        <div class="gx-history-layout">
+          <aside class="gx-calendar surface">
+            <div class="gx-calendar-nav"><button id="gxCalPrev" type="button" aria-label="เดือนก่อนหน้า" disabled>‹</button><strong id="gxMonthLabel">กำลังโหลด…</strong><button id="gxCalNext" type="button" aria-label="เดือนถัดไป" disabled>›</button></div>
+            <div class="gx-calendar-week" aria-hidden="true"><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span><span>อา</span></div>
+            <div id="gxCalendarDays" class="gx-calendar-days" aria-label="เลือกวันที่มีราคาย้อนหลัง"></div>
+            <div class="gx-calendar-key"><span>วันสีทอง = มีข้อมูลบันทึก</span><b id="gxCalCoverage">กำลังตรวจสอบ</b></div>
+            <div class="gx-cal-detail" id="gxCalDetail" aria-live="polite">กดวันที่สีทองเพื่อดูรายละเอียดราคา</div>
+          </aside>
+          <div class="gx-table-card surface">
+            <div class="gx-table-top"><div><h3>ตารางราคาทองคำแท่งย้อนหลัง</h3><p id="gxHistoryCount">กำลังตรวจข้อมูล…</p></div><button id="gxClearDay" type="button" disabled>แสดงทุกวันในเดือน</button></div>
+            <div class="gx-table-scroll" tabindex="0" aria-label="ตารางราคาทองไทยแบบเลื่อนดูได้"><table class="gx-table"><thead><tr><th scope="col">วันที่</th><th scope="col">เปิด (ขายออก)</th><th scope="col">สูงสุด</th><th scope="col">ต่ำสุด</th><th scope="col">ปิด (ขายออก)</th><th scope="col">รับซื้อปิดวัน</th><th scope="col">ต่างจากเปิด</th></tr></thead><tbody id="gxHistoryRows"><tr><td colspan="7" class="gx-table-empty">เลื่อนลงมาเพื่อโหลดข้อมูลย้อนหลัง</td></tr></tbody></table></div>
+            <div class="gx-pagination"><span>หน้าที่ <strong id="gxTablePage">1 / 1</strong></span><div><button id="gxPagePrev" type="button" disabled>ก่อนหน้า</button><button id="gxPageNext" type="button" disabled>ถัดไป</button></div></div>
+            <p class="gx-data-attribution" id="gxTableAttribution">ข้อมูลราคาจริงเท่านั้น ไม่ใช้ราคาประมาณการ</p>
+          </div>
+        </div>
       </section>
       <section class="lower-grid" id="tools-section"><article class="scenario-panel surface"><div class="section-kicker">04 / SCENARIO ANALYSIS</div><h2>สถานการณ์ราคาที่เป็นไปได้</h2><p class="panel-desc" id="scenarioDescription">กรอบจำลองเชิงสถิติจากความผันผวน ATR(14) สำหรับ XAU/USD ไม่ใช่การพยากรณ์ล่วงหน้า</p><div class="scenario-list"><div class="scenario"><span class="scenario-icon bull">↗</span><div><strong>กรณีปรับตัวขึ้น</strong><small>ราคาปัจจุบัน + 1 ATR</small></div><b id="bullScenario">—</b></div><div class="scenario"><span class="scenario-icon flat">━</span><div><strong>ราคาจุดอ้างอิง</strong><small>ราคาตลาดล่าสุด</small></div><b id="baseScenario">—</b></div><div class="scenario"><span class="scenario-icon bear">↘</span><div><strong>กรณีปรับตัวลง</strong><small>ราคาปัจจุบัน − 1 ATR</small></div><b id="bearScenario">—</b></div></div><div class="insight-note"><svg><use href="#i-info" /></svg><span>ตลาดไทยอาจเคลื่อนไหวต่างจาก XAU/USD ตามค่าเงินบาท ค่าพรีเมียม และรอบประกาศราคา</span></div></article>
         <article class="converter-panel surface" id="calculator-section"><div class="section-kicker">05 / GOLD CALCULATOR</div><h2>เครื่องคำนวณทองคำ</h2><p class="panel-desc">ประเมินมูลค่าทองไทยด้วยราคาประกาศล่าสุดของตลาดไทย</p><div class="calc-field"><label for="goldWeight">น้ำหนักทองคำ</label><div class="calc-entry"><input type="number" min="0.01" step="0.25" value="1" id="goldWeight" inputmode="decimal"/><span>บาททองคำ</span></div></div><div class="weight-presets"><button data-weight="0.25">1 สลึง</button><button data-weight="0.5">2 สลึง</button><button class="selected" data-weight="1">1 บาท</button><button data-weight="2">2 บาท</button><button data-weight="5">5 บาท</button></div><div class="calc-output"><span>ประมาณราคาซื้อจากร้าน <small>(ราคาขายออก)</small></span><strong id="calcBuy">—</strong><div class="calc-line"></div><span>ประมาณราคาขายคืนร้าน <small>(ราคารับซื้อ)</small></span><strong id="calcSell">—</strong></div><div class="calc-footer">* คำนวณสำหรับทองแท่ง 96.5% ไม่รวมค่ากำเหน็จ ค่าธรรมเนียม หรือเงื่อนไขของร้านทอง</div></article></section>
@@ -318,11 +365,11 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
     if(!state.lastSync)setStatus('กำลังเชื่อมต่อ','warn');
     try {
       const d=await getQuotes();
-      state.quotes=d;renderQuotes();
+      state.quotes=d;renderQuotes();window.dispatchEvent(new CustomEvent("goldx:quotes-ready",{detail:d}));
       if(!silent&&(d.errors?.thai||d.errors?.world))toast('เชื่อมต่อราคาได้บางตลาด — ตลาดที่ขัดข้องจะแสดงเป็นขีด');
       if(!silent&&!(d.errors?.thai||d.errors?.world))toast('ตรวจสอบราคาล่าสุดจากผู้ให้บริการเรียบร้อย');
     } catch(e) {
-      state.quotes={thai:null,world:null};renderQuotes();
+      state.quotes={thai:null,world:null};renderQuotes();window.dispatchEvent(new CustomEvent("goldx:quotes-error"));
       if(!silent)toast('ไม่สามารถโหลดราคาได้ กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต');
     } finally {
       state.refreshing=false;$('refreshBtn').classList.remove('spinning');
@@ -581,6 +628,7 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
     if(name==='thai'||name==='world'){
       setMarket(name);$(name+'-card').scrollIntoView({behavior:'smooth',block:'center'});
     } else if(name==='analysis')$('analysis-section').scrollIntoView({behavior:'smooth'});
+    else if(name==='history')$('goldx-history-section').scrollIntoView({behavior:'smooth'});
     else if(name==='calculator')$('calculator-section').scrollIntoView({behavior:'smooth'});
     else if(name==='alerts')$('alerts-section').scrollIntoView({behavior:'smooth'});
     else $('overview-section').scrollIntoView({behavior:'smooth'});
@@ -715,5 +763,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 })();
 
 </script>
+<script src="/goldx-indicators.js" defer></script>
+<script src="/goldx-pro.js" defer></script>
 </body>
 </html>
