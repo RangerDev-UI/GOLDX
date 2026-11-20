@@ -230,6 +230,9 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
         </div>
       </details>
 
+      <details class="gx4-fold gx4-history-fold" id="gx4-history-fold">
+        <summary><span class="gx4-fold-icon">▦</span><span><strong>ประวัติราคาทองและปฏิทิน</strong><small>กราฟ OHLC รายวัน · ค้นหาตามวันที่ · ตารางย้อนหลัง</small></span><span aria-hidden="true">⌄</span></summary>
+        <div class="gx4-fold-body">
       <section class="gx-history-section" id="goldx-history-section" aria-label="ปฏิทินและตารางราคาทองย้อนหลัง">
         <div class="gx-section-head"><div><span class="gx-overline">THAI GOLD / VERIFIED HISTORY</span><h2>ปฏิทินและตารางราคาทองย้อนหลัง</h2><p>ทองแท่งไทย 96.5% · ราคาเปิด สูงสุด ต่ำสุด และปิดจากข้อมูลที่ตรวจสอบได้</p></div><span class="gx-chip">ข้อมูลย้อนหลังสูงสุด 1 ปีตามต้นทาง</span></div>
         <div class="gx-history-layout">
@@ -248,8 +251,15 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
           </div>
         </div>
       </section>
+        </div>
+      </details>
+      <details class="gx4-fold gx4-tools-fold" id="gx4-tools-fold">
+        <summary><span class="gx4-fold-icon">⌗</span><span><strong>เครื่องคำนวณและแจ้งเตือนราคา</strong><small>คำนวณมูลค่าทอง · ตั้งราคาที่ต้องการติดตาม</small></span><span aria-hidden="true">⌄</span></summary>
+        <div class="gx4-fold-body">
       <section class="lower-grid" id="tools-section"><article class="converter-panel surface" id="calculator-section"><div class="section-kicker">05 / GOLD CALCULATOR</div><h2>เครื่องคำนวณทองคำ</h2><p class="panel-desc">ประเมินมูลค่าทองไทยด้วยราคาประกาศล่าสุดของตลาดไทย</p><div class="calc-field"><label for="goldWeight">น้ำหนักทองคำ</label><div class="calc-entry"><input type="number" min="0.01" step="0.25" value="1" id="goldWeight" inputmode="decimal"/><span>บาททองคำ</span></div></div><div class="weight-presets"><button data-weight="0.25">1 สลึง</button><button data-weight="0.5">2 สลึง</button><button class="selected" data-weight="1">1 บาท</button><button data-weight="2">2 บาท</button><button data-weight="5">5 บาท</button></div><div class="calc-output"><span>ประมาณราคาซื้อจากร้าน <small>(ราคาขายออก)</small></span><strong id="calcBuy">—</strong><div class="calc-line"></div><span>ประมาณราคาขายคืนร้าน <small>(ราคารับซื้อ)</small></span><strong id="calcSell">—</strong></div><div class="calc-footer">* คำนวณสำหรับทองแท่ง 96.5% ไม่รวมค่ากำเหน็จ ค่าธรรมเนียม หรือเงื่อนไขของร้านทอง</div></article></section>
       <section class="alerts-section surface" id="alerts-section"><div class="alerts-intro"><span class="section-kicker">06 / PRICE WATCH</span><h2>ติดตามระดับราคาที่คุณสนใจ</h2><p>กำหนดราคาเป้าหมาย และรับการแจ้งเตือนบนหน้าจอเมื่อราคาข้ามระดับที่ตั้งไว้ <strong>ขณะเปิดเว็บอยู่เท่านั้น</strong></p></div><div class="alerts-content"><form id="alertForm" class="alert-form"><label><span>ตลาด</span><select id="alertMarket"><option value="thai">ทองแท่งไทย (THB)</option><option value="world">ทองโลก (USD)</option></select></label><label><span>เงื่อนไข</span><select id="alertDirection"><option value="above">สูงกว่าหรือเท่ากับ</option><option value="below">ต่ำกว่าหรือเท่ากับ</option></select></label><label><span>ราคาเป้าหมาย</span><input id="alertTarget" type="number" min="1" step="0.01" required placeholder="เช่น 70000" /></label><button class="add-alert" type="submit">+ เพิ่มการติดตาม</button></form><div class="alert-list" id="alertList"><p class="alerts-empty">ยังไม่ได้ตั้งระดับราคาที่ติดตาม</p></div></div></section>
+        </div>
+      </details>
       <details class="gx4-more" id="gx4-more">
         <summary><span class="gx4-more-icon">⚙</span><span><strong>ข้อมูลเพิ่มเติมและตั้งค่า</strong><small>ตั้งค่ากราฟ · ปฏิทินเศรษฐกิจ · อัตราส่วนทอง/เงิน · ATR</small></span><span aria-hidden="true">⌄</span></summary>
         <div class="gx4-more-body">
@@ -743,9 +753,9 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
     if(name==='thai'||name==='world'){
       setMarket(name);$(name+'-card').scrollIntoView({behavior:'smooth',block:'center'});
     } else if(name==='analysis')$('analysis-section').scrollIntoView({behavior:'smooth'});
-    else if(name==='history')$('goldx-history-section').scrollIntoView({behavior:'smooth'});
-    else if(name==='calculator')$('calculator-section').scrollIntoView({behavior:'smooth'});
-    else if(name==='alerts')$('alerts-section').scrollIntoView({behavior:'smooth'});
+    else if(name==='history'){$('gx4-history-fold').open=true;$('goldx-history-section').scrollIntoView({behavior:'smooth'});}
+    else if(name==='calculator'){$('gx4-tools-fold').open=true;$('calculator-section').scrollIntoView({behavior:'smooth'});}
+    else if(name==='alerts'){$('gx4-tools-fold').open=true;$('alerts-section').scrollIntoView({behavior:'smooth'});}
     else if(name==='more'){$('gx4-more').open=true;$('gx4-more').scrollIntoView({behavior:'smooth'});}
     else $('overview-section').scrollIntoView({behavior:'smooth'});
     closeMenu();
