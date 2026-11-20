@@ -32,6 +32,47 @@ function parseChnwtDate(d,t){
  const year=Number(m[3])>2400?Number(m[3])-543:Number(m[3]);
  return thaiTime(`${year}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}T${h[1].padStart(2,'0')}:${h[2]}:00`);
 }
+
+// Public GTA homepage is an optional read-only fallback, not the members-only API.
+// Refuse to parse a price unless its official announcement timestamp is present.
+function officialWebQuote(html){
+ if(typeof html!=='string'||html.length<100)throw new Error('Official webpage missing HTML');
+ const text=html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,' ')
+   .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi,' ')
+   .replace(/<[^>]+>/g,' ').replace(/&nbsp;|&#160;/gi,' ')
+   .replace(/&amp;/gi,'&').replace(/\s+/g,' ').trim();
+ const stamp=/ประจำวันที่\s*(\d{1,2})\/(\d{1,2})\/(\d{4})\s*เวลา\s*(\d{1,2}):(\d{2})(?:\s*น\.)?(?:\s*\(ครั้งที่\s*(\d+)\))?/i.exec(text);
+ if(!stamp)throw new Error('Official webpage missing announcement date');
+ const [_,day,month,rawYear,hour,min,seq]=stamp;
+ const year=Number(rawYear)>2400?Number(rawYear)-543:Number(rawYear);
+ const announcedAt=thaiTime(`${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}T${hour.padStart(2,'0')}:${min}:00`);
+ // Limit extraction to the gold price area, never prices in unrelated news.
+ const start=text.search(/ทองคำแท่ง\s*96\.5%/i);
+ const ornamentStart=text.search(/ทองรูปพรรณ\s*96\.5%/i);
+ if(start<0||ornamentStart<=start||ornamentStart-start>900)throw new Error('Official gold quote panel missing');
+ const bar=text.slice(start,ornamentStart);
+ const goldOrn=text.slice(ornamentStart,ornamentStart+380);
+ const buy=/รับซื้อ\s*([\d,]+(?:\.\d{1,2})?)/.exec(bar);
+ const sell=/ขายออก\s*([\d,]+(?:\.\d{1,2})?)/.exec(bar);
+ if(!buy||!sell)throw new Error('Official webpage price markers missing');
+ const ornBuy=/รับซื้อ\s*([\d,]+(?:\.\d{1,2})?)/.exec(goldOrn);
+ const ornSell=/ขายออก\s*([\d,]+(?:\.\d{1,2})?)/.exec(goldOrn);
+ return markQuote({buyBar:n(buy[1]),sellBar:n(sell[1]),buyOrnament:n(ornBuy?.[1]),sellOrnament:n(ornSell?.[1]),
+   change:null,changePercent:null,round:n(seq),updatedAt:announcedAt,
+   source:'หน้าเว็บสมาคมค้าทองคำ · ประกาศสาธารณะ',sourceUrl:'https://www.goldtraders.or.th/',
+   sourceType:'official-public-page',spot:null,fx:null,marketOpen:null});
+}
+async function fetchOfficialWeb(){
+ const controller=new AbortController();
+ const timeout=setTimeout(()=>controller.abort(),4500);
+ try {
+   const r=await fetch('https://www.goldtraders.or.th/',{signal:controller.signal,
+     headers:{Accept:'text/html,application/xhtml+xml','User-Agent':'GOLDX/1.0 (public market reference)'}});
+   if(!r.ok)throw new Error(`GTA public webpage HTTP ${r.status}`);
+   return officialWebQuote(await r.text());
+ }finally{clearTimeout(timeout);}
+}
+
 async function quote(json){
  const providers=[];
  if(process.env.GTA_API_TOKEN)providers.push(async()=>{
@@ -52,12 +93,13 @@ async function quote(json){
    if(d.status!=='success'||!c)throw new Error('CHNWT invalid response');
    return markQuote({buyBar:n(c.price?.gold_bar?.buy),sellBar:n(c.price?.gold_bar?.sell),buyOrnament:n(c.price?.gold?.buy),sellOrnament:n(c.price?.gold?.sell),change:null,changePercent:null,round:n(/ครั้งที่\s*(\d+)/.exec(c.update_time||'')?.[1]),updatedAt:parseChnwtDate(c.update_date,c.update_time),source:'CHNWT · ข้อมูลประกาศราคาทองคำไทย',sourceUrl:'https://github.com/max180643/thai-gold-api',sourceType:'public-relay',spot:null,fx:null,marketOpen:null});
  });
+ providers.push(fetchOfficialWeb);
  // Compare validated announcements: prefer newest genuine timestamp over quickest upstream.
  // Requests run concurrently; a slow or broken provider never makes up a replacement price.
  const results=await Promise.allSettled(providers.map(p=>p()));
  const candidates=results.filter(r=>r.status==='fulfilled').map(r=>r.value);
  if(!candidates.length){console.warn('Thai public/official quote providers all unavailable');throw new Error('Thai quote providers unavailable');}
- candidates.sort((a,b)=>Date.parse(b.updatedAt)-Date.parse(a.updatedAt) || (a.sourceType==='official'?-1:b.sourceType==='official'?1:0));
+ candidates.sort((a,b)=>Date.parse(b.updatedAt)-Date.parse(a.updatedAt) || (a.sourceType.startsWith('official')?-1:b.sourceType.startsWith('official')?1:0));
  return candidates[0];
 }
 function verifiedDaily(rows){
@@ -100,4 +142,4 @@ async function history(period,json,response){
    return response({market:'thai',period,source:'สมาคมค้าทองคำ · API ประกาศย้อนหลัง',isDaily:false,quality:'official-announcements',points,fetchedAt:new Date().toISOString()},200,300);
  }
 }
-module.exports={quote,history,verifiedDaily,verifiedToday,thaiTime,markQuote};
+module.exports={quote,history,verifiedDaily,verifiedToday,thaiTime,markQuote,officialWebQuote};
