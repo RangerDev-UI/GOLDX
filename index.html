@@ -109,6 +109,7 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
       <button class="nav-link" data-nav="history"><svg><use href="#i-clock" /></svg><span>ประวัติราคาทองไทย</span></button>
       <button class="nav-link" data-nav="calculator"><svg><use href="#i-calculator" /></svg><span>คำนวณทองคำ</span></button>
       <button class="nav-link" data-nav="alerts"><svg><use href="#i-bell" /></svg><span>แจ้งเตือนราคา</span></button>
+      <button class="nav-link" data-nav="more"><svg><use href="#i-info" /></svg><span>ข้อมูลเพิ่มเติม / ตั้งค่า</span></button>
     </nav>
     <div class="sidebar-bottom">
       <div class="side-source"><span class="source-emblem">◎</span><div><strong>Trusted market data</strong><p>แสดงราคาจากผู้ให้บริการจริง<br />ไม่มีราคาแต่งขึ้นหรือสุ่มตัวเลข</p></div></div>
@@ -118,32 +119,31 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
   <div class="content-wrap">
     <header class="topbar">
       <div class="top-left"><button class="menu-button icon-btn" id="menuBtn" aria-label="เปิดเมนู"><span>☰</span></button><span class="top-eyebrow">MARKETS <span>/</span> GOLD</span><span class="top-divider"></span><span id="todayDate">—</span></div>
-      <div class="top-right"><span class="timezone">BANGKOK (GMT+7)</span><span class="live-indicator" id="statusPill"><span class="status-dot"></span><span id="statusText">กำลังเชื่อมต่อ</span></span><button type="button" class="icon-btn refresh-btn" id="refreshBtn" title="ดึงราคาล่าสุด" aria-label="รีเฟรชราคาล่าสุด"><svg><use href="#i-refresh" /></svg></button></div>
+      <div class="top-right">
+  <details class="gx4-health-popover" id="gx4-toolbox">
+    <summary aria-label="แสดงรายละเอียดสถานะข้อมูล API"><span class="gx4-health-spark" aria-hidden="true"></span><span>API</span><strong id="gx4HealthBadge">กำลังตรวจสอบ</strong></summary>
+    <div class="gx4-health-popover-body">
+      <div class="gx4-health-popover-head"><strong>ความพร้อมของข้อมูล</strong><span class="live-indicator" id="statusPill"><span class="status-dot"></span><span id="statusText">กำลังเชื่อมต่อ</span></span></div>
+      <div class="gx4-health-row"><span>ทองไทย 96.5%</span><strong id="gx4HealthThai">รอข้อมูล</strong></div>
+      <div class="gx4-health-row"><span>XAU/USD</span><strong id="gx4HealthWorld">รอข้อมูล</strong></div>
+      <div class="gx4-health-row"><span>USD/THB</span><strong id="gx4HealthFX">รอข้อมูล</strong></div>
+      <p class="gx4-fineprint" id="gx4HealthSource">แสดงเวลาและสถานะจากแหล่งข้อมูลจริง</p>
+      <p class="gx4-fineprint">ข้อมูลตรวจทุก 60 วินาทีเมื่อเปิดเว็บ · อาจล่าช้าตาม API</p>
+    </div>
+  </details>
+  <span class="gx4-last-check">ตรวจราคา <strong id="heroLastSync">—</strong></span>
+  <button type="button" class="icon-btn refresh-btn" id="refreshBtn" title="ตรวจข้อมูลล่าสุด" aria-label="รีเฟรชราคาล่าสุด"><svg><use href="#i-refresh" /></svg></button>
+</div>
     </header>
     <main>
       <section class="gx4-masthead" id="overview-section">
         <div class="gx4-masthead-copy">
-          <span class="gx4-kicker">✧ AURUM TERMINAL / GOLDX 4.0</span>
-          <h1>ตลาดทองคำ <em>ในมุมมองเดียว</em></h1>
-          <p>ราคาทองไทยและ XAU/USD พร้อมกราฟ เทคนิค และความน่าเชื่อถือของข้อมูล — ไม่มีราคาจำลอง</p>
-        </div>
-        <div class="gx4-head-actions">
-          <span class="gx4-source-badge" id="gx4HeadlineStatus">กำลังตรวจสอบข้อมูล</span>
-          <div class="gx4-quick-switch" role="group" aria-label="เปิดกราฟของตลาด">
-            <button type="button" data-market="thai" aria-selected="false" class="gx4-switch">🇹🇭 กราฟทองไทย</button>
-            <button type="button" data-market="world" aria-selected="true" class="gx4-switch is-selected">🌐 XAU/USD</button>
-          </div>
+          <span class="gx4-kicker">✧ GOLDX / AURUM TERMINAL</span>
+          <h1>ตลาดทองคำ <em>วันนี้</em></h1>
+          <p>ทองไทย 96.5% · XAU/USD · กราฟและข้อมูลเทคนิค</p>
         </div>
       </section>
-      <section class="hero" id="brand-section">
-        <div class="hero-copy"><span class="eyebrow"><span class="eyebrow-line"></span> THE GOLD STANDARD <span class="eyebrow-end">/ 2026</span></span>
-          <h1>ทุกจังหวะของ <em>ทองคำ</em><br/>ในมุมมองที่เหนือกว่า</h1>
-          <p>ติดตามราคาทองคำไทยและตลาดโลกในที่เดียว พร้อมข้อมูลเชิงเทคนิคที่ตรวจสอบแหล่งที่มาได้ เพื่อช่วยให้คุณตัดสินใจอย่างมีข้อมูล</p>
-          <div class="hero-meta"><span><span class="mini-dot"></span> อัปเดตทุก 60 วินาทีเมื่อเปิดหน้าเว็บ</span><span class="hero-meta-break"></span><span>ตรวจสอบราคา <strong id="heroLastSync">—</strong></span><span class="gx-sync-note" id="gxAutoSyncInfo">ราคาตรวจทุก 60 วินาทีเมื่อเปิดเว็บ · กราฟและประวัติซิงก์ตามช่วงเวลา</span></div><div class="gx-hero-links"><a class="hero-cta" href="#goldx-daily-section">ภาพรวมราคาวันนี้ <span aria-hidden="true">↗</span></a><a class="gx-hero-secondary" href="#analysis-section">กราฟและแนวรับ–แนวต้าน</a></div>
-        </div>
-        <div class="hero-art" aria-hidden="true"><div class="art-circle art-circle-1"></div><div class="art-circle art-circle-2"></div><div class="art-halo"></div><div class="gold-block gold-block-back"><span>GOLDX</span></div><div class="gold-block gold-block-front"><div class="block-brand">Au</div><div class="block-purity">999.9 <span>FINE GOLD</span></div><span class="block-mass">1 KILO</span></div><span class="art-cross">✦</span></div>
-      </section>
-      <div class="section-caption"><div><span class="section-kicker">01 / LIVE MARKET</span><h2>ราคาทองคำปัจจุบัน</h2></div><span class="muted-caption">ราคาล่าสุดที่แหล่งข้อมูลส่งมา · อาจมี Cache หรือประกาศล่าช้า · ไม่ใช่ Streaming</span></div>
+      <div class="gx4-quote-label"><span>ราคาประกาศล่าสุดจากแหล่งข้อมูล</span><span>ไม่ใช่ราคาเสนอซื้อขาย</span></div>
       <section class="quote-grid" aria-label="ราคาทองคำไทยและทองคำโลก">
         <article class="quote-card thai-quote" id="thai-card">
           <div class="quote-top"><span class="quote-icon quote-icon-thai">฿</span><div class="quote-title"><span class="quote-name">THAILAND GOLD</span><h3>ทองคำไทย <span>96.5%</span></h3></div><span class="small-tag">THB / BAHT</span></div>
@@ -159,57 +159,16 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
           <div class="quote-sub-label">Spot Gold · ดอลลาร์สหรัฐ / ทรอยออนซ์</div>
           <div class="quote-hero-price"><span class="currency-sign">$</span><strong id="worldMainPrice">—</strong><span class="price-suffix">USD</span></div>
           <div class="quote-info-row"><span id="worldChange" class="price-change neutral">อ้างอิงราคา Spot</span><span class="quote-caption">1 oz = 31.1035 กรัม</span></div>
-          <div class="quote-divider"></div><div class="bidask"><div><small>ราคา / กรัม (USD)</small><strong id="worldPerGram">—</strong></div><span class="bidask-bar"></span><div><small>ทอง / เงิน (Ratio)</small><strong id="worldSilverRatio">—</strong></div></div>
+          <div class="quote-divider"></div><div class="bidask"><div><small>ราคา / กรัม (USD)</small><strong id="worldPerGram">—</strong></div><span id="worldSilverRatio" hidden>—</span></div>
           <div class="source-line"><span class="tiny-dot" id="worldDot"></span><span id="worldSource">กำลังตรวจสอบแหล่งข้อมูล</span><span id="worldTime" class="time-right">—</span></div>
         </article>
       </section>
-      <section class="quick-metrics" aria-label="ข้อมูลตลาดสำคัญ"><div class="metric"><span>USD / THB <span class="metric-slash">/</span> อัตราแลกเปลี่ยน</span><strong id="fxRate">—</strong><small id="fxDetail">อ้างอิงแหล่งข้อมูล</small></div><div class="metric"><span>ทองรูปพรรณ <span class="metric-slash">/</span> ขายออก</span><strong id="ornamentSell">—</strong><small>บาท / 1 บาททองคำ</small></div><div class="metric"><span>ทองรูปพรรณ <span class="metric-slash">/</span> รับซื้อ</span><strong id="ornamentBuy">—</strong><small>บาท / 1 บาททองคำ</small></div><div class="metric"><span>GOLD / SILVER <span class="metric-slash">/</span> RATIO</span><strong id="silverRatio">—</strong><small>อัตราส่วนราคา Spot</small></div></section>
+      <section class="quick-metrics" aria-label="ข้อมูลตลาดสำคัญ"><div class="metric"><span>USD / THB <span class="metric-slash">/</span> อัตราแลกเปลี่ยน</span><strong id="fxRate">—</strong><small id="fxDetail">อ้างอิงแหล่งข้อมูล</small></div><div class="metric"><span>ทองรูปพรรณ <span class="metric-slash">/</span> ขายออก</span><strong id="ornamentSell">—</strong><small>บาท / 1 บาททองคำ</small></div><div class="metric"><span>ทองรูปพรรณ <span class="metric-slash">/</span> รับซื้อ</span><strong id="ornamentBuy">—</strong><small>บาท / 1 บาททองคำ</small></div></section>
 
-      <section class="gx4-toolbox" id="gx4-toolbox" aria-label="สรุปการวิเคราะห์และสถานะข้อมูล">
-        <article class="gx4-tool gx4-health">
-          <div class="gx4-tool-head"><span class="gx4-overline">01 / DATA HEALTH</span><span id="gx4HealthBadge" class="gx4-status-chip">กำลังตรวจสอบ</span></div>
-          <h3>ตรวจสอบความพร้อมของข้อมูล</h3>
-          <div class="gx4-health-row"><span>🇹🇭 ทองไทย</span><strong id="gx4HealthThai">รอข้อมูล</strong></div>
-          <div class="gx4-health-row"><span>🌐 ทองโลก</span><strong id="gx4HealthWorld">รอข้อมูล</strong></div>
-          <div class="gx4-health-row"><span>💱 USD/THB</span><strong id="gx4HealthFX">รอข้อมูล</strong></div>
-          <p id="gx4HealthSource" class="gx4-fineprint">เวลาประกาศและสถานะตามผู้ให้บริการ ไม่ใช่ราคา Streaming</p>
-        </article>
-        <article class="gx4-tool gx4-brief">
-          <div class="gx4-tool-head"><span class="gx4-overline">02 / MARKET BRIEF</span><span id="gx4BriefMarket" class="gx4-status-chip">XAU/USD</span></div>
-          <h3>สรุปเทคนิคอัตโนมัติ</h3>
-          <p class="gx4-brief-lead" id="gx4BriefTitle">รอข้อมูลเทคนิค</p>
-          <p class="gx4-brief-body" id="gx4BriefBody">สรุปตามกฎจาก RSI, EMA และ Pivot ที่ตรวจสอบได้ ไม่ได้ใช้ AI API</p>
-          <p class="gx4-fineprint" id="gx4BriefOrigin">ไม่ใช่การคาดการณ์หรือคำแนะนำลงทุน</p>
-        </article>
-        <article class="gx4-tool gx4-pair">
-          <div class="gx4-tool-head"><span class="gx4-overline">03 / GOLD FACTORS</span><span class="gx4-status-chip">3 ตลาด</span></div>
-          <h3>ทองไทย • ทองโลก • เงินบาท</h3>
-          <div class="gx4-health-row"><span>ทองแท่งขายออก</span><strong id="gx4PairThai">—</strong></div>
-          <div class="gx4-health-row"><span>Spot XAU/USD</span><strong id="gx4PairWorld">—</strong></div>
-          <div class="gx4-health-row"><span>USD/THB</span><strong id="gx4PairFX">—</strong></div>
-          <p class="gx4-fineprint">ข้อมูลต่างหน่วยและต่างเวลา จึงไม่เทียบผลตอบแทนตรง ๆ</p>
-        </article>
-      </section>
-      <section class="gx4-extras" aria-label="ตั้งค่าหน้าเว็บและปฏิทินเศรษฐกิจ">
-        <div class="gx4-extra-block">
-          <div><span class="gx4-overline">04 / PERSONALIZE</span><h3>ตลาดเริ่มต้น</h3><p>จำตลาดที่เลือกไว้ในอุปกรณ์นี้</p></div>
-          <label class="gx4-setting-label" for="gx4DefaultMarket">เปิดกราฟ
-            <select id="gx4DefaultMarket"><option value="world">🌐 ทองโลก</option><option value="thai">🇹🇭 ทองไทย</option></select>
-          </label>
-        </div>
-        <div class="gx4-extra-block">
-          <div><span class="gx4-overline">05 / ECONOMIC CALENDAR</span><h3>วันประกาศเศรษฐกิจ</h3><p>ตรวจวันจริงจากหน่วยงานทางการ ไม่แสดงวันที่ที่ยังไม่ได้ยืนยัน</p></div>
-          <div class="gx4-event-links">
-            <a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank" rel="noopener noreferrer">FOMC ↗</a>
-            <a href="https://www.bls.gov/schedule/news_release/cpi.htm" target="_blank" rel="noopener noreferrer">CPI ↗</a>
-            <a href="https://www.bls.gov/schedule/news_release/empsit.htm" target="_blank" rel="noopener noreferrer">NFP ↗</a>
-          </div>
-        </div>
-      </section>
       <section class="gx-daily surface" id="goldx-daily-section" aria-label="ภาพรวมราคาทองวันนี้">
         <div class="gx-section-head"><div><span class="gx-overline">DAILY GOLD PULSE / THAILAND</span><h2>ภาพรวมราคาทองคำวันนี้</h2><p>แยกข้อมูลประกาศล่าสุดออกจากสถิติรายรอบที่ตรวจสอบได้ · เขตเวลาไทย</p></div><span class="gx-chip" id="gxTodayStatus" role="status">กำลังตรวจข้อมูล</span></div>
         <div class="gx-daily-grid">
-          <div class="gx-pulse-card"><span>ทองแท่ง 96.5% · ราคาขายออก</span><strong id="gxTodaySell">—</strong><small id="gxTodayPriceSub">รอข้อมูลประกาศ</small></div>
+          <span id="gxTodaySell" hidden>—</span><span id="gxTodayPriceSub" hidden>รอข้อมูลประกาศ</span>
           <div class="gx-pulse-card"><span>เปลี่ยนจากประกาศแรก</span><strong id="gxTodayChange">—</strong><small id="gxTodayChangeSub">รอข้อมูลรายรอบ</small></div>
           <div class="gx-pulse-card"><span>สูงสุดจากประกาศที่เข้าถึงได้</span><strong id="gxTodayHigh">—</strong><small id="gxTodayRangeSub">รอข้อมูลช่วงราคา</small></div>
           <div class="gx-pulse-card"><span>ต่ำสุดจากประกาศที่เข้าถึงได้</span><strong id="gxTodayLow">—</strong><small>ข้อมูลรายรอบอาจไม่ครบทุกประกาศ</small></div>
@@ -262,6 +221,14 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
           <div class="tech-indicators"><div><small>RSI (14)</small><strong id="rsiValue">—</strong></div><div><small>ATR (14)</small><strong id="atrValue">—</strong></div><div><small>EMA 20 / 50</small><strong id="emaValue">—</strong><small class="gx-ema-info" id="emaValuesDetail">รอข้อมูล</small></div></div><p class="tech-disclaimer" id="techDisclaimer">คำนวณจากข้อมูลตลาดย้อนหลังจริง ไม่ใช่การทำนายราคาที่รับประกันผล</p>
         </aside>
       </section>
+      <details class="gx4-brief-strip" id="gx4-brief-strip">
+        <summary><span class="gx4-overline">สรุปมุมมองเทคนิค</span><strong id="gx4BriefTitle">รอข้อมูลเทคนิค</strong><span class="gx4-open-hint">รายละเอียด <span aria-hidden="true">⌄</span></span></summary>
+        <div class="gx4-brief-strip-body">
+          <span id="gx4BriefMarket" class="gx4-status-chip">XAU/USD</span>
+          <p id="gx4BriefBody">สรุปด้วยกฎจากข้อมูล RSI, EMA และ Pivot จริง ไม่ได้ใช้ AI API</p>
+          <p class="gx4-fineprint" id="gx4BriefOrigin">ไม่ใช่คำแนะนำการลงทุน</p>
+        </div>
+      </details>
 
       <section class="gx-history-section" id="goldx-history-section" aria-label="ปฏิทินและตารางราคาทองย้อนหลัง">
         <div class="gx-section-head"><div><span class="gx-overline">THAI GOLD / VERIFIED HISTORY</span><h2>ปฏิทินและตารางราคาทองย้อนหลัง</h2><p>ทองแท่งไทย 96.5% · ราคาเปิด สูงสุด ต่ำสุด และปิดจากข้อมูลที่ตรวจสอบได้</p></div><span class="gx-chip">ข้อมูลย้อนหลังสูงสุด 1 ปีตามต้นทาง</span></div>
@@ -281,9 +248,34 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
           </div>
         </div>
       </section>
-      <section class="lower-grid" id="tools-section"><article class="scenario-panel surface"><div class="section-kicker">04 / SCENARIO ANALYSIS</div><h2>สถานการณ์ราคาที่เป็นไปได้</h2><p class="panel-desc" id="scenarioDescription">กรอบจำลองเชิงสถิติจากความผันผวน ATR(14) สำหรับ XAU/USD ไม่ใช่การพยากรณ์ล่วงหน้า</p><div class="scenario-list"><div class="scenario"><span class="scenario-icon bull">↗</span><div><strong>กรณีปรับตัวขึ้น</strong><small>ราคาปัจจุบัน + 1 ATR</small></div><b id="bullScenario">—</b></div><div class="scenario"><span class="scenario-icon flat">━</span><div><strong>ราคาจุดอ้างอิง</strong><small>ราคาตลาดล่าสุด</small></div><b id="baseScenario">—</b></div><div class="scenario"><span class="scenario-icon bear">↘</span><div><strong>กรณีปรับตัวลง</strong><small>ราคาปัจจุบัน − 1 ATR</small></div><b id="bearScenario">—</b></div></div><div class="insight-note"><svg><use href="#i-info" /></svg><span>ตลาดไทยอาจเคลื่อนไหวต่างจาก XAU/USD ตามค่าเงินบาท ค่าพรีเมียม และรอบประกาศราคา</span></div></article>
-        <article class="converter-panel surface" id="calculator-section"><div class="section-kicker">05 / GOLD CALCULATOR</div><h2>เครื่องคำนวณทองคำ</h2><p class="panel-desc">ประเมินมูลค่าทองไทยด้วยราคาประกาศล่าสุดของตลาดไทย</p><div class="calc-field"><label for="goldWeight">น้ำหนักทองคำ</label><div class="calc-entry"><input type="number" min="0.01" step="0.25" value="1" id="goldWeight" inputmode="decimal"/><span>บาททองคำ</span></div></div><div class="weight-presets"><button data-weight="0.25">1 สลึง</button><button data-weight="0.5">2 สลึง</button><button class="selected" data-weight="1">1 บาท</button><button data-weight="2">2 บาท</button><button data-weight="5">5 บาท</button></div><div class="calc-output"><span>ประมาณราคาซื้อจากร้าน <small>(ราคาขายออก)</small></span><strong id="calcBuy">—</strong><div class="calc-line"></div><span>ประมาณราคาขายคืนร้าน <small>(ราคารับซื้อ)</small></span><strong id="calcSell">—</strong></div><div class="calc-footer">* คำนวณสำหรับทองแท่ง 96.5% ไม่รวมค่ากำเหน็จ ค่าธรรมเนียม หรือเงื่อนไขของร้านทอง</div></article></section>
+      <section class="lower-grid" id="tools-section"><article class="converter-panel surface" id="calculator-section"><div class="section-kicker">05 / GOLD CALCULATOR</div><h2>เครื่องคำนวณทองคำ</h2><p class="panel-desc">ประเมินมูลค่าทองไทยด้วยราคาประกาศล่าสุดของตลาดไทย</p><div class="calc-field"><label for="goldWeight">น้ำหนักทองคำ</label><div class="calc-entry"><input type="number" min="0.01" step="0.25" value="1" id="goldWeight" inputmode="decimal"/><span>บาททองคำ</span></div></div><div class="weight-presets"><button data-weight="0.25">1 สลึง</button><button data-weight="0.5">2 สลึง</button><button class="selected" data-weight="1">1 บาท</button><button data-weight="2">2 บาท</button><button data-weight="5">5 บาท</button></div><div class="calc-output"><span>ประมาณราคาซื้อจากร้าน <small>(ราคาขายออก)</small></span><strong id="calcBuy">—</strong><div class="calc-line"></div><span>ประมาณราคาขายคืนร้าน <small>(ราคารับซื้อ)</small></span><strong id="calcSell">—</strong></div><div class="calc-footer">* คำนวณสำหรับทองแท่ง 96.5% ไม่รวมค่ากำเหน็จ ค่าธรรมเนียม หรือเงื่อนไขของร้านทอง</div></article></section>
       <section class="alerts-section surface" id="alerts-section"><div class="alerts-intro"><span class="section-kicker">06 / PRICE WATCH</span><h2>ติดตามระดับราคาที่คุณสนใจ</h2><p>กำหนดราคาเป้าหมาย และรับการแจ้งเตือนบนหน้าจอเมื่อราคาข้ามระดับที่ตั้งไว้ <strong>ขณะเปิดเว็บอยู่เท่านั้น</strong></p></div><div class="alerts-content"><form id="alertForm" class="alert-form"><label><span>ตลาด</span><select id="alertMarket"><option value="thai">ทองแท่งไทย (THB)</option><option value="world">ทองโลก (USD)</option></select></label><label><span>เงื่อนไข</span><select id="alertDirection"><option value="above">สูงกว่าหรือเท่ากับ</option><option value="below">ต่ำกว่าหรือเท่ากับ</option></select></label><label><span>ราคาเป้าหมาย</span><input id="alertTarget" type="number" min="1" step="0.01" required placeholder="เช่น 70000" /></label><button class="add-alert" type="submit">+ เพิ่มการติดตาม</button></form><div class="alert-list" id="alertList"><p class="alerts-empty">ยังไม่ได้ตั้งระดับราคาที่ติดตาม</p></div></div></section>
+      <details class="gx4-more" id="gx4-more">
+        <summary><span class="gx4-more-icon">⚙</span><span><strong>ข้อมูลเพิ่มเติมและตั้งค่า</strong><small>ตั้งค่ากราฟ · ปฏิทินเศรษฐกิจ · อัตราส่วนทอง/เงิน · ATR</small></span><span aria-hidden="true">⌄</span></summary>
+        <div class="gx4-more-body">
+          <section class="gx4-extras" aria-label="ตั้งค่าหน้าเว็บและปฏิทินเศรษฐกิจ">
+        <div class="gx4-extra-block">
+          <div><span class="gx4-overline">04 / PERSONALIZE</span><h3>ตลาดเริ่มต้น</h3><p>จำตลาดที่เลือกไว้ในอุปกรณ์นี้</p></div>
+          <label class="gx4-setting-label" for="gx4DefaultMarket">เปิดกราฟ
+            <select id="gx4DefaultMarket"><option value="world">🌐 ทองโลก</option><option value="thai">🇹🇭 ทองไทย</option></select>
+          </label>
+        </div>
+        <div class="gx4-extra-block">
+          <div><span class="gx4-overline">05 / ECONOMIC CALENDAR</span><h3>วันประกาศเศรษฐกิจ</h3><p>ตรวจวันจริงจากหน่วยงานทางการ ไม่แสดงวันที่ที่ยังไม่ได้ยืนยัน</p></div>
+          <div class="gx4-event-links">
+            <a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank" rel="noopener noreferrer">FOMC ↗</a>
+            <a href="https://www.bls.gov/schedule/news_release/cpi.htm" target="_blank" rel="noopener noreferrer">CPI ↗</a>
+            <a href="https://www.bls.gov/schedule/news_release/empsit.htm" target="_blank" rel="noopener noreferrer">NFP ↗</a>
+          </div>
+        </div>
+      </section>
+          <div class="gx4-aux-metric"><div><strong>Gold / Silver Ratio</strong><p>ข้อมูลอ้างอิง Spot · ย้ายจากหน้าแรก</p></div><strong id="silverRatio">—</strong></div>
+          <details class="gx4-atr-details">
+            <summary>กรอบความผันผวน ATR (ข้อมูลเพิ่มเติม) <span aria-hidden="true">⌄</span></summary>
+            <article class="scenario-panel surface"><div class="section-kicker">04 / SCENARIO ANALYSIS</div><h2>สถานการณ์ราคาที่เป็นไปได้</h2><p class="panel-desc" id="scenarioDescription">กรอบจำลองเชิงสถิติจากความผันผวน ATR(14) สำหรับ XAU/USD ไม่ใช่การพยากรณ์ล่วงหน้า</p><div class="scenario-list"><div class="scenario"><span class="scenario-icon bull">↗</span><div><strong>กรณีปรับตัวขึ้น</strong><small>ราคาปัจจุบัน + 1 ATR</small></div><b id="bullScenario">—</b></div><div class="scenario"><span class="scenario-icon flat">━</span><div><strong>ราคาจุดอ้างอิง</strong><small>ราคาตลาดล่าสุด</small></div><b id="baseScenario">—</b></div><div class="scenario"><span class="scenario-icon bear">↘</span><div><strong>กรณีปรับตัวลง</strong><small>ราคาปัจจุบัน − 1 ATR</small></div><b id="bearScenario">—</b></div></div><div class="insight-note"><svg><use href="#i-info" /></svg><span>ตลาดไทยอาจเคลื่อนไหวต่างจาก XAU/USD ตามค่าเงินบาท ค่าพรีเมียม และรอบประกาศราคา</span></div></article>
+          </details>
+        </div>
+      </details>
       <footer class="footer"><div><span class="footer-logo">✧ GOLDX</span><span class="footer-sub">DATA FIRST. ALWAYS.</span></div><p>ราคาทองไทยอิงประกาศสมาคมค้าทองคำผ่าน API ที่ระบุ · ราคาทองโลกเป็น Spot อ้างอิง ไม่ใช่ราคาที่สามารถซื้อขายได้ทันที · เครื่องมือวิเคราะห์เพื่อการศึกษา ไม่ใช่คำแนะนำในการลงทุน</p><div class="footer-links"><a href="https://www.goldtraders.or.th/" target="_blank" rel="noopener noreferrer">สมาคมค้าทองคำ ↗</a><a href="https://www.thaigoldtoday.com" target="_blank" rel="noopener noreferrer">ราคาทอง.today ↗</a><a href="https://xaus.com/api/" target="_blank" rel="noopener noreferrer">XAUS API ↗</a></div></footer>
     </main>
   </div>
@@ -754,6 +746,7 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
     else if(name==='history')$('goldx-history-section').scrollIntoView({behavior:'smooth'});
     else if(name==='calculator')$('calculator-section').scrollIntoView({behavior:'smooth'});
     else if(name==='alerts')$('alerts-section').scrollIntoView({behavior:'smooth'});
+    else if(name==='more'){$('gx4-more').open=true;$('gx4-more').scrollIntoView({behavior:'smooth'});}
     else $('overview-section').scrollIntoView({behavior:'smooth'});
     closeMenu();
   }
