@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  const control=$('gx4DefaultMarket'),initial=saved();
  control.value=initial;
  control.addEventListener('change',()=>{if(!['thai','world'].includes(control.value))return;save(control.value);window.dispatchEvent(new CustomEvent('goldx4:set-market',{detail:{market:control.value}}))});
- window.addEventListener('goldx:market-changed',e=>{state.market=e.detail?.market==='thai'?'thai':'world';brief()});
+ window.addEventListener('goldx:market-changed',e=>{state.market=e.detail?.market==='thai'?'thai':'world';queueMicrotask(brief)});
  window.addEventListener('goldx:quotes-ready',e=>{state.quotes=e.detail;queueMicrotask(render)});
  window.addEventListener('goldx:quotes-error',()=>{state.quotes=null;render()});
  window.addEventListener('goldx:history-ready',()=>queueMicrotask(brief));
