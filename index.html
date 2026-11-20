@@ -75,6 +75,10 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
 
 </style>
 <link rel="stylesheet" href="/goldx-pro.css" />
+  <link rel="stylesheet" href="/goldx4.css" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 </head>
 <body>
 <svg width="0" height="0" aria-hidden="true" class="svg-defs" xmlns="http://www.w3.org/2000/svg"><defs>
@@ -117,7 +121,21 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
       <div class="top-right"><span class="timezone">BANGKOK (GMT+7)</span><span class="live-indicator" id="statusPill"><span class="status-dot"></span><span id="statusText">กำลังเชื่อมต่อ</span></span><button type="button" class="icon-btn refresh-btn" id="refreshBtn" title="ดึงราคาล่าสุด" aria-label="รีเฟรชราคาล่าสุด"><svg><use href="#i-refresh" /></svg></button></div>
     </header>
     <main>
-      <section class="hero" id="overview-section">
+      <section class="gx4-masthead" id="overview-section">
+        <div class="gx4-masthead-copy">
+          <span class="gx4-kicker">✧ AURUM TERMINAL / GOLDX 4.0</span>
+          <h1>ตลาดทองคำ <em>ในมุมมองเดียว</em></h1>
+          <p>ราคาทองไทยและ XAU/USD พร้อมกราฟ เทคนิค และความน่าเชื่อถือของข้อมูล — ไม่มีราคาจำลอง</p>
+        </div>
+        <div class="gx4-head-actions">
+          <span class="gx4-source-badge" id="gx4HeadlineStatus">กำลังตรวจสอบข้อมูล</span>
+          <div class="gx4-quick-switch" role="group" aria-label="เปิดกราฟของตลาด">
+            <button type="button" data-market="thai" aria-selected="false" class="gx4-switch">🇹🇭 กราฟทองไทย</button>
+            <button type="button" data-market="world" aria-selected="true" class="gx4-switch is-selected">🌐 XAU/USD</button>
+          </div>
+        </div>
+      </section>
+      <section class="hero" id="brand-section">
         <div class="hero-copy"><span class="eyebrow"><span class="eyebrow-line"></span> THE GOLD STANDARD <span class="eyebrow-end">/ 2026</span></span>
           <h1>ทุกจังหวะของ <em>ทองคำ</em><br/>ในมุมมองที่เหนือกว่า</h1>
           <p>ติดตามราคาทองคำไทยและตลาดโลกในที่เดียว พร้อมข้อมูลเชิงเทคนิคที่ตรวจสอบแหล่งที่มาได้ เพื่อช่วยให้คุณตัดสินใจอย่างมีข้อมูล</p>
@@ -147,6 +165,47 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
       </section>
       <section class="quick-metrics" aria-label="ข้อมูลตลาดสำคัญ"><div class="metric"><span>USD / THB <span class="metric-slash">/</span> อัตราแลกเปลี่ยน</span><strong id="fxRate">—</strong><small id="fxDetail">อ้างอิงแหล่งข้อมูล</small></div><div class="metric"><span>ทองรูปพรรณ <span class="metric-slash">/</span> ขายออก</span><strong id="ornamentSell">—</strong><small>บาท / 1 บาททองคำ</small></div><div class="metric"><span>ทองรูปพรรณ <span class="metric-slash">/</span> รับซื้อ</span><strong id="ornamentBuy">—</strong><small>บาท / 1 บาททองคำ</small></div><div class="metric"><span>GOLD / SILVER <span class="metric-slash">/</span> RATIO</span><strong id="silverRatio">—</strong><small>อัตราส่วนราคา Spot</small></div></section>
 
+      <section class="gx4-toolbox" id="gx4-toolbox" aria-label="สรุปการวิเคราะห์และสถานะข้อมูล">
+        <article class="gx4-tool gx4-health">
+          <div class="gx4-tool-head"><span class="gx4-overline">01 / DATA HEALTH</span><span id="gx4HealthBadge" class="gx4-status-chip">กำลังตรวจสอบ</span></div>
+          <h3>ตรวจสอบความพร้อมของข้อมูล</h3>
+          <div class="gx4-health-row"><span>🇹🇭 ทองไทย</span><strong id="gx4HealthThai">รอข้อมูล</strong></div>
+          <div class="gx4-health-row"><span>🌐 ทองโลก</span><strong id="gx4HealthWorld">รอข้อมูล</strong></div>
+          <div class="gx4-health-row"><span>💱 USD/THB</span><strong id="gx4HealthFX">รอข้อมูล</strong></div>
+          <p id="gx4HealthSource" class="gx4-fineprint">เวลาประกาศและสถานะตามผู้ให้บริการ ไม่ใช่ราคา Streaming</p>
+        </article>
+        <article class="gx4-tool gx4-brief">
+          <div class="gx4-tool-head"><span class="gx4-overline">02 / MARKET BRIEF</span><span id="gx4BriefMarket" class="gx4-status-chip">XAU/USD</span></div>
+          <h3>สรุปเทคนิคอัตโนมัติ</h3>
+          <p class="gx4-brief-lead" id="gx4BriefTitle">รอข้อมูลเทคนิค</p>
+          <p class="gx4-brief-body" id="gx4BriefBody">สรุปตามกฎจาก RSI, EMA และ Pivot ที่ตรวจสอบได้ ไม่ได้ใช้ AI API</p>
+          <p class="gx4-fineprint" id="gx4BriefOrigin">ไม่ใช่การคาดการณ์หรือคำแนะนำลงทุน</p>
+        </article>
+        <article class="gx4-tool gx4-pair">
+          <div class="gx4-tool-head"><span class="gx4-overline">03 / GOLD FACTORS</span><span class="gx4-status-chip">3 ตลาด</span></div>
+          <h3>ทองไทย • ทองโลก • เงินบาท</h3>
+          <div class="gx4-health-row"><span>ทองแท่งขายออก</span><strong id="gx4PairThai">—</strong></div>
+          <div class="gx4-health-row"><span>Spot XAU/USD</span><strong id="gx4PairWorld">—</strong></div>
+          <div class="gx4-health-row"><span>USD/THB</span><strong id="gx4PairFX">—</strong></div>
+          <p class="gx4-fineprint">ข้อมูลต่างหน่วยและต่างเวลา จึงไม่เทียบผลตอบแทนตรง ๆ</p>
+        </article>
+      </section>
+      <section class="gx4-extras" aria-label="ตั้งค่าหน้าเว็บและปฏิทินเศรษฐกิจ">
+        <div class="gx4-extra-block">
+          <div><span class="gx4-overline">04 / PERSONALIZE</span><h3>ตลาดเริ่มต้น</h3><p>จำตลาดที่เลือกไว้ในอุปกรณ์นี้</p></div>
+          <label class="gx4-setting-label" for="gx4DefaultMarket">เปิดกราฟ
+            <select id="gx4DefaultMarket"><option value="world">🌐 ทองโลก</option><option value="thai">🇹🇭 ทองไทย</option></select>
+          </label>
+        </div>
+        <div class="gx4-extra-block">
+          <div><span class="gx4-overline">05 / ECONOMIC CALENDAR</span><h3>วันประกาศเศรษฐกิจ</h3><p>ตรวจวันจริงจากหน่วยงานทางการ ไม่แสดงวันที่ที่ยังไม่ได้ยืนยัน</p></div>
+          <div class="gx4-event-links">
+            <a href="https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm" target="_blank" rel="noopener noreferrer">FOMC ↗</a>
+            <a href="https://www.bls.gov/schedule/news_release/cpi.htm" target="_blank" rel="noopener noreferrer">CPI ↗</a>
+            <a href="https://www.bls.gov/schedule/news_release/empsit.htm" target="_blank" rel="noopener noreferrer">NFP ↗</a>
+          </div>
+        </div>
+      </section>
       <section class="gx-daily surface" id="goldx-daily-section" aria-label="ภาพรวมราคาทองวันนี้">
         <div class="gx-section-head"><div><span class="gx-overline">DAILY GOLD PULSE / THAILAND</span><h2>ภาพรวมราคาทองคำวันนี้</h2><p>แยกข้อมูลประกาศล่าสุดออกจากสถิติรายรอบที่ตรวจสอบได้ · เขตเวลาไทย</p></div><span class="gx-chip" id="gxTodayStatus" role="status">กำลังตรวจข้อมูล</span></div>
         <div class="gx-daily-grid">
@@ -853,5 +912,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 <script src="/goldx-near-ui.js" defer></script>
 <script src="/goldx-indicators.js" defer></script>
 <script src="/goldx-pro.js" defer></script>
+<script src="/goldx4.js" defer></script>
 </body>
 </html>
