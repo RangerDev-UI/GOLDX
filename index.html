@@ -813,7 +813,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  el('historyLine').addEventListener('click',()=>setMode('line'));
  el('historyCandles').addEventListener('click',()=>setMode('candle'));
  el('historyCSV').addEventListener('click',csv);
- el('historyRefresh').addEventListener('click',()=>window.location.reload());
+ el('historyRefresh').addEventListener('click',()=>window.dispatchEvent(new CustomEvent('goldx:refresh-chart')));
  el('priceChart').addEventListener('pointermove',detail);
 });
 })();
