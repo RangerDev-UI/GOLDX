@@ -2,7 +2,8 @@
  * No simulated prices are ever returned. Missing data stays null.
  */
 'use strict';
-const TTL = { quotes: 55, chart: 280, thaiHistory: 280 };
+const thaiFeed = require('./thai-feed.js');
+const TTL = { quotes: 65, chart: 280, thaiHistory: 300 };
 const PERIODS = {
   '1D': { range: '1d', interval: '5m' },
   '1W': { range: '5d', interval: '30m' },
@@ -22,7 +23,7 @@ function isPositive(v) { return typeof v === 'number' && Number.isFinite(v) && v
 function validTime(v) { const time = Date.parse(v); return Number.isFinite(time) ? new Date(time).toISOString() : null; }
 async function json(url, opts = {}) {
   const controller = new AbortController();
-  const tm = setTimeout(() => controller.abort(), 11000);
+  const tm = setTimeout(() => controller.abort(), 6500);
   try {
     const r = await fetch(url, { ...opts, signal: controller.signal,
       headers: { 'Accept':'application/json', 'User-Agent':'GOLDX/1.0 (market dashboard)', ...(opts.headers || {}) }
@@ -92,7 +93,7 @@ async function worldQuote() {
   } catch(e) { throw new Error(`World providers unavailable: ${lastError?.message}; ${e.message}`); }
 }
 async function quotes() {
-  const [thaiResult, worldResult] = await Promise.allSettled([thaiQuote(),worldQuote()]);
+  const [thaiResult, worldResult] = await Promise.allSettled([thaiFeed.quote(json),worldQuote()]);
   const thai = thaiResult.status === 'fulfilled' ? thaiResult.value : null;
   const world = worldResult.status === 'fulfilled' ? worldResult.value : null;
   return response({ fetchedAt:new Date().toISOString(), thai, world,
@@ -157,7 +158,7 @@ exports.handler = async (event) => {
   try {
     if(q.mode==='quotes' || !q.mode) return await quotes();
     if(q.mode==='chart') {
-      if(q.market==='thai') return await thaiHistory(q.period==='1Y'?90:q.period==='3M'?90:q.period==='1M'?30:7);
+      if(q.market==='thai') return await thaiFeed.history(PERIODS[q.period] ? q.period : '1M',json,response);
       const period=PERIODS[q.period] ? q.period : '1M';
       return await worldChart(period);
     }
