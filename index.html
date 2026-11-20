@@ -106,7 +106,7 @@
           <div class="tech-indicators"><div><small>RSI (14)</small><strong id="rsiValue">—</strong></div><div><small>ATR (14)</small><strong id="atrValue">—</strong></div><div><small>EMA 20 / 50</small><strong id="emaValue">—</strong></div></div><p class="tech-disclaimer" id="techDisclaimer">คำนวณจากข้อมูลตลาดย้อนหลังจริง ไม่ใช่การทำนายราคาที่รับประกันผล</p>
         </aside>
       </section>
-      <section class="lower-grid" id="tools-section"><article class="scenario-panel surface"><div class="section-kicker">04 / SCENARIO ANALYSIS</div><h2>สถานการณ์ราคาที่เป็นไปได้</h2><p class="panel-desc">กรอบจำลองเชิงสถิติจากความผันผวน ATR(14) สำหรับ XAU/USD ไม่ใช่การพยากรณ์ล่วงหน้า</p><div class="scenario-list"><div class="scenario"><span class="scenario-icon bull">↗</span><div><strong>กรณีปรับตัวขึ้น</strong><small>ราคาปัจจุบัน + 1 ATR</small></div><b id="bullScenario">—</b></div><div class="scenario"><span class="scenario-icon flat">━</span><div><strong>ราคาจุดอ้างอิง</strong><small>ราคาตลาดล่าสุด</small></div><b id="baseScenario">—</b></div><div class="scenario"><span class="scenario-icon bear">↘</span><div><strong>กรณีปรับตัวลง</strong><small>ราคาปัจจุบัน − 1 ATR</small></div><b id="bearScenario">—</b></div></div><div class="insight-note"><svg><use href="#i-info" /></svg><span>ตลาดไทยอาจเคลื่อนไหวต่างจาก XAU/USD ตามค่าเงินบาท ค่าพรีเมียม และรอบประกาศราคา</span></div></article>
+      <section class="lower-grid" id="tools-section"><article class="scenario-panel surface"><div class="section-kicker">04 / SCENARIO ANALYSIS</div><h2>สถานการณ์ราคาที่เป็นไปได้</h2><p class="panel-desc" id="scenarioDescription">กรอบจำลองเชิงสถิติจากความผันผวน ATR(14) สำหรับ XAU/USD ไม่ใช่การพยากรณ์ล่วงหน้า</p><div class="scenario-list"><div class="scenario"><span class="scenario-icon bull">↗</span><div><strong>กรณีปรับตัวขึ้น</strong><small>ราคาปัจจุบัน + 1 ATR</small></div><b id="bullScenario">—</b></div><div class="scenario"><span class="scenario-icon flat">━</span><div><strong>ราคาจุดอ้างอิง</strong><small>ราคาตลาดล่าสุด</small></div><b id="baseScenario">—</b></div><div class="scenario"><span class="scenario-icon bear">↘</span><div><strong>กรณีปรับตัวลง</strong><small>ราคาปัจจุบัน − 1 ATR</small></div><b id="bearScenario">—</b></div></div><div class="insight-note"><svg><use href="#i-info" /></svg><span>ตลาดไทยอาจเคลื่อนไหวต่างจาก XAU/USD ตามค่าเงินบาท ค่าพรีเมียม และรอบประกาศราคา</span></div></article>
         <article class="converter-panel surface" id="calculator-section"><div class="section-kicker">05 / GOLD CALCULATOR</div><h2>เครื่องคำนวณทองคำ</h2><p class="panel-desc">ประเมินมูลค่าทองไทยด้วยราคาประกาศล่าสุดของตลาดไทย</p><div class="calc-field"><label for="goldWeight">น้ำหนักทองคำ</label><div class="calc-entry"><input type="number" min="0.01" step="0.25" value="1" id="goldWeight" inputmode="decimal"/><span>บาททองคำ</span></div></div><div class="weight-presets"><button data-weight="0.25">1 สลึง</button><button data-weight="0.5">2 สลึง</button><button class="selected" data-weight="1">1 บาท</button><button data-weight="2">2 บาท</button><button data-weight="5">5 บาท</button></div><div class="calc-output"><span>ประมาณราคาซื้อจากร้าน <small>(ราคาขายออก)</small></span><strong id="calcBuy">—</strong><div class="calc-line"></div><span>ประมาณราคาขายคืนร้าน <small>(ราคารับซื้อ)</small></span><strong id="calcSell">—</strong></div><div class="calc-footer">* คำนวณสำหรับทองแท่ง 96.5% ไม่รวมค่ากำเหน็จ ค่าธรรมเนียม หรือเงื่อนไขของร้านทอง</div></article></section>
       <section class="alerts-section surface" id="alerts-section"><div class="alerts-intro"><span class="section-kicker">06 / PRICE WATCH</span><h2>ติดตามระดับราคาที่คุณสนใจ</h2><p>กำหนดราคาเป้าหมาย และรับการแจ้งเตือนบนหน้าจอเมื่อราคาข้ามระดับที่ตั้งไว้ <strong>ขณะเปิดเว็บอยู่เท่านั้น</strong></p></div><div class="alerts-content"><form id="alertForm" class="alert-form"><label><span>ตลาด</span><select id="alertMarket"><option value="thai">ทองแท่งไทย (THB)</option><option value="world">ทองโลก (USD)</option></select></label><label><span>เงื่อนไข</span><select id="alertDirection"><option value="above">สูงกว่าหรือเท่ากับ</option><option value="below">ต่ำกว่าหรือเท่ากับ</option></select></label><label><span>ราคาเป้าหมาย</span><input id="alertTarget" type="number" min="1" step="0.01" required placeholder="เช่น 70000" /></label><button class="add-alert" type="submit">+ เพิ่มการติดตาม</button></form><div class="alert-list" id="alertList"><p class="alerts-empty">ยังไม่ได้ตั้งระดับราคาที่ติดตาม</p></div></div></section>
       <footer class="footer"><div><span class="footer-logo">✧ GOLDX</span><span class="footer-sub">DATA FIRST. ALWAYS.</span></div><p>ราคาทองไทยอิงประกาศสมาคมค้าทองคำผ่าน API ที่ระบุ · ราคาทองโลกเป็น Spot อ้างอิง ไม่ใช่ราคาที่สามารถซื้อขายได้ทันที · เครื่องมือวิเคราะห์เพื่อการศึกษา ไม่ใช่คำแนะนำในการลงทุน</p><div class="footer-links"><a href="https://www.goldtraders.or.th/" target="_blank" rel="noopener noreferrer">สมาคมค้าทองคำ ↗</a><a href="https://www.thaigoldtoday.com" target="_blank" rel="noopener noreferrer">ราคาทอง.today ↗</a><a href="https://xaus.com/api/" target="_blank" rel="noopener noreferrer">XAUS API ↗</a></div></footer>
@@ -135,7 +135,7 @@
     return new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',day:'numeric',month:'short',...(withTime?{hour:'2-digit',minute:'2-digit',hour12:false}:{})}).format(new Date(t));
   };
   const state = { quotes:null, market:'world', period:'1M', charts:new Map(), chartPoints:[],
-    thaiHistory:null, worldTech:null, chartRequest:0, alertList:[], refreshing:false, lastSync:null };
+    thaiHistory:null, thaiTech:null, thaiTechMeta:null, worldTech:null, chartRequest:0, alertList:[], refreshing:false, lastSync:null };
   let toastTimer;
   function toast(msg) {
     $('toast').textContent=msg;
@@ -219,7 +219,7 @@
       setChange('thaiChange',thai.change,'บาท',' / รอบก่อน');
       setText('ornamentSell',thai.sellOrnament>0?fmt(thai.sellOrnament):'—');
       setText('ornamentBuy',thai.buyOrnament>0?fmt(thai.buyOrnament):'—');
-      noteSource('thai',thai.source,thai.updatedAt,!thai.updatedAt||(Date.now()-Date.parse(thai.updatedAt)>72*60*60*1000));
+      noteSource('thai',thai.source+(thai.stale?' · ประกาศก่อนหน้า':''),thai.updatedAt,thai.stale===true||!thai.updatedAt);
     } else {
       indicateUnavailable('thai');setText('ornamentSell','—');setText('ornamentBuy','—');
     }
@@ -240,8 +240,8 @@
       setText('heroLastSync',timeTH(state.lastSync));
       const freshWorld=world&&!world.stale;
       const both=data.thai&&data.world;
-      const thaiNotOld=thai?.updatedAt && Date.now()-Date.parse(thai.updatedAt)<=72*60*60*1000;
-      setStatus(both&&freshWorld&&thaiNotOld?'ราคาเชื่อมต่อแล้ว':freshWorld?'ทองโลกออนไลน์':both?'ข้อมูลอาจล่าช้า':'เชื่อมต่อบางส่วน',both&&freshWorld&&thaiNotOld?'ok':'warn');
+      const thaiNotOld=thai?.updatedAt && thai.stale===false;
+      setStatus(both&&freshWorld&&thaiNotOld?'ราคาเชื่อมต่อแล้ว':freshWorld&&thai?.stale?'ทองโลกออนไลน์ · ทองไทยประกาศก่อนหน้า':freshWorld?'ทองโลกออนไลน์':thai?.stale?'ทองไทยประกาศก่อนหน้า':both?'ข้อมูลอาจล่าช้า':'เชื่อมต่อบางส่วน',both&&freshWorld&&thaiNotOld?'ok':'warn');
     } else setStatus('ข้อมูลไม่พร้อมใช้งาน','error');
     const activeQuote=state.quotes?.[state.market];
     setText('chartPrice',activeQuote?(state.market==='thai'?`฿${fmt(activeQuote.sellBar)}`:`$${fmt(activeQuote.price)}`):'—');
@@ -351,9 +351,8 @@
       if(current!==state.chartRequest)return;
       $('priceChart').style.visibility='hidden';state.chartPoints=[];
       $('chartEmpty').hidden=false;
-      const needsToken=state.market==='thai' && (e.code==='THAI_HISTORY_REQUIRES_TOKEN'||e.status===424);
-      setText('chartEmptyMessage',needsToken?'กราฟย้อนหลังทองไทยต้องใช้ GTA_API_TOKEN ที่ได้รับอนุญาตจากสมาคมค้าทองคำ (ดู README)':'ไม่สามารถตรวจสอบประวัติราคาจริงได้ในขณะนี้ — ไม่มีการแสดงกราฟสมมติ');
-      setText('chartSource',needsToken?'รอการเชื่อมต่อ API ประวัติทองไทย':'ไม่พบข้อมูลที่ยืนยันได้');
+      setText('chartEmptyMessage','ไม่สามารถตรวจสอบประวัติราคาจริงได้ในขณะนี้ — จะไม่แสดงข้อมูลประมาณการแทนราคาที่ประกาศจริง');
+      setText('chartSource','ไม่พบประวัติราคาจากแหล่งที่ตรวจสอบได้');
       setText('chartChange','—');$('chartXAxis').replaceChildren();
     } finally {if(current===state.chartRequest)$('chartLoading').hidden=true;}
   }
@@ -383,12 +382,14 @@
     for(let i=period;i<trs.length;i++)atr=(atr*(period-1)+trs[i])/period;
     return atr;
   }
-  function getWorldTechnicals(points){
+  function getWorldTechnicals(points,zone='world'){
     const completed=points.filter(p=>p.c>0&&p.h>0&&p.l>0).slice();
     if(completed.length<18)return null;
-    // Avoid a potentially incomplete trading-day candle when constructing a daily pivot.
+    // Previous COMPLETED session only; Thai local day is Asia/Bangkok, world day UTC.
     const todayUTC=new Date().toISOString().slice(0,10);
-    if(completed.at(-1).t.slice(0,10)>=todayUTC)completed.pop();
+    const todayTH=new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+    const asDate=p=>zone==='thai'?new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(p.t)):p.t.slice(0,10);
+    if(asDate(completed.at(-1))>=(zone==='thai'?todayTH:todayUTC))completed.pop();
     if(completed.length<15)return null;
     const prev=completed.at(-1),high=prev.h,low=prev.l,close=prev.c;
     const pivot=(high+low+close)/3;
@@ -412,23 +413,20 @@
       setText('worldChange','ไม่มีราคาปิดก่อนหน้าที่ตรวจสอบได้');
     }
   }
+  async function loadThaiTech(){
+    try {
+      const data=await getChart('thai','3M');
+      if(!data.isDaily||data.quality!=='reported-daily-ohlc')throw new Error('Thai daily verified OHLC not available');
+      const tech=getWorldTechnicals(data.points,'thai');
+      if(!tech)throw new Error('Insufficient completed Thai daily OHLC');
+      state.thaiTech=tech;
+      state.thaiTechMeta={source:data.source,count:data.points.length,coverage:data.coverage};
+    } catch(e){state.thaiTech=null;state.thaiTechMeta=null;}
+    renderTechnicals();
+  }
   function techForCurrentMarket(){
-    const base=state.worldTech;
-    if(!base)return null;
-    if(state.market==='world')return {...base,method:'pivot',derived:false};
-    const thai=state.quotes?.thai,world=state.quotes?.world;
-    if(!thai?.sellBar||!world?.price)return null;
-    const actual=state.thaiHistory;
-    if(actual && actual.length>=8){
-      // Actual GTA announcement ranges (not candlestick pivots).
-      const closes=actual.slice(-28).map(p=>p.c).filter(v=>v>0), recent=closes.slice(-15);
-      const low=Math.min(...recent),high=Math.max(...recent),step=(high-low)||100;
-      return {r2:high+step*.382,r1:high,pivot:(low+high+closes.at(-1))/3,s1:low,s2:low-step*.382,
-        rsi:calcRSI(closes),atr:null,ema20:calcEMA(closes,20),ema50:calcEMA(closes,50),method:'thai-range',derived:false};
-    }
-    const scale=thai.sellBar/world.price;
-    return {...base,r2:base.r2*scale,r1:base.r1*scale,pivot:base.pivot*scale,s1:base.s1*scale,
-      s2:base.s2*scale,atr:base.atr*scale,method:'scaled-world',derived:true};
+    if(state.market==='world')return state.worldTech?{...state.worldTech,method:'world-daily'}:null;
+    return state.thaiTech?{...state.thaiTech,method:'thai-daily'}:null;
   }
   function renderTechnicals() {
     const isThai=state.market==='thai';
@@ -438,8 +436,8 @@
       for(const id of ['r2','r1','pivot','s1','s2','rsiValue','atrValue','emaValue','bullScenario','baseScenario','bearScenario'])setText(id,'—');
       setText('momentumText','ยังไม่มีข้อมูล');setText('technicalBadge','รอข้อมูล');
       $('technicalBadge').className='technical-badge';setText('levelBasis','ต้องใช้ข้อมูลราคาจริง');
-      setText('techDisclaimer','การคำนวณต้องมีข้อมูลย้อนหลังจริง หากแหล่งข้อมูลไม่พร้อมจะแสดงเป็นขีด');
-      $('momentumThumb').style.left='50%';return;
+      setText('techDisclaimer',isThai?'แนวรับ–แนวต้านไทยต้องใช้ OHLC รายวันที่มาจากประกาศจริง หากมีไม่พอจะไม่ใช้สูตรแปลงราคาทองโลกมาทดแทน':'การคำนวณต้องมีข้อมูลย้อนหลังจริง หากแหล่งข้อมูลไม่พร้อมจะแสดงเป็นขีด');
+      $('momentumThumb').style.left='50%';setText('scenarioDescription',isThai?'ต้องมีราคาทองไทย OHLC รายวันที่ตรวจสอบได้จึงจะแสดงกรอบ ATR':'ต้องมีข้อมูลทองโลกย้อนหลังจริงจึงจะแสดงกรอบ ATR');return;
     }
     for(const k of ['r2','r1','pivot','s1','s2'])setText(k,fmt(data[k],isThai?0:2));
     setText('rsiValue',isNum(data.rsi)?fmt(data.rsi,1):'—');
@@ -452,21 +450,20 @@
     const badge=isNum(rsi)?rsi>70?'ซื้อมากเกินไป':rsi<30?'ขายมากเกินไป':rsi>55?'เอนเอียงขึ้น':rsi<45?'เอนเอียงลง':'เป็นกลาง':'ไม่พร้อม';
     setText('technicalBadge',badge);
     $('technicalBadge').className='technical-badge '+(isNum(rsi)&&rsi>55?'bull':isNum(rsi)&&rsi<45?'bear':'');
-    if(isThai&&data.method==='thai-range') {
-      setText('levelBasis','กรอบประกาศย้อนหลังจริง');
-      setText('techDisclaimer','แนวรับ/ต้านไทยใช้ช่วงสูง–ต่ำจากราคาประกาศย้อนหลัง ไม่ใช่ Pivot OHLC; RSI และ EMA คำนวณตาม “รอบประกาศ” ไม่ใช่รายวัน');
-    } else if(isThai) {
-      setText('levelBasis','ประมาณการจาก XAU/USD');
-      setText('techDisclaimer','ระดับทองไทยนี้ประมาณจากสัดส่วน Pivot ของ XAU/USD กับราคาทองไทย โดยสมมติค่าเงิน/พรีเมียมคงที่ ไม่ใช่แนวรับ–ต้านที่สมาคมประกาศ; RSI/EMA อิงตลาดโลก');
+    if(isThai){
+      setText('levelBasis','Pivot ทองไทย · วันก่อน');
+      setText('techDisclaimer',`Classic Pivot จากราคาทองแท่งขายออก OHLC ของวันก่อน (${chartDate(data.basis)}) ในชุดข้อมูล gta ที่ตรวจสอบได้ผ่าน ${state.thaiTechMeta?.source||'แหล่งข้อมูลรายวัน'} · ค่า RSI/EMA/ATR จากข้อมูลย้อนหลังจริง · ไม่ใช่ระดับจากสมาคมโดยตรง`);
     } else {
       setText('levelBasis','Pivot ของแท่งวันก่อน');
       setText('techDisclaimer',`Classic Pivot: ใช้ High/Low/Close ของวันก่อน (${chartDate(data.basis)}); RSI, EMA, ATR(14) ใช้ข้อมูลย้อนหลังจริง ไม่ใช่คำทำนาย`);
     }
-    const price=state.quotes?.world?.price;
-    const atr=worldTech?.atr;
-    setText('baseScenario',isNum(price)?`$${fmt(price)}`:'—');
-    setText('bullScenario',isNum(price)&&isNum(atr)?`$${fmt(price+atr)}`:'—');
-    setText('bearScenario',isNum(price)&&isNum(atr)?`$${fmt(Math.max(0,price-atr))}`:'—');
+    const price=isThai?state.quotes?.thai?.sellBar:state.quotes?.world?.price;
+    const atr=data.atr;
+    const curr=isThai?'฿':'$';
+    setText('baseScenario',isNum(price)?`${curr}${fmt(price,isThai?0:2)}`:'—');
+    setText('bullScenario',isNum(price)&&isNum(atr)?`${curr}${fmt(price+atr,isThai?0:2)}`:'—');
+    setText('bearScenario',isNum(price)&&isNum(atr)?`${curr}${fmt(Math.max(0,price-atr),isThai?0:2)}`:'—');
+    setText('scenarioDescription',`กรอบจำลองเชิงสถิติ ± 1 ATR(14) สำหรับ ${isThai?'ทองไทย 96.5% (บาท/บาททองคำ)':'XAU/USD (USD/oz)'} จากข้อมูลราคาย้อนหลังจริง ไม่ใช่การพยากรณ์ล่วงหน้า`);
   }
   function renderConverter() {
     const weight=Number($('goldWeight').value),thai=state.quotes?.thai;
@@ -567,10 +564,11 @@
   async function boot(){
     bind();loadAlerts();renderAlerts();
     // In parallel: quote and observed history; do not render synthetic prices.
-    await Promise.allSettled([refreshQuotes(true),loadChart(),loadWorldTech()]);
+    await Promise.allSettled([refreshQuotes(true),loadChart(),loadWorldTech(),loadThaiTech()]);
     renderTechnicals();
     // Refreshes only while the page is visible; not a background notification service.
     setInterval(()=>{if(document.visibilityState==='visible')refreshQuotes(true);},60000);
+    setInterval(()=>{if(document.visibilityState==='visible'){state.charts.delete('thai:3M');state.charts.delete('world:3M');loadThaiTech();loadWorldTech();}},360000);
     document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&(!state.lastSync||Date.now()-state.lastSync>60000))refreshQuotes(true);});
   }
   document.addEventListener('DOMContentLoaded',boot);
