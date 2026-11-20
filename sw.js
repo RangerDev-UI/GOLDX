@@ -1,5 +1,5 @@
 /* GOLDX PWA: cache only the static application shell, never live market/API data. */
-const CACHE='goldx4-static-v3';
+const CACHE='goldx4-static-v4';
 const STATIC=['/','/index.html','/favicon.svg','/goldx-pro.css','/goldx4.css','/goldx4.js','/ivory-ledger.css','/ivory-ledger.js','/goldx-pro.js','/goldx-indicators.js','/goldx-levels.js','/goldx-near-ui.js'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{
  const cache=await caches.open(CACHE);
