@@ -15,6 +15,7 @@ function response(data, code = 200, seconds = 55) {
   return { statusCode: code, headers: {
     'Content-Type': 'application/json; charset=utf-8',
     'Cache-Control': `public, max-age=0, s-maxage=${seconds}, stale-while-revalidate=60`,
+    'Netlify-CDN-Cache-Control': `public, s-maxage=${seconds}, stale-while-revalidate=60`,
     'X-Content-Type-Options': 'nosniff'
   }, body: JSON.stringify(data) };
 }
@@ -23,7 +24,7 @@ function isPositive(v) { return typeof v === 'number' && Number.isFinite(v) && v
 function validTime(v) { const time = Date.parse(v); return Number.isFinite(time) ? new Date(time).toISOString() : null; }
 async function json(url, opts = {}) {
   const controller = new AbortController();
-  const tm = setTimeout(() => controller.abort(), 6500);
+  const tm = setTimeout(() => controller.abort(), 5000);
   try {
     const r = await fetch(url, { ...opts, signal: controller.signal,
       headers: { 'Accept':'application/json', 'User-Agent':'GOLDX/1.0 (market dashboard)', ...(opts.headers || {}) }
