@@ -242,6 +242,8 @@ async function loadHistory(){
  }
 }
 function init(){
+ // Start with all EMA lines hidden; users can explicitly enable available lines.
+ for(const id of ['gxShowEma20','gxShowEma50','gxShowEma200'])$(id).checked=false;
  $('gxShowEma20').addEventListener('change',drawEMA);$('gxShowEma50').addEventListener('change',drawEMA);$('gxShowEma200').addEventListener('change',drawEMA);
  $('gxCalPrev').addEventListener('click',()=>{S.month=moveMonth(S.month,-1);S.selected=null;S.page=0;redrawHistory();});
  $('gxCalNext').addEventListener('click',()=>{S.month=moveMonth(S.month,1);S.selected=null;S.page=0;redrawHistory();});
