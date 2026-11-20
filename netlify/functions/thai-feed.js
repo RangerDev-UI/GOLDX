@@ -35,7 +35,7 @@ function parseChnwtDate(d,t){
 
 // Public GTA homepage is an optional read-only fallback, not the members-only API.
 // Refuse to parse a price unless its official announcement timestamp is present.
-function officialWebQuote(html){
+function officialWebQuote(html, pageUrl='https://www.goldtraders.or.th/'){
  if(typeof html!=='string'||html.length<100)throw new Error('Official webpage missing HTML');
  const text=html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,' ')
    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi,' ')
@@ -55,11 +55,12 @@ function officialWebQuote(html){
  const buy=/รับซื้อ\s*([\d,]+(?:\.\d{1,2})?)/.exec(bar);
  const sell=/ขายออก\s*([\d,]+(?:\.\d{1,2})?)/.exec(bar);
  if(!buy||!sell)throw new Error('Official webpage price markers missing');
- const ornBuy=/รับซื้อ\s*([\d,]+(?:\.\d{1,2})?)/.exec(goldOrn);
+ if(!positive(n(buy[1]))||!positive(n(sell[1]))||n(sell[1])-n(buy[1])>1000)throw new Error('Official webpage bullion spread invalid');
+ const ornBuy=/(?:รับซื้อ|ฐานภาษี)\s*([\d,]+(?:\.\d{1,2})?)/.exec(goldOrn);
  const ornSell=/ขายออก\s*([\d,]+(?:\.\d{1,2})?)/.exec(goldOrn);
  return markQuote({buyBar:n(buy[1]),sellBar:n(sell[1]),buyOrnament:n(ornBuy?.[1]),sellOrnament:n(ornSell?.[1]),
    change:null,changePercent:null,round:n(seq),updatedAt:announcedAt,
-   source:'หน้าเว็บสมาคมค้าทองคำ · ประกาศสาธารณะ',sourceUrl:'https://www.goldtraders.or.th/',
+   source:'หน้าเว็บสมาคมค้าทองคำ · ประกาศสาธารณะ',sourceUrl:pageUrl,
    sourceType:'official-public-page',spot:null,fx:null,marketOpen:null});
 }
 
@@ -104,7 +105,7 @@ async function fetchOfficialPage(url, type){
     headers:{Accept:'text/html,application/xhtml+xml','User-Agent':'GOLDX/1.1 (public market reference)'}});
   if(!r.ok)throw new Error(`Official website HTTP ${r.status}`);
   const html=await r.text();
-  return type==='table'?officialTableQuote(html,url):officialWebQuote(html);
+  return type==='table'?officialTableQuote(html,url):officialWebQuote(html,url);
  } finally{clearTimeout(timeout);}
 }
 async function quote(json){
@@ -128,6 +129,7 @@ async function quote(json){
    if(d.status!=='success'||!c)throw new Error('Invalid relay response');
    return markQuote({buyBar:n(c.price?.gold_bar?.buy),sellBar:n(c.price?.gold_bar?.sell),buyOrnament:n(c.price?.gold?.buy),sellOrnament:n(c.price?.gold?.sell),change:null,changePercent:null,round:n(/ครั้งที่\s*(\d+)/.exec(c.update_time||'')?.[1]),updatedAt:parseChnwtDate(c.update_date,c.update_time),source:'CHNWT · ข้อมูลประกาศราคาทองคำไทย',sourceUrl:'https://github.com/max180643/thai-gold-api',sourceType:'public-relay',spot:null,fx:null,marketOpen:null});
  });
+ add('GTA public SSE page',()=>fetchOfficialPage('https://sse.goldtraders.or.th/','home'));
  add('GTA home',()=>fetchOfficialPage('https://www.goldtraders.or.th/','home'));
  add('GTA classic table',()=>fetchOfficialPage('https://classic.goldtraders.or.th/UpdatePriceList.aspx','table'));
  add('GTA sideb table',()=>fetchOfficialPage('https://sideb.goldtraders.or.th/UpdatePriceList.aspx','table'));
