@@ -1,0 +1,4 @@
+# Publish only the public website files, never server-side code.
+*
+!index.html
+!favicon.svg
