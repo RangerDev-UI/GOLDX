@@ -157,7 +157,7 @@ async function worldChart(period) {
     }
   }
   if(points.length<2) throw new Error('No verified historical points');
-  return response({ market:'world',period, source, isDaily, points, fetchedAt:new Date().toISOString() },200,TTL.chart);
+  return response({ market:'world',period, source, isDaily, points, fetchedAt:new Date().toISOString() },200,period==='1D'?60:period==='1W'?120:TTL.chart);
 }
 async function thaiHistory(days) {
   if(!process.env.GTA_API_TOKEN) return response({
