@@ -32,7 +32,8 @@ test('Old promotional hero, Gold Factors and duplicated headline are removed',()
  assert.doesNotMatch(main,/gxAutoSyncInfo|gx4HeadlineStatus/);
 });
 test('Data Health is a single compact topbar disclosure with complete source diagnostics',()=>{
- const top=html.slice(html.indexOf('<header class="topbar">'),html.indexOf('</header>')+9);
+ const topStart=html.indexOf('<header class="topbar">');
+ const top=html.slice(topStart,html.indexOf('</header>',topStart)+9);
  assert.match(top,/<details class="gx4-health-popover" id="gx4-toolbox">/);
  assert.match(top,/<summary[^>]+>[\s\S]*id="gx4HealthBadge"/);
  for(const id of ['statusPill','statusText','gx4HealthThai','gx4HealthWorld','gx4HealthFX','gx4HealthSource'])assert.match(top,new RegExp('id="'+id+'"'),id);
