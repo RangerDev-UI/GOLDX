@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0c0d" />
+  <meta name="application-name" content="GOLDX" />
+  <meta property="og:title" content="GOLDX — Gold Market Intelligence" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20role%3D%22img%22%20aria-label%3D%22GOLDX%22%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23ffecb2%22%2F%3E%3Cstop%20offset%3D%22.55%22%20stop-color%3D%22%23d8ac60%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23a27a3a%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%2260%22%20height%3D%2260%22%20rx%3D%2215%22%20fill%3D%22%23111214%22%20stroke%3D%22%235f4d2e%22%20stroke-width%3D%222%22%2F%3E%0A%3Cpath%20d%3D%22M36%2018.5C32.5%2016.7%2024.2%2018.4%2020.8%2024.6c-4%207.5-1%2017.6%206.2%2020.9%204.4%202.1%209.8%201.3%2013.3-1V34H30.5%22%20stroke%3D%22url%28%23g%29%22%20fill%3D%22none%22%20stroke-width%3D%225.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%0A%3Cpath%20d%3D%22M42%2015.6%2052.2%2027M52.2%2015.6%2042%2027%22%20stroke%3D%22url%28%23g%29%22%20fill%3D%22none%22%20stroke-width%3D%223.4%22%20stroke-linecap%3D%22round%22%2F%3E%0A%3C%2Fsvg%3E" />
+  <meta name="description" content="GOLDX — ตรวจสอบราคาทองคำไทย 96.5% และทองคำโลก XAU/USD พร้อมกราฟจริง แนวรับ แนวต้าน RSI และการวิเคราะห์เชิงเทคนิค" />
+  <title>GOLDX — Gold Market Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+:root{--bg:#0b0c0e;--rail:#101113;--panel:#151619;--panel-hi:#191a1d;--line:#2c2d2e;--subline:#262728;--gold:#ddba78;--gold-hi:#f7daa1;--gold-muted:#a18a63;--ink:#f1f0ec;--muted:#85868b;--subtle:#54565a;--green:#91d9b0;--red:#ed8c83;--radius:16px;--font:'DM Sans','Noto Sans Thai',system-ui,sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;-webkit-font-smoothing:antialiased}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}a{color:inherit}h1,h2,h3,p{margin:0}svg{display:block}button{border:0;color:inherit}::selection{background:#b99654;color:#0b0c0e}.svg-defs{position:absolute;overflow:hidden;pointer-events:none}.site-shell{display:flex;min-height:100vh;max-width:2200px;margin:auto}.sidebar{width:248px;flex-shrink:0;position:sticky;top:0;height:100vh;background:var(--rail);border-right:1px solid #252527;display:flex;flex-direction:column;padding:31px 16px 22px;z-index:22}.brand{display:flex;align-items:center;gap:11px;padding:0 12px 41px}.brand-mark{height:40px;width:40px;flex-shrink:0;display:grid;place-items:center;background:linear-gradient(130deg,#f5d997,#95723c);color:#15120e;border-radius:11px;transform:rotate(-8deg);box-shadow:0 5px 22px #bb8d3830}.brand-mark>span{font-size:16px;font-weight:800;letter-spacing:-1px;transform:rotate(8deg);line-height:1}.brand-type strong{display:block;font-size:22px;letter-spacing:3px;font-weight:800;line-height:1.1}.brand-type small{display:block;white-space:nowrap;font-size:7px;letter-spacing:2px;color:var(--gold-muted);margin-top:5px;font-weight:700}.sidebar-label,.section-kicker{font-size:10px;letter-spacing:2px;font-weight:800;color:var(--gold-muted)}.sidebar-label{padding:0 14px;margin-bottom:17px;color:#777779;font-size:9px}.side-nav{display:flex;flex-direction:column;gap:5px}.nav-link{height:47px;background:transparent;width:100%;padding:0 13px;border-radius:9px;display:flex;align-items:center;gap:13px;text-align:left;font-weight:600;color:#a4a4a6;transition:background .18s,color .18s}.nav-link:hover{background:#222326;color:#fff}.nav-link.is-active{background:linear-gradient(90deg,#4c412d70,#27231e50);color:#f4d391;border:1px solid #b18e472e}.nav-link svg,.quote-icon svg,.icon-btn svg,.insight-note svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.nav-link svg{width:18px;height:18px}.sidebar-bottom{margin-top:auto}.side-source{background:#17181a;border:1px solid #35302a;border-radius:12px;padding:17px 12px;display:flex;gap:10px;align-items:flex-start}.source-emblem{color:var(--gold);font-size:21px}.side-source strong{font-size:11px;color:var(--gold-hi)}.side-source p{font-size:10px;line-height:1.8;color:#858285;margin-top:6px}.sidebar-footer{display:flex;justify-content:space-between;align-items:center;padding:22px 7px 0;color:#66676a;font-size:10px;letter-spacing:.8px}.sidebar-footer span{font-size:14px;color:var(--gold-muted)}.content-wrap{min-width:0;flex:1}.topbar{height:79px;padding:0 43px;border-bottom:1px solid #222427;display:flex;align-items:center;justify-content:space-between;gap:12px}.top-left,.top-right{display:flex;align-items:center;gap:20px}.top-left{font-size:11px;color:#909194}.top-eyebrow{font-weight:700;letter-spacing:1.6px;color:#e3e1da;font-size:10px}.top-eyebrow span{color:#6d6b65;margin:0 4px}.top-divider{height:15px;width:1px;background:#38383a}.timezone{font-size:9px;letter-spacing:1px;color:#787879;font-weight:700}.live-indicator{display:inline-flex;gap:8px;align-items:center;background:#24342c40;border:1px solid #46694e65;border-radius:50px;padding:7px 11px;color:var(--green);font-size:10px;font-weight:700;white-space:nowrap}.live-indicator.is-warning{background:#4f392039;border-color:#725936;color:#f3ca80}.live-indicator.is-error{background:#51292a42;border-color:#844042;color:#f09c96}.status-dot,.mini-dot,.tiny-dot{width:6px;height:6px;background:currentColor;border-radius:50%;display:inline-block;box-shadow:0 0 9px currentColor}.icon-btn{width:36px;height:36px;border:1px solid #38393c;background:#1c1d20;border-radius:10px;display:grid;place-items:center;color:#c2c2c3;transition:.2s}.icon-btn:hover{color:var(--gold-hi);border-color:#846e48}.icon-btn.spinning svg{animation:rot .85s linear infinite}.menu-button{display:none}.content-wrap main{padding:31px 43px 0;max-width:1800px;margin:auto}.hero{min-height:250px;position:relative;overflow:hidden;border-radius:17px;background:radial-gradient(ellipse 70% 160% at 100% 50%,#61503339,transparent 75%),linear-gradient(110deg,#1c1b18,#181819 68%,#252018);border:1px solid #403a2f;display:flex;justify-content:space-between;align-items:center;padding:29px 38px}.hero::after{content:'';position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(90deg,transparent 95%,#e4c68e06 96%),linear-gradient(transparent 95%,#e4c68e06 96%);background-size:32px 32px;mask-image:linear-gradient(to left,black,transparent 65%)}.hero-copy{z-index:2;max-width:670px}.eyebrow{font-size:10px;font-weight:800;color:#ebc785;letter-spacing:2.2px;display:flex;gap:12px;align-items:center}.eyebrow-line{width:23px;height:1px;background:#e9c37b}.eyebrow-end{color:#776d5a}.hero h1{font-size:clamp(28px,3.1vw,48px);letter-spacing:-1.4px;line-height:1.4;font-weight:700;margin:12px 0 9px}.hero h1 em{font-style:normal;color:var(--gold-hi);font-weight:800}.hero-copy>p{font-size:12px;line-height:2.05;color:#b5afa5;max-width:560px}.hero-meta{margin-top:23px;font-size:10px;display:flex;gap:15px;flex-wrap:wrap;color:#a7a7a6;align-items:center}.hero-meta strong{font-weight:700;color:#e4d2ae}.hero-meta .mini-dot{margin-right:7px;color:var(--green)}.hero-meta-break{height:13px;background:#534c42;width:1px}.hero-art{height:232px;width:300px;flex-shrink:0;position:relative;z-index:1;margin-right:3px}.art-circle{border:1px solid #cda65a2c;border-radius:50%;position:absolute;left:15px;top:-66px;width:280px;height:280px}.art-circle-2{left:49px;top:-31px;width:212px;height:212px;border-style:dashed;border-color:#cda65a36}.art-halo{width:220px;height:130px;background:#e0b66545;filter:blur(62px);border-radius:50%;position:absolute;left:43px;top:65px}.gold-block{position:absolute;background:linear-gradient(146deg,#ffedac 0%,#cea158 17%,#b27c2f 51%,#73512c 100%);box-shadow:7px 19px 38px #0009,inset 2px 2px 3px #fff6;border:1px solid #f9d9988c;border-radius:6px;transform:skewY(-12deg) rotate(-11deg)}.gold-block-front{width:181px;height:112px;left:64px;top:58px;padding:18px 19px;color:#493216;display:flex;flex-direction:column;justify-content:space-between}.gold-block-front:after{content:'';position:absolute;bottom:-11px;left:1px;width:100%;height:12px;clip-path:polygon(0 0,100% 0,94% 100%,7% 100%);background:linear-gradient(90deg,#8d652f,#bd8540,#513713);border-radius:0 0 4px 4px}.gold-block-back{width:173px;height:103px;left:94px;top:42px;transform:skewY(-12deg) rotate(6deg);background:linear-gradient(150deg,#f8d18a,#88602a);opacity:.9}.gold-block-back span{position:absolute;font-size:9px;letter-spacing:3px;left:30px;bottom:22px;color:#67451b}.block-brand{font-weight:800;font-size:23px;letter-spacing:-1px}.block-purity{font-weight:800;font-size:19px;letter-spacing:1px}.block-purity span{display:block;font-size:6px;letter-spacing:2.2px}.block-mass{font-size:8px;letter-spacing:1.5px;position:absolute;right:18px;top:24px;font-weight:800}.art-cross{color:#f3d09a;font-size:21px;position:absolute;top:23px;right:24px;opacity:.9}.section-caption{display:flex;align-items:end;justify-content:space-between;gap:10px;margin:31px 0 17px}.section-caption h2,.panel-top h2,.lower-grid h2,.alerts-intro h2{font-size:19px;letter-spacing:-.4px;margin-top:7px;font-weight:700}.muted-caption{font-size:10px;color:var(--muted)}.quote-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.quote-card{position:relative;overflow:hidden;background:linear-gradient(140deg,#1c1d1f,#171819 65%);border:1px solid #38383a;border-radius:16px;padding:23px 26px 0;min-width:0}.thai-quote{background:radial-gradient(ellipse 70% 70% at 100% 0%,#9a753123,transparent),linear-gradient(140deg,#20201e,#171819 70%);border-color:#594d37}.quote-card::after{content:'';position:absolute;right:-38px;top:50px;height:135px;width:135px;border:1px solid #d3aa5520;transform:rotate(35deg);border-radius:20px;pointer-events:none}.quote-top{display:flex;gap:12px;align-items:center}.quote-icon{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;flex-shrink:0;font-weight:800;font-size:23px}.quote-icon-thai{background:linear-gradient(130deg,#75572c,#b59351);color:#ffe5af}.quote-icon-world{background:#20333b;color:#8fc3d1}.quote-title{min-width:0}.quote-name{font-size:9px;font-weight:800;letter-spacing:1.3px;color:#a99a76}.world-quote .quote-name{color:#8dabae}.quote-title h3{font-size:17px;font-weight:700;margin-top:2px;white-space:nowrap}.quote-title h3 span{font-size:11px;color:#9b9995;margin-left:4px}.small-tag{font-size:9px;letter-spacing:.9px;border:1px solid #514839;color:var(--gold);padding:7px 9px;border-radius:6px;font-weight:700;margin-left:auto;white-space:nowrap}.world-quote .small-tag{border-color:#2c4a52;color:#9dbdc5}.quote-sub-label{font-size:11px;color:#92918f;margin-top:23px}.quote-hero-price{display:flex;align-items:baseline;gap:7px;white-space:nowrap;margin-top:2px}.quote-hero-price .currency-sign{font-size:21px;color:var(--gold-muted)}.world-quote .currency-sign{color:#92bec6}.quote-hero-price strong{font-size:clamp(28px,3.25vw,48px);font-weight:700;letter-spacing:-2px;line-height:1.3;font-variant-numeric:tabular-nums}.price-suffix{font-size:10px;color:#828286;font-weight:700;letter-spacing:1px;margin-left:5px}.quote-info-row{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:5px;min-height:25px}.price-change{font-size:11px;font-weight:700;padding:5px 9px;border-radius:5px;background:#282a2b;color:#a5a6a6}.price-change.positive{color:var(--green);background:#27463760}.price-change.negative{color:var(--red);background:#512c2b70}.quote-caption{font-size:10px;color:#979594}.quote-caption strong{font-weight:700;color:#c7c3b9}.quote-divider{height:1px;background:#393938;margin:20px 0 15px}.bidask{display:flex;align-items:center;gap:20px;padding-bottom:22px}.bidask>div{flex:1;min-width:0}.bidask small{color:#898988;display:block;font-size:10px;margin-bottom:5px}.bidask strong{font-size:19px;letter-spacing:-.4px;white-space:nowrap;font-weight:700;font-variant-numeric:tabular-nums}.bidask-bar{width:1px;height:36px;background:#484644}.source-line{margin:0 -26px;padding:12px 25px;display:flex;gap:8px;align-items:center;background:#0d0e1055;border-top:1px solid #333335;color:#989a99;font-size:9px;min-width:0}.source-line>span:nth-child(2){overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tiny-dot{color:var(--green);width:5px;height:5px;flex-shrink:0}.tiny-dot.stale{color:#efc17a}.tiny-dot.off{color:#a4a3a3}.time-right{margin-left:auto;flex-shrink:0;color:#b6b7b5}.quick-metrics{margin:16px 0 28px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.metric{border:1px solid #2e3032;background:#141517;border-radius:12px;padding:17px 18px;min-width:0}.metric>span{font-size:10px;color:#929291;font-weight:700}.metric-slash{color:#605a50;margin:0 4px}.metric strong{display:block;font-size:23px;font-weight:700;letter-spacing:-.6px;margin-top:10px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.metric small{font-size:10px;color:#727373}.analysis-layout{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(300px,1fr);gap:16px;scroll-margin-top:20px}.surface{background:linear-gradient(150deg,#18191b,#141517);border:1px solid #303133;border-radius:16px;min-width:0}.chart-panel{padding:24px 25px 20px}.technical-panel{padding:24px 23px 20px}.panel-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.panel-top-mark{font-size:9px;letter-spacing:1px;color:#787877;font-weight:700}.panel-top-mark span{font-size:17px;color:var(--gold);margin-left:8px}.chart-controls{display:flex;justify-content:space-between;gap:8px;margin:25px 0 25px;align-items:center;flex-wrap:wrap}.segmented{background:#101113;border:1px solid #373738;border-radius:9px;padding:4px;display:flex;gap:3px}.segment{border-radius:6px;color:#8d8e8e;background:transparent;padding:10px 13px;font-size:11px;font-weight:700;white-space:nowrap}.segment.is-selected{background:#57452a;color:#ffdfac}.periods{display:flex;gap:3px}.periods button{padding:9px 11px;background:transparent;color:#898989;font-size:10px;font-weight:800;border-radius:7px}.periods button:hover{color:#e1d1b0;background:#2d2b27}.periods button.is-selected{background:#28241d;color:#ecc784}.chart-info{display:flex;justify-content:space-between;align-items:baseline;gap:9px}.chart-info>div{display:flex;align-items:baseline;gap:13px;flex-wrap:wrap}.chart-symbol{font-size:10px;font-weight:800;letter-spacing:.9px;color:#bba67f}.chart-info strong{font-size:23px;letter-spacing:-.7px;font-weight:700}.chart-info small{font-size:11px;color:#9f9e98}.chart-data-source{color:#7a7975;font-size:9px;text-align:right}.chart-container{height:305px;position:relative;margin-top:9px;overflow:hidden}.chart-container>svg{width:100%;height:100%}.chart-loader,.chart-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:13px;color:#97948b;font-size:11px;background:#151618ed;z-index:5}.chart-loader[hidden],.chart-empty[hidden]{display:none}.spinner{height:25px;width:25px;border:2px solid #55462d;border-top-color:#e8c481;border-radius:50%;animation:rot .9s linear infinite}.chart-empty span{font-size:30px;color:var(--gold-muted)}.chart-empty strong{font-size:13px;color:#ded5c4}.chart-empty p{max-width:300px;text-align:center;line-height:1.8;color:#93908a}.chart-tooltip{position:absolute;z-index:3;pointer-events:none;top:20px;left:20px;background:#0b0c0def;border:1px solid #615033;border-radius:8px;padding:9px 12px;font-size:10px;white-space:nowrap;color:#ddd}.chart-tooltip strong{display:block;font-size:14px;color:var(--gold-hi);margin-top:3px}.chart-tooltip[hidden]{display:none}.chart-axis{display:flex;justify-content:space-between;font-size:9px;color:#777875;padding:0 7px;margin-top:0}.chart-footnote{display:flex;justify-content:space-between;align-items:center;gap:10px;color:#727370;font-size:9px;margin-top:17px}.chart-legend{display:flex;align-items:center;gap:8px;color:#aaa8a3}.chart-legend i{height:2px;width:17px;background:var(--gold)}.tech-star{color:var(--gold);font-size:26px;font-weight:300}.tech-mode{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:24px 0 23px;font-size:10px;color:#a3a3a0;font-weight:600}.technical-badge{color:#f0c987;background:#413723;border:1px solid #69532b;padding:5px 8px;border-radius:5px;font-size:10px;font-weight:700;white-space:nowrap}.technical-badge.bull{color:#89d2a4;background:#243c2e;border-color:#366344}.technical-badge.bear{color:#ee9994;background:#4b2d2d;border-color:#71413e}.momentum-block{padding:15px 0 20px;border-top:1px solid #333438}.minor-label{font-size:9px;letter-spacing:1.4px;font-weight:800;color:#8c8d8e}.momentum-block strong{display:block;font-size:22px;color:#f0d4a0;margin:7px 0 17px;font-weight:700}.momentum-track{height:7px;position:relative;border-radius:50px;background:linear-gradient(90deg,#d27675,#b9ac6f 50%,#7bbd9b)}.track-gradient{display:block}.momentum-thumb{height:15px;width:15px;background:#fff4da;border:3px solid #9f804d;position:absolute;top:50%;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 3px #d8b8792c}.track-titles{display:flex;justify-content:space-between;color:#77777a;font-size:8px;font-weight:800;letter-spacing:.6px;margin-top:10px}.tech-levels{border-top:1px solid #333438;padding-top:16px}.levels-head{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:11px;font-weight:700;margin-bottom:8px}.levels-head span:last-child{font-weight:500;font-size:9px;color:#818285}.level-row{display:flex;justify-content:space-between;align-items:center;min-height:38px;font-size:11px;color:#b6b7b5;border-bottom:1px solid #2b2c2e}.level-row:last-child{border-bottom:0}.level-row span{display:flex;align-items:center;gap:8px}.level-mark{height:5px;width:5px;border-radius:50%;background:#9e9e9e}.level-row.resistance .level-mark{background:#e38a83}.level-row.support .level-mark{background:#8dd1ab}.level-row.pivot .level-mark{background:#d8bd7f}.level-row strong{color:#dededb;letter-spacing:.2px;font-size:12px;font-variant-numeric:tabular-nums}.tech-indicators{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #333439;border-radius:9px;margin-top:17px}.tech-indicators>div{padding:12px 8px;text-align:center;min-width:0}.tech-indicators>div+div{border-left:1px solid #333439}.tech-indicators small{font-size:9px;color:#8b8d8d;display:block}.tech-indicators strong{font-size:13px;display:block;margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.tech-disclaimer{font-size:10px;color:#93918a;line-height:1.8;margin-top:15px}.lower-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0;scroll-margin-top:20px}.lower-grid>article{padding:25px 27px}.panel-desc{color:#8f908d;font-size:11px;line-height:1.9;margin-top:11px}.scenario-list{display:flex;flex-direction:column;gap:11px;margin-top:22px}.scenario{border:1px solid #333435;background:#10111355;border-radius:10px;display:flex;align-items:center;gap:12px;padding:12px 14px}.scenario-icon{height:39px;width:39px;border-radius:9px;display:grid;place-items:center;font-size:18px;font-weight:700;flex-shrink:0}.scenario-icon.bull{background:#2f4c3a60;color:#9ad7ac}.scenario-icon.flat{background:#48402b80;color:#f4ce83}.scenario-icon.bear{background:#57313472;color:#f2a399}.scenario>div{min-width:0}.scenario strong{font-size:12px;display:block}.scenario small{font-size:10px;color:#858584;display:block;margin-top:3px}.scenario b{font-size:17px;margin-left:auto;white-space:nowrap;letter-spacing:-.4px}.insight-note{margin-top:21px;padding:12px 12px;display:flex;align-items:flex-start;gap:10px;border:1px solid #494029;background:#8e733315;border-radius:8px;font-size:10px;line-height:1.7;color:#afaa9f}.insight-note svg{height:16px;width:16px;color:var(--gold);flex-shrink:0}.calc-field{margin-top:21px}.calc-field label,.alert-form label>span{font-size:11px;font-weight:600;color:#b0ada7}.calc-entry{display:flex;margin-top:9px;border:1px solid #464445;border-radius:9px;background:#101113;height:49px;align-items:center}.calc-entry input{background:transparent;color:#eae9e5;border:0;outline:0;padding:0 16px;width:100%;min-width:0;font-size:19px;font-weight:700}.calc-entry span{color:#92928e;font-size:11px;white-space:nowrap;padding:0 15px}.weight-presets{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}.weight-presets button{background:#232425;border:1px solid #343638;border-radius:7px;color:#a1a19e;padding:9px 10px;font-size:10px;font-weight:700}.weight-presets button.selected{border-color:#94784b;background:#4c402d;color:#f2d19a}.calc-output{background:linear-gradient(115deg,#272419,#1c1b1a);border:1px solid #49412f;border-radius:10px;padding:16px 17px;margin-top:22px}.calc-output>span{font-size:11px;color:#c8bc9d;display:block}.calc-output>span small{color:#959189}.calc-output>strong{font-size:25px;letter-spacing:-.6px;display:block;margin:3px 0 0;font-weight:700}.calc-line{height:1px;background:#5c5038;margin:13px 0}.calc-footer{font-size:10px;line-height:1.8;color:#81817e;margin-top:13px}.alerts-section{margin-top:16px;padding:27px;display:grid;grid-template-columns:minmax(220px,.8fr) minmax(0,1.5fr);gap:35px;scroll-margin-top:20px}.alerts-intro p{font-size:11px;line-height:1.9;color:#888986;margin-top:11px}.alerts-intro p strong{color:#d7c392;font-weight:600}.alert-form{display:grid;grid-template-columns:1fr 1.1fr 1fr auto;gap:9px;align-items:end}.alert-form label{display:flex;flex-direction:column;gap:7px;min-width:0}.alert-form select,.alert-form input{background:#101113;border:1px solid #3a3b3e;border-radius:8px;color:#e4e3df;min-width:0;width:100%;height:41px;padding:0 10px;font-size:11px;outline:0}.alert-form option{background:#191a1b}.add-alert{height:41px;padding:0 16px;background:linear-gradient(110deg,#c09b60,#e3c58d);border-radius:8px;color:#211808;font-size:11px;font-weight:800;white-space:nowrap}.add-alert:hover{filter:brightness(1.08)}.alert-list{margin-top:14px;display:flex;flex-direction:column;gap:8px}.alerts-empty{color:#858585;font-size:10px}.alert-item{display:flex;justify-content:space-between;gap:8px;padding:9px 11px;background:#202123;border:1px solid #38393b;border-radius:8px;align-items:center}.alert-item p{font-size:10px;color:#bdb9ad}.alert-item p strong{color:#ecd09a;font-size:12px}.alert-item button{background:transparent;color:#b1a5a1;font-size:18px}.alert-item.triggered{border-color:#4e855c;background:#233b2b}.footer{margin:27px -43px 0;padding:28px 43px 35px;border-top:1px solid #292a2c;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:22px}.footer-logo{font-size:14px;letter-spacing:2px;color:#e5c68c;font-weight:800;display:block}.footer-sub{color:#70706e;font-size:8px;letter-spacing:1px}.footer p{color:#777776;font-size:9px;line-height:1.8;max-width:580px}.footer-links{display:flex;flex-direction:column;gap:4px}.footer-links a{font-size:10px;color:#aa9673;text-decoration:none;white-space:nowrap}.footer-links a:hover{color:var(--gold-hi)}.toast{z-index:100;position:fixed;bottom:24px;right:25px;max-width:385px;background:#282419;border:1px solid #8c7143;box-shadow:0 12px 35px #0008;color:#f0d9b2;border-radius:10px;padding:14px 19px;font-size:12px;opacity:0;transform:translateY(15px);pointer-events:none;transition:.25s;line-height:1.7}.toast.is-visible{opacity:1;transform:translateY(0)}.mobile-cover{display:none}@keyframes rot{to{transform:rotate(360deg)}}
+@media (max-width:1480px){.sidebar{width:228px}.content-wrap main{padding:28px 30px 0}.topbar{padding:0 30px}.footer{margin-left:-30px;margin-right:-30px;padding-left:30px;padding-right:30px}.hero{padding-left:30px}.analysis-layout{grid-template-columns:minmax(0,1.55fr) minmax(280px,1fr)}.quote-card{padding-left:20px;padding-right:20px}.source-line{margin-left:-20px;margin-right:-20px;padding-left:20px;padding-right:20px}.quote-title h3{font-size:16px}.bidask strong{font-size:17px}.quote-hero-price strong{font-size:35px}}
+@media (max-width:1220px){.quick-metrics{grid-template-columns:repeat(2,1fr)}.analysis-layout{grid-template-columns:1fr}.technical-panel{display:grid;grid-template-columns:1fr 1fr;column-gap:25px;align-items:start}.technical-panel .panel-top,.technical-panel .tech-mode,.technical-panel .tech-disclaimer{grid-column:1/-1}.tech-mode{margin-bottom:5px}.tech-levels{padding-top:15px}.momentum-block{padding-top:15px}.tech-indicators{grid-column:1/-1;margin-top:0}.lower-grid{grid-template-columns:1fr 1fr}.alerts-section{grid-template-columns:1fr;gap:20px}.alert-form{grid-template-columns:1fr 1fr 1fr auto}.hero-art{width:240px}.gold-block-front{left:28px}.gold-block-back{left:60px}.art-circle{left:0}.art-circle-2{left:34px}}
+@media (max-width:890px){.sidebar{position:fixed;left:0;transform:translateX(-100%);transition:transform .25s;width:270px;box-shadow:15px 0 35px #0005}.sidebar.open{transform:translateX(0)}.mobile-cover.show{display:block;position:fixed;inset:0;background:#0009;z-index:20}.menu-button{display:grid}.topbar{height:68px}.top-left{gap:10px}.timezone{display:none}.content-wrap{width:100%}.hero{min-height:220px}.quote-hero-price strong{font-size:34px}}
+@media (max-width:700px){.content-wrap main{padding:18px 16px 0}.topbar{padding:0 16px}.hero{padding:24px 20px;min-height:262px}.hero-copy{position:relative;z-index:3}.hero h1{font-size:28px;max-width:440px}.hero-copy>p{font-size:11px;max-width:480px}.hero-art{position:absolute;right:-85px;top:40px;opacity:.2;transform:scale(1.3)}.hero-meta{font-size:9px}.top-left{font-size:10px}.topbar .top-divider{display:none}.top-eyebrow{display:none}.quote-grid{grid-template-columns:1fr}.quote-card{padding:21px 21px 0}.quote-hero-price strong{font-size:40px}.section-caption{margin-top:25px}.section-caption h2,.panel-top h2,.lower-grid h2,.alerts-intro h2{font-size:17px}.muted-caption{display:none}.quick-metrics{gap:10px}.metric{padding:15px 13px}.metric strong{font-size:21px}.metric>span{font-size:9px}.analysis-layout{grid-template-columns:1fr}.chart-panel,.technical-panel{padding:21px 15px}.chart-controls{margin:20px 0 19px}.chart-container{height:275px}.technical-panel{display:block}.tech-indicators{margin-top:16px}.tech-levels{margin-top:0}.lower-grid{grid-template-columns:1fr}.lower-grid>article{padding:22px 20px}.alerts-section{padding:21px 18px}.alert-form{grid-template-columns:1fr 1fr}.add-alert{grid-column:1/-1}.footer{grid-template-columns:1fr;margin:25px -16px 0;padding:25px 18px}.footer-links{flex-direction:row;flex-wrap:wrap;gap:14px}.footer p{max-width:none}}
+@media (max-width:420px){.top-right{gap:6px}.top-left{gap:6px}.topbar{padding:0 12px}.live-indicator{font-size:9px;padding:6px 8px}.hero h1{font-size:25px}.hero-meta-break{display:none}.quote-hero-price strong{font-size:36px}.bidask strong{font-size:16px}.chart-info{align-items:start;flex-direction:column}.chart-controls{align-items:start;flex-direction:column}.segmented,.segment{width:100%}.segment{width:50%;text-align:center}.periods{width:100%;justify-content:space-between}.chart-container{height:260px}.chart-panel,.technical-panel{padding:17px 12px}.source-line{font-size:8px}.quote-title h3{font-size:15px}.quote-card::after{opacity:.35}.metric strong{font-size:19px}.alert-form{grid-template-columns:1fr}.alert-form .add-alert{grid-column:auto}}
+@media (prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+  </style>
+</head>
+<body>
+<svg width="0" height="0" aria-hidden="true" class="svg-defs" xmlns="http://www.w3.org/2000/svg"><defs>
+  <symbol id="i-overview" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></symbol>
+  <symbol id="i-gold" viewBox="0 0 24 24"><path d="m4 16 3-7h10l3 7-2 3H6z"/><path d="M8 9 10 5h4l2 4"/><path d="M4 16h16"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c-6 5-6 13 0 18M12 3c6 5 6 13 0 18"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 20V4M3 20h18M6 15l5-5 4 3 6-8"/></symbol>
+  <symbol id="i-calculator" viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="2"/><path d="M8 7h8M8 11h2M14 11h2M8 15h2M14 15h2"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 8-3 8-3 10h18c0-2-3-2-3-10M10 21h4"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M5.7 9a7 7 0 0 1 12-2l2.3 3M18.3 15a7 7 0 0 1-12 2L4 14"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="m7 17 10-10M9 7h8v8"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7v1"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></symbol>
+</defs></svg>
+<div class="site-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand" aria-label="GOLDX">
+      <span class="brand-mark"><span>GX</span></span>
+      <span class="brand-type"><strong>GOLDX</strong><small>LIVE MARKET INTELLIGENCE</small></span>
+    </div>
+    <div class="sidebar-label">WORKSPACE</div>
+    <nav class="side-nav" aria-label="การนำทาง">
+      <button class="nav-link is-active" data-nav="overview"><svg><use href="#i-overview" /></svg><span>ภาพรวมตลาด</span></button>
+      <button class="nav-link" data-nav="thai"><svg><use href="#i-gold" /></svg><span>ทองคำไทย 96.5%</span></button>
+      <button class="nav-link" data-nav="world"><svg><use href="#i-globe" /></svg><span>ทองคำโลก XAU/USD</span></button>
+      <button class="nav-link" data-nav="analysis"><svg><use href="#i-chart" /></svg><span>วิเคราะห์ราคา</span></button>
+      <button class="nav-link" data-nav="calculator"><svg><use href="#i-calculator" /></svg><span>คำนวณทองคำ</span></button>
+      <button class="nav-link" data-nav="alerts"><svg><use href="#i-bell" /></svg><span>แจ้งเตือนราคา</span></button>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="side-source"><span class="source-emblem">◎</span><div><strong>Trusted market data</strong><p>แสดงราคาจากผู้ให้บริการจริง<br />ไม่มีราคาแต่งขึ้นหรือสุ่มตัวเลข</p></div></div>
+      <div class="sidebar-footer">© 2026 GOLDX <span>✦</span> v1.0</div>
+    </div>
+  </aside>
+  <div class="content-wrap">
+    <header class="topbar">
+      <div class="top-left"><button class="menu-button icon-btn" id="menuBtn" aria-label="เปิดเมนู"><span>☰</span></button><span class="top-eyebrow">MARKETS <span>/</span> GOLD</span><span class="top-divider"></span><span id="todayDate">—</span></div>
+      <div class="top-right"><span class="timezone">BANGKOK (GMT+7)</span><span class="live-indicator" id="statusPill"><span class="status-dot"></span><span id="statusText">กำลังเชื่อมต่อ</span></span><button type="button" class="icon-btn refresh-btn" id="refreshBtn" title="ดึงราคาล่าสุด" aria-label="รีเฟรชราคาล่าสุด"><svg><use href="#i-refresh" /></svg></button></div>
+    </header>
+    <main>
+      <section class="hero" id="overview-section">
+        <div class="hero-copy"><span class="eyebrow"><span class="eyebrow-line"></span> THE GOLD STANDARD <span class="eyebrow-end">/ 2026</span></span>
+          <h1>ทุกจังหวะของ <em>ทองคำ</em><br/>ในมุมมองที่เหนือกว่า</h1>
+          <p>ติดตามราคาทองคำไทยและตลาดโลกในที่เดียว พร้อมข้อมูลเชิงเทคนิคที่ตรวจสอบแหล่งที่มาได้ เพื่อช่วยให้คุณตัดสินใจอย่างมีข้อมูล</p>
+          <div class="hero-meta"><span><span class="mini-dot"></span> อัปเดตทุก 60 วินาทีเมื่อเปิดหน้าเว็บ</span><span class="hero-meta-break"></span><span>ตรวจสอบล่าสุด <strong id="heroLastSync">—</strong></span></div>
+        </div>
+        <div class="hero-art" aria-hidden="true"><div class="art-circle art-circle-1"></div><div class="art-circle art-circle-2"></div><div class="art-halo"></div><div class="gold-block gold-block-back"><span>GOLDX</span></div><div class="gold-block gold-block-front"><div class="block-brand">Au</div><div class="block-purity">999.9 <span>FINE GOLD</span></div><span class="block-mass">1 KILO</span></div><span class="art-cross">✦</span></div>
+      </section>
+      <div class="section-caption"><div><span class="section-kicker">01 / LIVE MARKET</span><h2>ราคาทองคำปัจจุบัน</h2></div><span class="muted-caption">ราคาตามเวลาจริงของแหล่งข้อมูล · ไม่ใช่ราคาเสนอซื้อขาย</span></div>
+      <section class="quote-grid" aria-label="ราคาทองคำไทยและทองคำโลก">
+        <article class="quote-card thai-quote" id="thai-card">
+          <div class="quote-top"><span class="quote-icon quote-icon-thai">฿</span><div class="quote-title"><span class="quote-name">THAILAND GOLD</span><h3>ทองคำไทย <span>96.5%</span></h3></div><span class="small-tag">THB / BAHT</span></div>
+          <div class="quote-sub-label">ทองคำแท่ง · ราคาขายออก / 1 บาททองคำ</div>
+          <div class="quote-hero-price"><span class="currency-sign">฿</span><strong id="thaiMainPrice">—</strong><span class="price-suffix">THB</span></div>
+          <div class="quote-info-row"><span id="thaiChange" class="price-change neutral">รอข้อมูลราคา</span><span class="quote-caption">ประกาศครั้งที่ <strong id="thaiRound">—</strong></span></div>
+          <div class="quote-divider"></div><div class="bidask"><div><small>ราคารับซื้อ</small><strong id="thaiBuy">—</strong></div><span class="bidask-bar"></span><div><small>ส่วนต่างซื้อ–ขาย</small><strong id="thaiSpread">—</strong></div></div>
+          <div class="source-line"><span class="tiny-dot" id="thaiDot"></span><span id="thaiSource">กำลังตรวจสอบแหล่งข้อมูล</span><span id="thaiTime" class="time-right">—</span></div>
+        </article>
+        <article class="quote-card world-quote" id="world-card">
+          <div class="quote-top"><span class="quote-icon quote-icon-world"><svg><use href="#i-globe" /></svg></span><div class="quote-title"><span class="quote-name">GLOBAL SPOT GOLD</span><h3>ทองคำโลก <span>XAU/USD</span></h3></div><span class="small-tag">USD / OZ</span></div>
+          <div class="quote-sub-label">Spot Gold · ดอลลาร์สหรัฐ / ทรอยออนซ์</div>
+          <div class="quote-hero-price"><span class="currency-sign">$</span><strong id="worldMainPrice">—</strong><span class="price-suffix">USD</span></div>
+          <div class="quote-info-row"><span id="worldChange" class="price-change neutral">อ้างอิงราคา Spot</span><span class="quote-caption">1 oz = 31.1035 กรัม</span></div>
+          <div class="quote-divider"></div><div class="bidask"><div><small>ราคา / กรัม (USD)</small><strong id="worldPerGram">—</strong></div><span class="bidask-bar"></span><div><small>ทอง / เงิน (Ratio)</small><strong id="worldSilverRatio">—</strong></div></div>
+          <div class="source-line"><span class="tiny-dot" id="worldDot"></span><span id="worldSource">กำลังตรวจสอบแหล่งข้อมูล</span><span id="worldTime" class="time-right">—</span></div>
+        </article>
+      </section>
+      <section class="quick-metrics" aria-label="ข้อมูลตลาดสำคัญ"><div class="metric"><span>USD / THB <span class="metric-slash">/</span> อัตราแลกเปลี่ยน</span><strong id="fxRate">—</strong><small id="fxDetail">อ้างอิงแหล่งข้อมูล</small></div><div class="metric"><span>ทองรูปพรรณ <span class="metric-slash">/</span> ขายออก</span><strong id="ornamentSell">—</strong><small>บาท / 1 บาททองคำ</small></div><div class="metric"><span>ทองรูปพรรณ <span class="metric-slash">/</span> รับซื้อ</span><strong id="ornamentBuy">—</strong><small>บาท / 1 บาททองคำ</small></div><div class="metric"><span>GOLD / SILVER <span class="metric-slash">/</span> RATIO</span><strong id="silverRatio">—</strong><small>อัตราส่วนราคา Spot</small></div></section>
+      <section class="analysis-layout" id="analysis-section">
+        <div class="chart-panel surface">
+          <div class="panel-top"><div><span class="section-kicker">02 / MARKET CHART</span><h2>กราฟการเคลื่อนไหวราคา</h2></div><div class="panel-top-mark">PRICE ACTION <span>↗</span></div></div>
+          <div class="chart-controls"><div class="segmented" role="tablist" aria-label="ตลาดทองคำ"><button class="segment" id="tabThai" role="tab" aria-selected="false" data-market="thai">🇹🇭 ทองคำไทย</button><button class="segment is-selected" id="tabWorld" role="tab" aria-selected="true" data-market="world">🌐 ทองคำโลก</button></div><div class="periods" role="group" aria-label="ช่วงเวลาของกราฟ"><button data-period="1D">1D</button><button data-period="1W">1W</button><button class="is-selected" data-period="1M">1M</button><button data-period="3M">3M</button><button data-period="1Y">1Y</button></div></div>
+          <div class="chart-info"><div><span class="chart-symbol" id="chartSymbol">XAU / USD</span><strong id="chartPrice">—</strong><small id="chartChange">—</small></div><span id="chartSource" class="chart-data-source">กำลังโหลดข้อมูลกราฟจริง</span></div>
+          <div class="chart-container" id="chartContainer"><div class="chart-loader" id="chartLoading"><span class="spinner"></span><span>กำลังโหลดประวัติราคาจริง…</span></div><svg id="priceChart" aria-label="กราฟราคาทองคำย้อนหลัง" role="img" viewBox="0 0 920 310" preserveAspectRatio="none"><defs><linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#dcb96c" stop-opacity=".23"/><stop offset="100%" stop-color="#dcb96c" stop-opacity="0"/></linearGradient></defs><g id="chartGrid"></g><path id="chartArea" fill="url(#chartFill)" d=""/><path id="chartLine" fill="none" stroke="#ebcb87" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d=""/><g id="chartLastDot"></g></svg><div class="chart-tooltip" id="chartTooltip" hidden></div><div class="chart-empty" id="chartEmpty" hidden><span>◇</span><strong>ยังไม่มีข้อมูลกราฟที่ยืนยันได้</strong><p id="chartEmptyMessage">ไม่แสดงกราฟสมมติเพื่อหลีกเลี่ยงความเข้าใจผิด</p></div></div>
+          <div class="chart-axis" id="chartXAxis"><span>—</span><span>—</span><span>—</span><span>—</span><span>—</span></div><div class="chart-footnote"><span class="chart-legend"><i></i> <span id="chartLegend">XAU/USD Price</span></span><span>ข้อมูลย้อนหลังจริง · อาจล่าช้าตามแหล่งข้อมูล</span></div>
+        </div>
+        <aside class="technical-panel surface" id="technical-panel"><div class="panel-top compact"><div><span class="section-kicker">03 / TECHNICAL OUTLOOK</span><h2>มุมมองเชิงเทคนิค</h2></div><span class="tech-star">✳</span></div><div class="tech-mode"><span id="techMarketLabel">ทองคำโลก · XAU/USD</span><span class="technical-badge" id="technicalBadge">รอข้อมูล</span></div>
+          <div class="momentum-block"><span class="minor-label">MOMENTUM INDICATOR</span><strong id="momentumText">—</strong><div class="momentum-track"><span class="track-gradient"></span><i class="momentum-thumb" id="momentumThumb" style="left:50%"></i></div><div class="track-titles"><span>BEARISH</span><span>NEUTRAL</span><span>BULLISH</span></div></div>
+          <div class="tech-levels"><div class="levels-head"><span>แนวรับ · แนวต้าน</span><span id="levelBasis">อิง Pivot รายวัน</span></div><div class="level-row resistance"><span><i class="level-mark"></i> แนวต้าน R2</span><strong id="r2">—</strong></div><div class="level-row resistance"><span><i class="level-mark"></i> แนวต้าน R1</span><strong id="r1">—</strong></div><div class="level-row pivot"><span><i class="level-mark"></i> Pivot</span><strong id="pivot">—</strong></div><div class="level-row support"><span><i class="level-mark"></i> แนวรับ S1</span><strong id="s1">—</strong></div><div class="level-row support"><span><i class="level-mark"></i> แนวรับ S2</span><strong id="s2">—</strong></div></div>
+          <div class="tech-indicators"><div><small>RSI (14)</small><strong id="rsiValue">—</strong></div><div><small>ATR (14)</small><strong id="atrValue">—</strong></div><div><small>EMA 20 / 50</small><strong id="emaValue">—</strong></div></div><p class="tech-disclaimer" id="techDisclaimer">คำนวณจากข้อมูลตลาดย้อนหลังจริง ไม่ใช่การทำนายราคาที่รับประกันผล</p>
+        </aside>
+      </section>
+      <section class="lower-grid" id="tools-section"><article class="scenario-panel surface"><div class="section-kicker">04 / SCENARIO ANALYSIS</div><h2>สถานการณ์ราคาที่เป็นไปได้</h2><p class="panel-desc">กรอบจำลองเชิงสถิติจากความผันผวน ATR(14) สำหรับ XAU/USD ไม่ใช่การพยากรณ์ล่วงหน้า</p><div class="scenario-list"><div class="scenario"><span class="scenario-icon bull">↗</span><div><strong>กรณีปรับตัวขึ้น</strong><small>ราคาปัจจุบัน + 1 ATR</small></div><b id="bullScenario">—</b></div><div class="scenario"><span class="scenario-icon flat">━</span><div><strong>ราคาจุดอ้างอิง</strong><small>ราคาตลาดล่าสุด</small></div><b id="baseScenario">—</b></div><div class="scenario"><span class="scenario-icon bear">↘</span><div><strong>กรณีปรับตัวลง</strong><small>ราคาปัจจุบัน − 1 ATR</small></div><b id="bearScenario">—</b></div></div><div class="insight-note"><svg><use href="#i-info" /></svg><span>ตลาดไทยอาจเคลื่อนไหวต่างจาก XAU/USD ตามค่าเงินบาท ค่าพรีเมียม และรอบประกาศราคา</span></div></article>
+        <article class="converter-panel surface" id="calculator-section"><div class="section-kicker">05 / GOLD CALCULATOR</div><h2>เครื่องคำนวณทองคำ</h2><p class="panel-desc">ประเมินมูลค่าทองไทยด้วยราคาประกาศล่าสุดของตลาดไทย</p><div class="calc-field"><label for="goldWeight">น้ำหนักทองคำ</label><div class="calc-entry"><input type="number" min="0.01" step="0.25" value="1" id="goldWeight" inputmode="decimal"/><span>บาททองคำ</span></div></div><div class="weight-presets"><button data-weight="0.25">1 สลึง</button><button data-weight="0.5">2 สลึง</button><button class="selected" data-weight="1">1 บาท</button><button data-weight="2">2 บาท</button><button data-weight="5">5 บาท</button></div><div class="calc-output"><span>ประมาณราคาซื้อจากร้าน <small>(ราคาขายออก)</small></span><strong id="calcBuy">—</strong><div class="calc-line"></div><span>ประมาณราคาขายคืนร้าน <small>(ราคารับซื้อ)</small></span><strong id="calcSell">—</strong></div><div class="calc-footer">* คำนวณสำหรับทองแท่ง 96.5% ไม่รวมค่ากำเหน็จ ค่าธรรมเนียม หรือเงื่อนไขของร้านทอง</div></article></section>
+      <section class="alerts-section surface" id="alerts-section"><div class="alerts-intro"><span class="section-kicker">06 / PRICE WATCH</span><h2>ติดตามระดับราคาที่คุณสนใจ</h2><p>กำหนดราคาเป้าหมาย และรับการแจ้งเตือนบนหน้าจอเมื่อราคาข้ามระดับที่ตั้งไว้ <strong>ขณะเปิดเว็บอยู่เท่านั้น</strong></p></div><div class="alerts-content"><form id="alertForm" class="alert-form"><label><span>ตลาด</span><select id="alertMarket"><option value="thai">ทองแท่งไทย (THB)</option><option value="world">ทองโลก (USD)</option></select></label><label><span>เงื่อนไข</span><select id="alertDirection"><option value="above">สูงกว่าหรือเท่ากับ</option><option value="below">ต่ำกว่าหรือเท่ากับ</option></select></label><label><span>ราคาเป้าหมาย</span><input id="alertTarget" type="number" min="1" step="0.01" required placeholder="เช่น 70000" /></label><button class="add-alert" type="submit">+ เพิ่มการติดตาม</button></form><div class="alert-list" id="alertList"><p class="alerts-empty">ยังไม่ได้ตั้งระดับราคาที่ติดตาม</p></div></div></section>
+      <footer class="footer"><div><span class="footer-logo">✧ GOLDX</span><span class="footer-sub">DATA FIRST. ALWAYS.</span></div><p>ราคาทองไทยอิงประกาศสมาคมค้าทองคำผ่าน API ที่ระบุ · ราคาทองโลกเป็น Spot อ้างอิง ไม่ใช่ราคาที่สามารถซื้อขายได้ทันที · เครื่องมือวิเคราะห์เพื่อการศึกษา ไม่ใช่คำแนะนำในการลงทุน</p><div class="footer-links"><a href="https://www.goldtraders.or.th/" target="_blank" rel="noopener noreferrer">สมาคมค้าทองคำ ↗</a><a href="https://www.thaigoldtoday.com" target="_blank" rel="noopener noreferrer">ราคาทอง.today ↗</a><a href="https://xaus.com/api/" target="_blank" rel="noopener noreferrer">XAUS API ↗</a></div></footer>
+    </main>
+  </div>
+</div>
+<div id="toast" class="toast" aria-live="polite" role="status"></div>
+<div id="mobileCover" class="mobile-cover" hidden></div>
+<script>
+/* GOLDX — client dashboard. No mock or simulated market prices. */
+(() => {
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const $$ = selector => [...document.querySelectorAll(selector)];
+  const fmt = (n, decimals = 2) => typeof n === 'number' && Number.isFinite(n)
+    ? n.toLocaleString('en-US', {minimumFractionDigits:decimals, maximumFractionDigits:decimals}) : '—';
+  const thaiFmt = (n, decimals=2) => fmt(n,decimals);
+  const isNum = n => typeof n==='number' && Number.isFinite(n);
+  const timeTH = value => {
+    const dt = new Date(value);
+    if (!value || isNaN(+dt)) return 'ไม่ทราบเวลา';
+    return new Intl.DateTimeFormat('th-TH', {timeZone:'Asia/Bangkok',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',hour12:false}).format(dt);
+  };
+  const chartDate = (t, withTime=false) => {
+    if (!t || isNaN(+new Date(t))) return '—';
+    return new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',day:'numeric',month:'short',...(withTime?{hour:'2-digit',minute:'2-digit',hour12:false}:{})}).format(new Date(t));
+  };
+  const state = { quotes:null, market:'world', period:'1M', charts:new Map(), chartPoints:[],
+    thaiHistory:null, worldTech:null, chartRequest:0, alertList:[], refreshing:false, lastSync:null };
+  let toastTimer;
+  function toast(msg) {
+    $('toast').textContent=msg;
+    $('toast').classList.add('is-visible');
+    clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('is-visible'),4800);
+  }
+  function setText(id, value) { $(id).textContent=value; }
+  function setStatus(label, kind='ok') {
+    $('statusPill').classList.toggle('is-warning',kind==='warn');
+    $('statusPill').classList.toggle('is-error',kind==='error');
+    $('statusText').textContent=label;
+  }
+  async function getJson(url) {
+    const ctrl = new AbortController(), timer = setTimeout(()=>ctrl.abort(),13000);
+    try {
+      const r=await fetch(url,{signal:ctrl.signal,cache:'no-store'});
+      const data=await r.json();
+      if (!r.ok) throw Object.assign(new Error(data.message || data.error || `HTTP ${r.status}`),{code:data.error,status:r.status});
+      return data;
+    } finally {clearTimeout(timer);}
+  }
+  async function getQuotes() {
+    try {return await getJson('/api/market?mode=quotes');}
+    catch(e) {
+      // Local HTML preview only: publicly documented CORS APIs. Netlify functions are preferred.
+      const results=await Promise.allSettled([
+        getJson('https://www.thaigoldtoday.com/api/gold-price'),
+        getJson('https://xaus.com/api/v1/spot?compact=1')
+      ]);
+      let thai=null, world=null;
+      if(results[0].status==='fulfilled') {
+        const d=results[0].value,c=d.current || {};
+        if(Number(c.sellBar)>0) thai={buyBar:+c.buyBar,sellBar:+c.sellBar,buyOrnament:+c.buyOrnament,
+          sellOrnament:+c.sellOrnament,change:isNum(c.change)?c.change:null,round:c.updateRound,
+          updatedAt:c.updatedAt,source:'ราคาทอง.today · อ้างอิงสมาคมค้าทองคำ',sourceUrl:'https://www.thaigoldtoday.com',
+          sourceType:'public-relay',fx:d.world?.thbRate};
+      }
+      if(results[1].status==='fulfilled') {
+        const d=results[1].value;
+        const time=d.price_as_of||d.data_state?.as_of||d.updated_at;
+        if(Number(d.spot_usd_oz)>0) world={price:+d.spot_usd_oz,perGram:d.per_gram_usd,
+          silver:d.silver_usd_oz,ratio:d.gold_silver_ratio,fxUsdThb:d.fx_rates?.THB,
+          updatedAt:time,stale:d.stale===true||d.data_state?.status==='stale'||!time||Date.now()-Date.parse(time)>180000,
+          source:'XAUS · XAU/USD',sourceUrl:'https://xaus.com/api/',sourceType:'indicative'};
+      }
+      if(!thai&&!world) throw e;
+      return {thai,world,fetchedAt:new Date().toISOString(),errors:{thai:!thai?'ดึงข้อมูลทองไทยไม่ได้':null,world:!world?'ดึงข้อมูลทองโลกไม่ได้':null}};
+    }
+  }
+  function noteSource(id, source, at, isStale=false) {
+    const dot=$(id==='thai'?'thaiDot':'worldDot');
+    dot.className='tiny-dot'+(isStale?' stale':'');
+    setText(id+'Source',source||'ไม่มีข้อมูล');
+    setText(id+'Time',at?timeTH(at):'เวลาไม่ระบุ');
+    dot.title=isStale?'ข้อมูลอาจล่าช้า':'เชื่อมต่อสำเร็จ';
+  }
+  function indicateUnavailable(market) {
+    const world=market==='world', pre=world?'world':'thai';
+    $(pre+'Dot').className='tiny-dot off';
+    setText(pre+'Source','ไม่มีข้อมูลที่ยืนยันได้');setText(pre+'Time','—');
+    if(world) {
+      setText('worldMainPrice','—');setText('worldPerGram','—');setText('worldSilverRatio','—');
+      setText('worldChange','เชื่อมต่อข้อมูลไม่ได้');$('worldChange').className='price-change neutral';
+    } else {
+      setText('thaiMainPrice','—');setText('thaiBuy','—');setText('thaiSpread','—');
+      setText('thaiChange','เชื่อมต่อข้อมูลไม่ได้');setText('thaiRound','—');
+      $('thaiChange').className='price-change neutral';
+    }
+  }
+  function setChange(id,n,unit,detail='') {
+    const el=$(id);
+    el.className='price-change '+(n>0?'positive':n<0?'negative':'neutral');
+    el.textContent=isNum(n) ? `${n>0?'+':n<0?'−':''}${fmt(Math.abs(n),2)} ${unit}${detail}` : 'ยังไม่มีข้อมูลเปลี่ยนแปลง';
+  }
+  function renderQuotes() {
+    const data=state.quotes||{},thai=data.thai,world=data.world;
+    if(thai&&thai.sellBar>0) {
+      setText('thaiMainPrice',fmt(thai.sellBar,2));setText('thaiBuy',fmt(thai.buyBar,2));
+      setText('thaiSpread',isNum(thai.buyBar)?fmt(thai.sellBar-thai.buyBar,2):'—');
+      setText('thaiRound',isNum(+thai.round)?fmt(+thai.round,0):'—');
+      setChange('thaiChange',thai.change,'บาท',' / รอบก่อน');
+      setText('ornamentSell',thai.sellOrnament>0?fmt(thai.sellOrnament):'—');
+      setText('ornamentBuy',thai.buyOrnament>0?fmt(thai.buyOrnament):'—');
+      noteSource('thai',thai.source,thai.updatedAt,!thai.updatedAt||(Date.now()-Date.parse(thai.updatedAt)>72*60*60*1000));
+    } else {
+      indicateUnavailable('thai');setText('ornamentSell','—');setText('ornamentBuy','—');
+    }
+    if(world&&world.price>0) {
+      setText('worldMainPrice',fmt(world.price));
+      setText('worldPerGram',fmt(isNum(world.perGram)?world.perGram:world.price/31.1034768));
+      setText('worldSilverRatio',isNum(world.ratio)?fmt(world.ratio,1):'—');
+      setText('silverRatio',isNum(world.ratio)?fmt(world.ratio,2):'—');
+      noteSource('world',world.source,world.updatedAt,world.stale);
+      if(state.worldTech?.prevClose>0) setChange('worldChange',world.price-state.worldTech.prevClose,'USD',' / ปิดก่อนหน้า');
+      else {setText('worldChange','รอข้อมูลปิดก่อนหน้า');$('worldChange').className='price-change neutral';}
+    } else {indicateUnavailable('world');setText('silverRatio','—');}
+    const rate=thai?.fx||world?.fxUsdThb;
+    setText('fxRate',isNum(+rate)&&+rate>0?fmt(+rate,3):'—');
+    setText('fxDetail',thai?.fx?'จากแหล่งข้อมูลราคาทองไทย':world?.fxUsdThb?'จากแหล่งข้อมูล XAUS':'ไม่พบข้อมูลอัตราแลกเปลี่ยน');
+    if(data.thai||data.world) {
+      state.lastSync=new Date();
+      setText('heroLastSync',timeTH(state.lastSync));
+      const freshWorld=world&&!world.stale;
+      const both=data.thai&&data.world;
+      const thaiNotOld=thai?.updatedAt && Date.now()-Date.parse(thai.updatedAt)<=72*60*60*1000;
+      setStatus(both&&freshWorld&&thaiNotOld?'ราคาเชื่อมต่อแล้ว':freshWorld?'ทองโลกออนไลน์':both?'ข้อมูลอาจล่าช้า':'เชื่อมต่อบางส่วน',both&&freshWorld&&thaiNotOld?'ok':'warn');
+    } else setStatus('ข้อมูลไม่พร้อมใช้งาน','error');
+    const activeQuote=state.quotes?.[state.market];
+    setText('chartPrice',activeQuote?(state.market==='thai'?`฿${fmt(activeQuote.sellBar)}`:`$${fmt(activeQuote.price)}`):'—');
+    renderConverter();renderTechnicals();checkAlerts();
+  }
+  async function refreshQuotes(silent=false) {
+    if(state.refreshing)return;
+    state.refreshing=true;
+    $('refreshBtn').classList.add('spinning');
+    if(!state.lastSync)setStatus('กำลังเชื่อมต่อ','warn');
+    try {
+      const d=await getQuotes();
+      state.quotes=d;renderQuotes();
+      if(!silent&&(d.errors?.thai||d.errors?.world))toast('เชื่อมต่อราคาได้บางตลาด — ตลาดที่ขัดข้องจะแสดงเป็นขีด');
+      if(!silent&&!(d.errors?.thai||d.errors?.world))toast('ตรวจสอบราคาล่าสุดจากผู้ให้บริการเรียบร้อย');
+    } catch(e) {
+      state.quotes={thai:null,world:null};renderQuotes();
+      if(!silent)toast('ไม่สามารถโหลดราคาได้ กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต');
+    } finally {
+      state.refreshing=false;$('refreshBtn').classList.remove('spinning');
+    }
+  }
+  async function getChart(market,period) {
+    const key=`${market}:${period}`;
+    const cache=state.charts.get(key);
+    if(cache && Date.now()-cache.loadedAt<(market==='thai'?300000:240000))return cache.data;
+    let data;
+    try {data=await getJson(`/api/market?mode=chart&market=${market}&period=${period}`);}
+    catch(e) {
+      if(market==='thai')throw e;
+      // Browser-only preview fallback; never fabricate points.
+      const query={ '1D':'range=1d&interval=5m','1W':'range=5d&interval=30m',
+        '1M':'range=1mo&interval=1d','3M':'range=3mo&interval=1d','1Y':'range=1y&interval=1d' }[period];
+      try {
+        const raw=await getJson(`https://xaus.com/api/v1/chart?symbol=xau&${query}`);
+        data={market:'world',period,points:raw.points||raw.data?.points||raw.candles||[],source:'XAUS / Chart API'};
+      } catch(e2) {
+        if(period==='1D'||period==='1W') {
+          const raw=await getJson('https://xaus.com/api/v1/intraday?symbol=xau&hours=48');
+          data={market:'world',period,points:raw.points||[],source:'XAUS / Intraday'};
+        } else {
+          const raw=await getJson('https://xaus.com/api/v1/history');
+          data={market:'world',period,points:(raw.points||[]).slice(-(period==='1M'?32:period==='3M'?95:370)),source:'XAUS / History'};
+        }
+      }
+    }
+    const points=(data.points||[]).map(p=>{
+      const raw=p.t??p.d??p.datetime;
+      const t=typeof raw==='number'?new Date(raw<1e12?raw*1000:raw).toISOString():typeof raw==='string'&&raw.length===10?raw+'T00:00:00.000Z':raw;
+      return {t,c:Number(p.c??p.close??p.p),o:p.o==null?null:Number(p.o),h:p.h==null?null:Number(p.h),l:p.l==null?null:Number(p.l),buy:p.buy??null};
+    }).filter(p=>p.t&&Number.isFinite(Date.parse(p.t))&&p.c>0).sort((a,b)=>Date.parse(a.t)-Date.parse(b.t));
+    data={...data,points};state.charts.set(key,{data,loadedAt:Date.now()});
+    if(market==='thai')state.thaiHistory=points;
+    return data;
+  }
+  function svgTag(name,attrs={}){
+    const n=document.createElementNS('http://www.w3.org/2000/svg',name);
+    for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));return n;
+  }
+  function drawChart(points,market) {
+    const grid=$('chartGrid');grid.replaceChildren();$('chartLastDot').replaceChildren();
+    const W=920,H=310,L=8,R=78,T=15,B=20;
+    const values=points.map(p=>p.c);let min=Math.min(...values),max=Math.max(...values);
+    const diff=max-min||max*.003||1;min-=diff*.18;max+=diff*.18;
+    const x=i=>L+(i/(points.length-1))*(W-L-R);
+    const y=v=>T+(max-v)/(max-min)*(H-T-B);
+    for(let i=0;i<=4;i++) {
+      const yy=T+(H-T-B)*(i/4);
+      grid.append(svgTag('line',{x1:L,y1:yy,x2:W-R+13,y2:yy,stroke:'#484949','stroke-opacity':'.42','stroke-dasharray':i===4?'0':'4 6','stroke-width':'.7'}));
+      const label=svgTag('text',{x:W-R+22,y:yy+4,fill:'#82827e','font-size':'12','font-family':'DM Sans, sans-serif'});
+      label.textContent=fmt(max-(max-min)*(i/4),market==='thai'?0:1);grid.append(label);
+    }
+    for(let i=1;i<=3;i++){
+      const xx=L+(W-L-R)*i/4;
+      grid.append(svgTag('line',{x1:xx,y1:T,x2:xx,y2:H-B,stroke:'#38393a','stroke-opacity':'.28','stroke-dasharray':'4 6'}));
+    }
+    const line=points.map((p,i)=>`${i?'L':'M'}${x(i).toFixed(2)},${y(p.c).toFixed(2)}`).join(' ');
+    const area=`${line} L${x(points.length-1)},${H-B} L${x(0)},${H-B} Z`;
+    $('chartLine').setAttribute('d',line);$('chartArea').setAttribute('d',area);
+    const last=points[points.length-1];
+    $('chartLastDot').append(svgTag('circle',{cx:x(points.length-1),cy:y(last.c),r:8,fill:'#e0bd79','fill-opacity':'.13'}),svgTag('circle',{cx:x(points.length-1),cy:y(last.c),r:3.8,fill:'#e7c783',stroke:'#231d13','stroke-width':1.5}));
+    const dateIndexes=[0,.25,.5,.75,1].map(p=>Math.round(p*(points.length-1)));
+    $('chartXAxis').replaceChildren(...dateIndexes.map(i=>{
+      const el=document.createElement('span');el.textContent=chartDate(points[i].t,points.length>20&&state.period==='1D');return el;
+    }));
+    state.chartPoints=points;
+  }
+  async function loadChart() {
+    const current=++state.chartRequest;
+    $('chartLoading').hidden=false;$('chartEmpty').hidden=true;
+    setText('chartSymbol',state.market==='thai'?'THAI / 96.5%':'XAU / USD');
+    setText('chartLegend',state.market==='thai'?'ทองคำแท่งขายออก':'XAU/USD Price');
+    const quote=state.quotes?.[state.market];
+    setText('chartPrice',quote?(state.market==='thai'?`฿${fmt(quote.sellBar)}`:`$${fmt(quote.price)}`):'—');
+    setText('chartSource','กำลังโหลดแหล่งข้อมูลย้อนหลัง');
+    try {
+      const data=await getChart(state.market,state.period);if(current!==state.chartRequest)return;
+      const points=data.points||[];
+      if(points.length<2)throw new Error('มีประวัติราคาไม่พอสำหรับวาดกราฟ');
+      drawChart(points,state.market);
+      const first=points[0].c,last=points[points.length-1].c,pct=(last-first)/first*100;
+      setText('chartChange',`${pct>=0?'+':''}${fmt(pct,2)}% ในช่วงเวลาที่เลือก`);
+      setText('chartSource',data.source||'กราฟจากข้อมูลจริง');
+      $('priceChart').style.visibility='visible';
+      if(state.market==='thai')renderTechnicals();
+    } catch(e) {
+      if(current!==state.chartRequest)return;
+      $('priceChart').style.visibility='hidden';state.chartPoints=[];
+      $('chartEmpty').hidden=false;
+      const needsToken=state.market==='thai' && (e.code==='THAI_HISTORY_REQUIRES_TOKEN'||e.status===424);
+      setText('chartEmptyMessage',needsToken?'กราฟย้อนหลังทองไทยต้องใช้ GTA_API_TOKEN ที่ได้รับอนุญาตจากสมาคมค้าทองคำ (ดู README)':'ไม่สามารถตรวจสอบประวัติราคาจริงได้ในขณะนี้ — ไม่มีการแสดงกราฟสมมติ');
+      setText('chartSource',needsToken?'รอการเชื่อมต่อ API ประวัติทองไทย':'ไม่พบข้อมูลที่ยืนยันได้');
+      setText('chartChange','—');$('chartXAxis').replaceChildren();
+    } finally {if(current===state.chartRequest)$('chartLoading').hidden=true;}
+  }
+  function calcEMA(values,period){
+    if(values.length<period)return null;
+    let ema=values.slice(0,period).reduce((a,b)=>a+b,0)/period;
+    const k=2/(period+1);
+    for(let i=period;i<values.length;i++)ema=values[i]*k+ema*(1-k);
+    return ema;
+  }
+  // Wilder RSI; only use actual historical observations.
+  function calcRSI(values,period=14){
+    if(values.length<period+1)return null;
+    let gains=0,losses=0;
+    for(let i=1;i<=period;i++){const change=values[i]-values[i-1];gains+=Math.max(0,change);losses+=Math.max(0,-change);}
+    let avgGain=gains/period,avgLoss=losses/period;
+    for(let i=period+1;i<values.length;i++){const ch=values[i]-values[i-1];avgGain=(avgGain*(period-1)+Math.max(0,ch))/period;avgLoss=(avgLoss*(period-1)+Math.max(0,-ch))/period;}
+    if(avgLoss===0)return avgGain===0?50:100;
+    return 100-100/(1+avgGain/avgLoss);
+  }
+  function calcATR(points,period=14){
+    const rows=points.filter(p=>isNum(p.h)&&isNum(p.l)&&isNum(p.c));
+    if(rows.length<period+1)return null;
+    const trs=[];
+    for(let i=1;i<rows.length;i++)trs.push(Math.max(rows[i].h-rows[i].l,Math.abs(rows[i].h-rows[i-1].c),Math.abs(rows[i].l-rows[i-1].c)));
+    let atr=trs.slice(0,period).reduce((a,b)=>a+b,0)/period;
+    for(let i=period;i<trs.length;i++)atr=(atr*(period-1)+trs[i])/period;
+    return atr;
+  }
+  function getWorldTechnicals(points){
+    const completed=points.filter(p=>p.c>0&&p.h>0&&p.l>0).slice();
+    if(completed.length<18)return null;
+    // Avoid a potentially incomplete trading-day candle when constructing a daily pivot.
+    const todayUTC=new Date().toISOString().slice(0,10);
+    if(completed.at(-1).t.slice(0,10)>=todayUTC)completed.pop();
+    if(completed.length<15)return null;
+    const prev=completed.at(-1),high=prev.h,low=prev.l,close=prev.c;
+    const pivot=(high+low+close)/3;
+    const rs={pivot,r1:2*pivot-low,r2:pivot+(high-low),s1:2*pivot-high,s2:pivot-(high-low)};
+    const closes=completed.map(p=>p.c);
+    return {...rs,atr:calcATR(completed),rsi:calcRSI(closes),ema20:calcEMA(closes,20),ema50:calcEMA(closes,50),basis:prev.t,prevClose:prev.c};
+  }
+  async function loadWorldTech() {
+    try {
+      const data=await getChart('world','3M');
+      const tech=getWorldTechnicals(data.points);
+      if(!tech) throw new Error('Insufficient daily candles');
+      state.worldTech=tech;renderTechnicals();
+      const price=state.quotes?.world?.price;
+      if(isNum(price)&&tech.prevClose>0){
+        const change=price-tech.prevClose;
+        setChange('worldChange',change,'USD',' / ปิดก่อนหน้า');
+      }
+    } catch(e) {
+      state.worldTech=null;renderTechnicals();
+      setText('worldChange','ไม่มีราคาปิดก่อนหน้าที่ตรวจสอบได้');
+    }
+  }
+  function techForCurrentMarket(){
+    const base=state.worldTech;
+    if(!base)return null;
+    if(state.market==='world')return {...base,method:'pivot',derived:false};
+    const thai=state.quotes?.thai,world=state.quotes?.world;
+    if(!thai?.sellBar||!world?.price)return null;
+    const actual=state.thaiHistory;
+    if(actual && actual.length>=8){
+      // Actual GTA announcement ranges (not candlestick pivots).
+      const closes=actual.slice(-28).map(p=>p.c).filter(v=>v>0), recent=closes.slice(-15);
+      const low=Math.min(...recent),high=Math.max(...recent),step=(high-low)||100;
+      return {r2:high+step*.382,r1:high,pivot:(low+high+closes.at(-1))/3,s1:low,s2:low-step*.382,
+        rsi:calcRSI(closes),atr:null,ema20:calcEMA(closes,20),ema50:calcEMA(closes,50),method:'thai-range',derived:false};
+    }
+    const scale=thai.sellBar/world.price;
+    return {...base,r2:base.r2*scale,r1:base.r1*scale,pivot:base.pivot*scale,s1:base.s1*scale,
+      s2:base.s2*scale,atr:base.atr*scale,method:'scaled-world',derived:true};
+  }
+  function renderTechnicals() {
+    const isThai=state.market==='thai';
+    setText('techMarketLabel',isThai?'ทองคำไทย · บาท / 1 บาททองคำ':'ทองคำโลก · XAU/USD');
+    const data=techForCurrentMarket(),worldTech=state.worldTech;
+    if(!data){
+      for(const id of ['r2','r1','pivot','s1','s2','rsiValue','atrValue','emaValue','bullScenario','baseScenario','bearScenario'])setText(id,'—');
+      setText('momentumText','ยังไม่มีข้อมูล');setText('technicalBadge','รอข้อมูล');
+      $('technicalBadge').className='technical-badge';setText('levelBasis','ต้องใช้ข้อมูลราคาจริง');
+      setText('techDisclaimer','การคำนวณต้องมีข้อมูลย้อนหลังจริง หากแหล่งข้อมูลไม่พร้อมจะแสดงเป็นขีด');
+      $('momentumThumb').style.left='50%';return;
+    }
+    for(const k of ['r2','r1','pivot','s1','s2'])setText(k,fmt(data[k],isThai?0:2));
+    setText('rsiValue',isNum(data.rsi)?fmt(data.rsi,1):'—');
+    setText('atrValue',isNum(data.atr)?fmt(data.atr,isThai?0:2):'—');
+    setText('emaValue',isNum(data.ema20)&&isNum(data.ema50)?data.ema20>=data.ema50?'EMA20 > 50':'EMA20 < 50':'—');
+    const rsi=data.rsi;
+    $('momentumThumb').style.left=`${isNum(rsi)?Math.max(5,Math.min(95,rsi)):50}%`;
+    const bias=!isNum(rsi)?'ไม่ทราบแนวโน้ม':rsi>=60?'โมเมนตัมแข็งแกร่ง':rsi<=40?'โมเมนตัมอ่อนแรง':'โมเมนตัมเป็นกลาง';
+    setText('momentumText',bias);
+    const badge=isNum(rsi)?rsi>70?'ซื้อมากเกินไป':rsi<30?'ขายมากเกินไป':rsi>55?'เอนเอียงขึ้น':rsi<45?'เอนเอียงลง':'เป็นกลาง':'ไม่พร้อม';
+    setText('technicalBadge',badge);
+    $('technicalBadge').className='technical-badge '+(isNum(rsi)&&rsi>55?'bull':isNum(rsi)&&rsi<45?'bear':'');
+    if(isThai&&data.method==='thai-range') {
+      setText('levelBasis','กรอบประกาศย้อนหลังจริง');
+      setText('techDisclaimer','แนวรับ/ต้านไทยใช้ช่วงสูง–ต่ำจากราคาประกาศย้อนหลัง ไม่ใช่ Pivot OHLC; RSI และ EMA คำนวณตาม “รอบประกาศ” ไม่ใช่รายวัน');
+    } else if(isThai) {
+      setText('levelBasis','ประมาณการจาก XAU/USD');
+      setText('techDisclaimer','ระดับทองไทยนี้ประมาณจากสัดส่วน Pivot ของ XAU/USD กับราคาทองไทย โดยสมมติค่าเงิน/พรีเมียมคงที่ ไม่ใช่แนวรับ–ต้านที่สมาคมประกาศ; RSI/EMA อิงตลาดโลก');
+    } else {
+      setText('levelBasis','Pivot ของแท่งวันก่อน');
+      setText('techDisclaimer',`Classic Pivot: ใช้ High/Low/Close ของวันก่อน (${chartDate(data.basis)}); RSI, EMA, ATR(14) ใช้ข้อมูลย้อนหลังจริง ไม่ใช่คำทำนาย`);
+    }
+    const price=state.quotes?.world?.price;
+    const atr=worldTech?.atr;
+    setText('baseScenario',isNum(price)?`$${fmt(price)}`:'—');
+    setText('bullScenario',isNum(price)&&isNum(atr)?`$${fmt(price+atr)}`:'—');
+    setText('bearScenario',isNum(price)&&isNum(atr)?`$${fmt(Math.max(0,price-atr))}`:'—');
+  }
+  function renderConverter() {
+    const weight=Number($('goldWeight').value),thai=state.quotes?.thai;
+    if(weight>0&&Number.isFinite(weight)&&thai?.buyBar>0&&thai?.sellBar>0){
+      setText('calcBuy',`฿ ${thaiFmt(thai.sellBar*weight)}`);
+      setText('calcSell',`฿ ${thaiFmt(thai.buyBar*weight)}`);
+    }else{setText('calcBuy','—');setText('calcSell','—');}
+  }
+  function saveAlerts(){try{localStorage.setItem('aurum-live-alerts-v1',JSON.stringify(state.alertList));}catch(e){}}
+  function loadAlerts(){try{
+    const a=JSON.parse(localStorage.getItem('aurum-live-alerts-v1')||'[]');
+    state.alertList=Array.isArray(a)?a.filter(x=>x&&['thai','world'].includes(x.market)&&['above','below'].includes(x.direction)&&Number(x.target)>0).slice(0,20):[];
+  }catch(e){state.alertList=[];}}
+  function currentAlertPrice(market){const q=state.quotes?.[market];return market==='thai'?q?.sellBar:q?.price;}
+  function checkAlerts(){
+    let changed=false;
+    for(const a of state.alertList){
+      if(a.triggered)continue;
+      const price=currentAlertPrice(a.market);
+      if(!isNum(price)||price<=0)continue;
+      if(a.direction==='above'?price>=a.target:price<=a.target){
+        a.triggered=true;changed=true;
+        toast(`ราคาทอง${a.market==='thai'?'ไทย':'โลก'}ถึงระดับที่ติดตามแล้ว: ${fmt(price)}`);
+      }
+    }
+    if(changed){saveAlerts();renderAlerts();}
+  }
+  function renderAlerts(){
+    const host=$('alertList');host.replaceChildren();
+    if(!state.alertList.length){const p=document.createElement('p');p.className='alerts-empty';p.textContent='ยังไม่ได้ตั้งระดับราคาที่ติดตาม';host.append(p);return;}
+    state.alertList.forEach(a=>{
+      const row=document.createElement('div');row.className='alert-item'+(a.triggered?' triggered':'');
+      const p=document.createElement('p');
+      const strong=document.createElement('strong');strong.textContent=`${a.market==='thai'?'฿':'$'}${fmt(a.target)}`;
+      p.append(strong,document.createTextNode(` · ${a.market==='thai'?'ทองไทย':'ทองโลก'} · ${a.direction==='above'?'เมื่อราคาถึงหรือสูงกว่า':'เมื่อราคาถึงหรือต่ำกว่า'}${a.triggered?' · ถึงเป้าหมายแล้ว':' · กำลังติดตาม'}`));
+      const button=document.createElement('button');button.type='button';button.textContent='×';button.title='ลบการติดตาม';
+      button.addEventListener('click',()=>{state.alertList=state.alertList.filter(x=>x.id!==a.id);saveAlerts();renderAlerts();});
+      row.append(p,button);host.append(row);
+    });
+  }
+  function setMarket(market){
+    if(state.market===market)return;
+    state.market=market;
+    $$('[data-market]').forEach(b=>{const active=b.dataset.market===market;b.classList.toggle('is-selected',active);b.setAttribute('aria-selected',String(active));});
+    loadChart();renderTechnicals();
+  }
+  function activateNav(name){
+    $$('.nav-link').forEach(el=>el.classList.toggle('is-active',el.dataset.nav===name));
+    if(name==='thai'||name==='world'){
+      setMarket(name);$(name+'-card').scrollIntoView({behavior:'smooth',block:'center'});
+    } else if(name==='analysis')$('analysis-section').scrollIntoView({behavior:'smooth'});
+    else if(name==='calculator')$('calculator-section').scrollIntoView({behavior:'smooth'});
+    else if(name==='alerts')$('alerts-section').scrollIntoView({behavior:'smooth'});
+    else $('overview-section').scrollIntoView({behavior:'smooth'});
+    closeMenu();
+  }
+  function closeMenu(){$('sidebar').classList.remove('open');$('mobileCover').classList.remove('show');$('mobileCover').hidden=true;}
+  function bind(){
+    setText('todayDate',new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(new Date()));
+    $$('.nav-link').forEach(el=>el.addEventListener('click',()=>activateNav(el.dataset.nav)));
+    $('menuBtn').addEventListener('click',()=>{const opened=$('sidebar').classList.toggle('open');$('mobileCover').hidden=!opened;$('mobileCover').classList.toggle('show',opened);});
+    $('mobileCover').addEventListener('click',closeMenu);
+    $('refreshBtn').addEventListener('click',()=>refreshQuotes(false));
+    $$('[data-market]').forEach(el=>el.addEventListener('click',()=>setMarket(el.dataset.market)));
+    $$('[data-period]').forEach(el=>el.addEventListener('click',()=>{
+      state.period=el.dataset.period;$$('[data-period]').forEach(x=>x.classList.toggle('is-selected',x===el));loadChart();
+    }));
+    $('goldWeight').addEventListener('input',()=>{
+      const w=Number($('goldWeight').value);
+      $$('[data-weight]').forEach(b=>b.classList.toggle('selected',Number(b.dataset.weight)===w));renderConverter();
+    });
+    $$('[data-weight]').forEach(b=>b.addEventListener('click',()=>{
+      $('goldWeight').value=b.dataset.weight;$$('[data-weight]').forEach(x=>x.classList.toggle('selected',x===b));renderConverter();
+    }));
+    $('alertForm').addEventListener('submit',ev=>{
+      ev.preventDefault();const market=$('alertMarket').value,direction=$('alertDirection').value,target=Number($('alertTarget').value);
+      if(!target||target<=0||!Number.isFinite(target)){toast('กรุณาระบุราคาเป้าหมายที่มากกว่า 0');return;}
+      if(state.alertList.filter(a=>!a.triggered).length>=20){toast('ติดตามพร้อมกันได้สูงสุด 20 ระดับ');return;}
+      state.alertList.unshift({id:`${Date.now()}-${Math.random().toString(36).slice(2,7)}`,market,direction,target,triggered:false});
+      saveAlerts();renderAlerts();checkAlerts();$('alertTarget').value='';toast('เพิ่มระดับราคาที่ต้องการติดตามแล้ว (เฉพาะขณะเปิดหน้าเว็บ)');
+    });
+    $('priceChart').addEventListener('pointermove',ev=>{
+      const pts=state.chartPoints;if(pts.length<2)return;
+      const rect=$('priceChart').getBoundingClientRect();
+      const portion=Math.max(0,Math.min(1,(ev.clientX-rect.left)/rect.width));
+      const idx=Math.max(0,Math.min(pts.length-1,Math.round(portion*(pts.length-1))));
+      const p=pts[idx],el=$('chartTooltip');
+      el.replaceChildren();
+      const date=document.createElement('span');date.textContent=chartDate(p.t,state.period==='1D'||state.period==='1W');
+      const price=document.createElement('strong');price.textContent=(state.market==='thai'?'฿':'$')+fmt(p.c,state.market==='thai'?0:2);
+      el.append(date,price);el.hidden=false;
+      el.style.left=`${Math.max(5,Math.min(rect.width-140,ev.clientX-rect.left+15))}px`;
+      el.style.top=`${Math.max(5,ev.clientY-rect.top-50)}px`;
+    });
+    $('priceChart').addEventListener('pointerleave',()=>$('chartTooltip').hidden=true);
+    window.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});
+  }
+  async function boot(){
+    bind();loadAlerts();renderAlerts();
+    // In parallel: quote and observed history; do not render synthetic prices.
+    await Promise.allSettled([refreshQuotes(true),loadChart(),loadWorldTech()]);
+    renderTechnicals();
+    // Refreshes only while the page is visible; not a background notification service.
+    setInterval(()=>{if(document.visibilityState==='visible')refreshQuotes(true);},60000);
+    document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&(!state.lastSync||Date.now()-state.lastSync>60000))refreshQuotes(true);});
+  }
+  document.addEventListener('DOMContentLoaded',boot);
+})();
+
+</script>
+</body>
+</html>
