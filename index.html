@@ -156,7 +156,7 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
           <div class="gx-pulse-card"><span>ต่ำสุดจากประกาศที่เข้าถึงได้</span><strong id="gxTodayLow">—</strong><small>ข้อมูลรายรอบอาจไม่ครบทุกประกาศ</small></div>
         </div>
         <div class="gx-daily-foot"><span>วันที่ประกาศ <strong id="gxQuoteUpdated">—</strong></span><i class="gx-bullet"></i><span>รอบที่ <strong id="gxTodayRound">—</strong></span><i class="gx-bullet"></i><span>แหล่งข้อมูล <strong id="gxDailySource">กำลังตรวจสอบ</strong></span></div>
-        <p class="gx-note" id="gxDayDataNote" style="margin-top:9px">สถิติรายรอบจะแสดงเมื่อมีประกาศย้อนหลังของวันนี้เพียงพอเท่านั้น</p>
+        <p class="gx-note" id="gxDayDataNote" style="margin-top:9px">สถิติรายรอบจะแสดงเมื่อมีประกาศย้อนหลังของวันนี้เพียงพอเท่านั้น</p><p class="gx-checked" id="gxDayCheckedAt" aria-live="polite">ตรวจสรุปรายวันล่าสุด —</p>
       </section>
       <section class="analysis-layout" id="analysis-section">
         <div class="chart-panel surface">
@@ -215,10 +215,10 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
             <div class="gx-cal-detail" id="gxCalDetail" aria-live="polite">กดวันที่สีทองเพื่อดูรายละเอียดราคา</div>
           </aside>
           <div class="gx-table-card surface">
-            <div class="gx-table-top"><div><h3>ตารางราคาทองคำแท่งย้อนหลัง</h3><p id="gxHistoryCount">กำลังตรวจข้อมูล…</p></div><button id="gxClearDay" type="button" disabled>แสดงทุกวันในเดือน</button></div>
+            <div class="gx-table-top"><div><h3>ตารางราคาทองคำแท่งย้อนหลัง</h3><p id="gxHistoryCount">กำลังตรวจข้อมูล…</p></div><div class="gx-history-actions"><button id="gxClearDay" type="button" disabled>แสดงทุกวันในเดือน</button><button id="gxHistoryRefresh" type="button" title="ตรวจข้อมูลย้อนหลังใหม่โดยไม่รีโหลดทั้งเว็บ">↻ อัปเดตข้อมูล</button></div></div>
             <div class="gx-table-scroll" tabindex="0" aria-label="ตารางราคาทองไทยแบบเลื่อนดูได้"><table class="gx-table"><thead><tr><th scope="col">วันที่</th><th scope="col">เปิด (ขายออก)</th><th scope="col">สูงสุด</th><th scope="col">ต่ำสุด</th><th scope="col">ปิด (ขายออก)</th><th scope="col">รับซื้อปิดวัน</th><th scope="col">ต่างจากเปิด</th></tr></thead><tbody id="gxHistoryRows"><tr><td colspan="7" class="gx-table-empty">เลื่อนลงมาเพื่อโหลดข้อมูลย้อนหลัง</td></tr></tbody></table></div>
             <div class="gx-pagination"><span>หน้าที่ <strong id="gxTablePage">1 / 1</strong></span><div><button id="gxPagePrev" type="button" disabled>ก่อนหน้า</button><button id="gxPageNext" type="button" disabled>ถัดไป</button></div></div>
-            <p class="gx-data-attribution" id="gxTableAttribution">ข้อมูลราคาจริงเท่านั้น ไม่ใช้ราคาประมาณการ</p>
+            <p class="gx-data-attribution" id="gxTableAttribution">ข้อมูลราคาจริงเท่านั้น ไม่ใช้ราคาประมาณการ</p><p class="gx-checked" id="gxHistoryCheckedAt" aria-live="polite">ตรวจประวัติราคาล่าสุด —</p>
           </div>
         </div>
       </section>
