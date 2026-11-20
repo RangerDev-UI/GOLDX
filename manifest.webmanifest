@@ -1,0 +1,28 @@
+{
+  "name": "GOLDX 4.0 — Aurum Gold Market",
+  "short_name": "GOLDX",
+  "description": "ติดตามราคาทองไทยและทองโลก พร้อมกราฟ เทคนิค และสถานะข้อมูล",
+  "lang": "th",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#090d14",
+  "theme_color": "#d6ac66",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "ราคาทองวันนี้",
+      "url": "/#overview-section"
+    },
+    {
+      "name": "กราฟราคาทอง",
+      "url": "/#analysis-section"
+    }
+  ]
+}
