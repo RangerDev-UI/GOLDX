@@ -62,46 +62,88 @@ function officialWebQuote(html){
    source:'หน้าเว็บสมาคมค้าทองคำ · ประกาศสาธารณะ',sourceUrl:'https://www.goldtraders.or.th/',
    sourceType:'official-public-page',spot:null,fx:null,marketOpen:null});
 }
-async function fetchOfficialWeb(){
+
+// A public announcement-history table can be parsed without member credentials.
+// Only rows with a *date, time, round and coherent bar/ornament prices* are accepted.
+function officialTableQuote(html, pageUrl='https://classic.goldtraders.or.th/UpdatePriceList.aspx'){
+ if(typeof html!=='string'||html.length<200)throw new Error('Official table missing HTML');
+ const clean=(s)=>String(s).replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi,' ')
+   .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi,' ')
+   .replace(/<[^>]*>/g,' ').replace(/&nbsp;|&#160;|&#xA0;/gi,' ')
+   .replace(/&amp;/gi,'&').replace(/\s+/g,' ').trim();
+ const rows=[...html.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)];
+ const candidates=[];
+ for(const row of rows){
+   const cells=[...row[1].matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/gi)].map(m=>clean(m[1]));
+   if(cells.length<8)continue;
+   const joined=cells.join(' ').replace(/\s+/g,' ').trim();
+   // Explicit date, time, sequence number and at least four price fields.
+   const m=/^(\d{1,2}\/\d{1,2}\/\d{4})\s+(\d{1,2}:\d{2})(?:\s*น\.)?\s+(\d{1,4})\s+([\d,]+(?:\.\d+)?)\s+([\d,]+(?:\.\d+)?)\s+([\d,]+(?:\.\d+)?)\s+([\d,]+(?:\.\d+)?)(?:\s+([\d,]+(?:\.\d+)?))?(?:\s+([\d,]+(?:\.\d+)?))?(?:\s+([+-]?[\d,]+(?:\.\d+)?))?/i.exec(joined);
+   if(!m)continue;
+   const dm=/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(m[1]);
+   const y=Number(dm[3])>2400?Number(dm[3])-543:Number(dm[3]);
+   const t=thaiTime(`${y}-${dm[2].padStart(2,'0')}-${dm[1].padStart(2,'0')}T${m[2].padStart(5,'0')}:00`);
+   const buyBar=n(m[4]),sellBar=n(m[5]),buyOrnament=n(m[6]),sellOrnament=n(m[7]);
+   if(!positive(buyBar)||!positive(sellBar)||!positive(buyOrnament)||!positive(sellOrnament))continue;
+   if(sellBar-buyBar>1000||sellBar<buyBar||sellOrnament<sellBar||sellOrnament-sellBar>3000||buyOrnament>buyBar||buyBar-buyOrnament>3000)continue;
+   try{candidates.push(markQuote({buyBar,sellBar,buyOrnament,sellOrnament,
+     round:n(m[3]),change:n(m[10]),changePercent:null,updatedAt:t,
+     source:'สมาคมค้าทองคำ · ตารางประกาศสาธารณะ',sourceUrl:pageUrl,
+     sourceType:'official-public-page',spot:n(m[8]),fx:n(m[9]),marketOpen:null}));}
+   catch(_e){/* invalid official record is not displayed */}
+ }
+ if(!candidates.length)throw new Error('Official table has no verifiable announcement rows');
+ candidates.sort((a,b)=>Date.parse(b.updatedAt)-Date.parse(a.updatedAt)||b.round-a.round);
+ return candidates[0];
+}
+async function fetchOfficialPage(url, type){
  const controller=new AbortController();
  const timeout=setTimeout(()=>controller.abort(),4500);
- try {
-   const r=await fetch('https://www.goldtraders.or.th/',{signal:controller.signal,
-     headers:{Accept:'text/html,application/xhtml+xml','User-Agent':'GOLDX/1.0 (public market reference)'}});
-   if(!r.ok)throw new Error(`GTA public webpage HTTP ${r.status}`);
-   return officialWebQuote(await r.text());
- }finally{clearTimeout(timeout);}
+ try{
+  const r=await fetch(url,{signal:controller.signal,
+    headers:{Accept:'text/html,application/xhtml+xml','User-Agent':'GOLDX/1.1 (public market reference)'}});
+  if(!r.ok)throw new Error(`Official website HTTP ${r.status}`);
+  const html=await r.text();
+  return type==='table'?officialTableQuote(html,url):officialWebQuote(html);
+ } finally{clearTimeout(timeout);}
 }
-
 async function quote(json){
  const providers=[];
- if(process.env.GTA_API_TOKEN)providers.push(async()=>{
+ const add=(name,run)=>providers.push({name,run});
+ if(process.env.GTA_API_TOKEN)add('GTA API',async()=>{
    const d=await json('https://announce.goldtraders.or.th/api/v1/price/latest',{headers:{Authorization:`Bearer ${process.env.GTA_API_TOKEN}`}});
    return markQuote({buyBar:n(d.gold_bar?.buy),sellBar:n(d.gold_bar?.sell),buyOrnament:n(d.ornament?.buy),sellOrnament:n(d.ornament?.sell),change:n(d.change),changePercent:null,round:n(d.announceNo),updatedAt:iso(d.announcedAt),source:'สมาคมค้าทองคำ · API ทางการ',sourceUrl:'https://www.goldtraders.or.th/',sourceType:'official',spot:n(d.spot?.usd),fx:n(d.fx?.usd_thb),marketOpen:d.market?.open??null});
  });
- providers.push(async()=>{
+ add('Rakhagold',async()=>{
    const d=await json(`${RAKHA}/latest`),c=d.data;
-   if(!c||c.source!=='gta')throw new Error('Rakhagold is not sourced from published GTA announcements');
+   if(!c||c.source!=='gta')throw new Error('Relay not sourced from GTA announcement');
    return markQuote({buyBar:n(c.bar_buy),sellBar:n(c.bar_sell),buyOrnament:n(c.orn_buy),sellOrnament:n(c.orn_sell),change:n(c.chg_prev),changePercent:null,round:n(c.seq),updatedAt:thaiTime(c.as_time),source:'Rakhagold · อ้างอิงประกาศสมาคมค้าทองคำ',sourceUrl:'https://rakhagold.com/api-docs/',sourceType:'public-relay',spot:n(c.spot),fx:n(c.usdthb),marketOpen:null});
  });
- providers.push(async()=>{
+ add('ThaiGoldToday',async()=>{
    const d=await json('https://www.thaigoldtoday.com/api/gold-price'),c=d.current||{};
    return markQuote({buyBar:n(c.buyBar),sellBar:n(c.sellBar),buyOrnament:n(c.buyOrnament),sellOrnament:n(c.sellOrnament),change:n(c.change),changePercent:n(c.changePercent),round:n(c.updateRound),updatedAt:iso(c.updatedAt),source:'ThaiGoldToday · อ้างอิงสมาคมค้าทองคำ',sourceUrl:'https://www.thaigoldtoday.com',sourceType:'public-relay',spot:n(d.world?.spotOz),fx:n(d.world?.thbRate),marketOpen:null});
  });
- providers.push(async()=>{
+ add('CHNWT',async()=>{
    const d=await json('https://api.chnwt.dev/thai-gold-api/latest'),c=d.response;
-   if(d.status!=='success'||!c)throw new Error('CHNWT invalid response');
+   if(d.status!=='success'||!c)throw new Error('Invalid relay response');
    return markQuote({buyBar:n(c.price?.gold_bar?.buy),sellBar:n(c.price?.gold_bar?.sell),buyOrnament:n(c.price?.gold?.buy),sellOrnament:n(c.price?.gold?.sell),change:null,changePercent:null,round:n(/ครั้งที่\s*(\d+)/.exec(c.update_time||'')?.[1]),updatedAt:parseChnwtDate(c.update_date,c.update_time),source:'CHNWT · ข้อมูลประกาศราคาทองคำไทย',sourceUrl:'https://github.com/max180643/thai-gold-api',sourceType:'public-relay',spot:null,fx:null,marketOpen:null});
  });
- providers.push(fetchOfficialWeb);
- // Compare validated announcements: prefer newest genuine timestamp over quickest upstream.
- // Requests run concurrently; a slow or broken provider never makes up a replacement price.
- const results=await Promise.allSettled(providers.map(p=>p()));
+ add('GTA home',()=>fetchOfficialPage('https://www.goldtraders.or.th/','home'));
+ add('GTA classic table',()=>fetchOfficialPage('https://classic.goldtraders.or.th/UpdatePriceList.aspx','table'));
+ add('GTA sideb table',()=>fetchOfficialPage('https://sideb.goldtraders.or.th/UpdatePriceList.aspx','table'));
+ const results=await Promise.allSettled(providers.map(p=>p.run()));
  const candidates=results.filter(r=>r.status==='fulfilled').map(r=>r.value);
- if(!candidates.length){console.warn('Thai public/official quote providers all unavailable');throw new Error('Thai quote providers unavailable');}
- candidates.sort((a,b)=>Date.parse(b.updatedAt)-Date.parse(a.updatedAt) || (a.sourceType.startsWith('official')?-1:b.sourceType.startsWith('official')?1:0));
- return candidates[0];
+ if(!candidates.length){console.warn('All Thai quote providers unavailable',results.map((r,i)=>`${providers[i].name}: ${r.status==='rejected'?r.reason?.message:'unexpected'}`).join('; '));throw new Error('Thai quote providers unavailable');}
+ // Include read-only provider diagnostics to distinguish a stale relay from blocked sources.
+ const checks=results.map((r,i)=>r.status==='fulfilled'?
+   {name:providers[i].name,ok:true,updatedAt:r.value.updatedAt,stale:r.value.stale}:
+   {name:providers[i].name,ok:false,reason:String(r.reason?.message||'Unavailable').slice(0,140)});
+ candidates.sort((a,b)=>Date.parse(b.updatedAt)-Date.parse(a.updatedAt)||
+  ((a.sourceType==='official'?2:a.sourceType==='official-public-page'?1:0) - (b.sourceType==='official'?2:b.sourceType==='official-public-page'?1:0))*-1);
+ const chosen=candidates[0];chosen.feedChecks=checks;
+ return chosen;
 }
+
 function verifiedDaily(rows){
  if(!Array.isArray(rows))return [];
  const points=rows.filter(r=>r?.source==='gta'&&n(r.rounds)>0).map(r=>{
@@ -142,4 +184,4 @@ async function history(period,json,response){
    return response({market:'thai',period,source:'สมาคมค้าทองคำ · API ประกาศย้อนหลัง',isDaily:false,quality:'official-announcements',points,fetchedAt:new Date().toISOString()},200,300);
  }
 }
-module.exports={quote,history,verifiedDaily,verifiedToday,thaiTime,markQuote,officialWebQuote};
+module.exports={quote,history,verifiedDaily,verifiedToday,thaiTime,markQuote,officialWebQuote,officialTableQuote};
