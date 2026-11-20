@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0b0c0d" />
+  <meta name="theme-color" content="#faf7ee" />
   <meta name="application-name" content="GOLDX" />
   <meta property="og:title" content="GOLDX — Gold Market Intelligence" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%20role%3D%22img%22%20aria-label%3D%22GOLDX%22%3E%0A%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23ffecb2%22%2F%3E%3Cstop%20offset%3D%22.55%22%20stop-color%3D%22%23d8ac60%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23a27a3a%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%3Crect%20x%3D%222%22%20y%3D%222%22%20width%3D%2260%22%20height%3D%2260%22%20rx%3D%2215%22%20fill%3D%22%23111214%22%20stroke%3D%22%235f4d2e%22%20stroke-width%3D%222%22%2F%3E%0A%3Cpath%20d%3D%22M36%2018.5C32.5%2016.7%2024.2%2018.4%2020.8%2024.6c-4%207.5-1%2017.6%206.2%2020.9%204.4%202.1%209.8%201.3%2013.3-1V34H30.5%22%20stroke%3D%22url%28%23g%29%22%20fill%3D%22none%22%20stroke-width%3D%225.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%0A%3Cpath%20d%3D%22M42%2015.6%2052.2%2027M52.2%2015.6%2042%2027%22%20stroke%3D%22url%28%23g%29%22%20fill%3D%22none%22%20stroke-width%3D%223.4%22%20stroke-linecap%3D%22round%22%2F%3E%0A%3C%2Fsvg%3E" />
   <meta name="description" content="GOLDX — ตรวจสอบราคาทองคำไทย 96.5% และทองคำโลก XAU/USD พร้อมกราฟจริง แนวรับ แนวต้าน RSI และการวิเคราะห์เชิงเทคนิค" />
-  <title>GOLDX 4.0 — Aurum Gold Market Terminal</title>
+  <title>GOLDX — ราคาทองไทย ทองโลก และอัตราแลกเปลี่ยน | Ivory Ledger</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+Thai:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -76,6 +76,7 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
 </style>
 <link rel="stylesheet" href="/goldx-pro.css" />
   <link rel="stylesheet" href="/goldx4.css" />
+  <link rel="stylesheet" href="/ivory-ledger.css" />
   <link rel="manifest" href="/manifest.webmanifest" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -94,7 +95,84 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
   <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7v1"/></symbol>
   <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/></symbol>
 </defs></svg>
-<div class="site-shell">
+<div class="ivory-ledger" id="ivory-ledger">
+  <header class="il-header">
+    <a class="il-brand" href="/" aria-label="GOLDX ภาพรวมราคาทองคำ">
+      <span class="il-brand-name">GOLD<span>X</span></span>
+      <span class="il-brand-byline">GOLD MARKET JOURNAL</span>
+    </a>
+    <div class="il-header-right">
+      <div class="il-fx" aria-label="อัตราแลกเปลี่ยนดอลลาร์สหรัฐต่อบาท">
+        <span class="il-fx-label">USD / THB · REFERENCE</span>
+        <strong class="il-fx-value" id="ilFX">—</strong>
+        <small class="il-fx-source" id="ilFXSource">รอข้อมูลอัตราแลกเปลี่ยน</small>
+      </div>
+      <span class="il-api" id="ilApi" data-state="warning" role="status" aria-live="polite">
+        <span class="il-api-dot" aria-hidden="true"></span>
+        <span id="ilStatus">กำลังตรวจสอบ</span>
+      </span>
+      <button type="button" class="il-refresh" id="ilRefresh" aria-label="ตรวจสอบราคาล่าสุด" title="ตรวจสอบราคาล่าสุด">↻</button>
+    </div>
+  </header>
+  <nav class="il-subnav" aria-label="หน้าเว็บ">
+    <strong>◈ ภาพรวมตลาด</strong>
+    <span>ราคาทองไทยและทองคำโลก</span>
+    <time id="ilDate">ประเทศไทย / GMT+7</time>
+  </nav>
+  <main class="il-main">
+    <div class="il-intro">
+      <span class="il-eyebrow">GOLD MARKET / DAILY EDITION</span>
+      <h1>ราคาทองคำ<br>ที่ดูแล้วเข้าใจทันที</h1>
+      <p>อัปเดตจากแหล่งราคาที่ตรวจสอบได้ · อ่านง่าย โปร่งสบาย และไม่แสดงราคาจำลอง</p>
+    </div>
+    <section class="il-market" aria-label="ราคาทองคำ">
+      <article class="il-quote" aria-labelledby="ilThaiTitle">
+        <span class="il-index" aria-hidden="true">01</span>
+        <div class="il-meta">
+          <h2 id="ilThaiTitle">ทองคำไทย 96.5%</h2>
+          <p>ทองแท่งขายออก · บาท / 1 บาททองคำ</p>
+          <div class="il-bid">รับซื้อ <strong id="ilThaiBuy">—</strong></div>
+          <small class="il-meta-source" id="ilThaiOrigin">กำลังตรวจสอบแหล่งข้อมูลทองไทย</small>
+        </div>
+        <div class="il-number thai">
+          <strong id="ilThaiSell">—</strong>
+          <small id="ilThaiChange">กำลังตรวจสอบราคา</small>
+        </div>
+      </article>
+      <article class="il-quote" aria-labelledby="ilWorldTitle">
+        <span class="il-index" aria-hidden="true">02</span>
+        <div class="il-meta">
+          <h2 id="ilWorldTitle">ทองคำโลก XAU/USD</h2>
+          <p>Spot Gold · ดอลลาร์สหรัฐ / ทรอยออนซ์</p>
+          <div class="il-bid">ต่อกรัม <strong id="ilWorldGram">—</strong></div>
+          <small class="il-meta-source" id="ilWorldOrigin">กำลังตรวจสอบแหล่งข้อมูลทองโลก</small>
+        </div>
+        <div class="il-number world">
+          <strong id="ilWorldSpot">—</strong>
+          <small id="ilWorldChange">ราคาอ้างอิงจากผู้ให้บริการ</small>
+        </div>
+      </article>
+    </section>
+    <section class="il-orn" aria-label="ราคาทองรูปพรรณ">
+      <article class="il-orn-card">
+        <small>ทองรูปพรรณ · ขายออก</small>
+        <strong id="ilOrnSell">—</strong>
+        <span class="il-orn-note">บาท / 1 บาททองคำ</span>
+      </article>
+      <article class="il-orn-card">
+        <small>ทองรูปพรรณ · รับซื้อ</small>
+        <strong id="ilOrnBuy">—</strong>
+        <span class="il-orn-note">บาท / 1 บาททองคำ</span>
+      </article>
+    </section>
+    <p class="il-notice" id="ilNotice" role="alert" hidden></p>
+  </main>
+  <footer class="il-footer">
+    <p>GOLDX · ทองไทยอ้างอิงราคาประกาศจากแหล่งข้อมูลที่ระบุ · XAU/USD เป็นราคา Spot อ้างอิง · USD/THB อาจเป็นเรตรายวัน ไม่ใช่ราคาแลกเปลี่ยน ณ ธนาคาร <a href="https://www.goldtraders.or.th/" target="_blank" rel="noopener noreferrer">สมาคมค้าทองคำ</a></p>
+    <span class="il-checked" id="ilLastChecked">ตรวจล่าสุด —</span>
+  </footer>
+</div>
+<div class="site-shell" inert aria-hidden="true">
   <aside class="sidebar" id="sidebar">
     <div class="brand" aria-label="GOLDX">
       <span class="brand-mark"><span>GX</span></span>
@@ -825,6 +903,7 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
     window.dispatchEvent(new CustomEvent('goldx:sync-tick',{detail:{at:now,forced}}));
   }
   async function boot(){
+    if(document.getElementById("ivory-ledger"))return; // Ivory uses the same API through its lightweight own scheduler.
     bind();loadAlerts();renderAlerts();
     await Promise.allSettled([refreshQuotes(true),loadChart(),loadWorldTech(),loadThaiTech()]);
     state.lastTechnicalCheck=Date.now();
@@ -917,5 +996,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 <script src="/goldx-indicators.js" defer></script>
 <script src="/goldx-pro.js" defer></script>
 <script src="/goldx4.js" defer></script>
+<script src="/ivory-ledger.js" defer></script>
 </body>
 </html>
