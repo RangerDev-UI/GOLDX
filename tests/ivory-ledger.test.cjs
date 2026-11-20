@@ -60,7 +60,7 @@ test('Market gateway and original worker remain unchanged, new UI uses a single 
  const assets=r('.assetsignore');
  for(const name of ['ivory-ledger.css','ivory-ledger.js'])assert.ok(assets.includes('!'+name));
  const sw=r('sw.js');
- assert.match(sw,/goldx4-static-v3/);
+ assert.match(sw,/goldx4-static-v4/);
  assert.match(sw,/url\.pathname\.startsWith\('\/api\/'\)/);
  assert.doesNotThrow(()=>new Function(js));
 });
