@@ -142,10 +142,13 @@ async function worldChart(period) {
     points=tidyPoints(d.points || d.data?.points || d.candles);
     if (points.length<2) throw new Error('Insufficient chart points');
   } catch(e) {
-    if (period==='1D' || period==='1W') {
+    if (period==='1D') {
       const d=await json('https://xaus.com/api/v1/intraday?symbol=xau&hours=48');
-      points=tidyPoints(d.points);
-      source='XAUS intraday (recorded quotes)'; isDaily=false;
+      points=tidyPoints(d.points).filter(p=>Date.parse(p.t)>=Date.now()-24*3600*1000);
+      source='XAUS intraday (recorded quotes, last 24h)'; isDaily=false;
+    } else if(period==='1W'){
+      // A 48-hour response cannot accurately represent a full week.
+      throw new Error('Verified five-day XAU/USD chart unavailable');
     } else {
       const d=await json('https://xaus.com/api/v1/history');
       points=tidyPoints(d.points);
