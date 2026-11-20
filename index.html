@@ -740,15 +740,37 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
     window.addEventListener('goldx:refresh-chart',()=>refreshActiveChart(true));
     window.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});
   }
+  // One scheduler while the page is visible; fetches have independent data-source cache policies.
+  function chartCadence(period){return period==='1D'?60000:period==='1W'?120000:300000;}
+  function refreshActiveChart(force=false){
+    if(state.chartBusy)return;
+    if(force)state.charts.delete(`${state.market}:${state.period}`);
+    return loadChart();
+  }
+  function refreshTechnicalData(){
+    state.lastTechnicalCheck=Date.now();
+    for(const key of ['thai:3M','world:3M','thai:1Y','world:1Y'])state.charts.delete(key);
+    // Pivot remains based on the last completed daily session, not current ticks.
+    return Promise.allSettled([loadThaiTech(),loadWorldTech()]);
+  }
+  function runSyncTick(forced=false){
+    if(!forced&&document.visibilityState!=='visible')return;
+    const now=Date.now();
+    refreshQuotes(!forced);
+    if(forced||now-state.lastChartCheck>=chartCadence(state.period))refreshActiveChart(true);
+    if(forced||now-state.lastTechnicalCheck>=360000)refreshTechnicalData();
+    window.dispatchEvent(new CustomEvent('goldx:sync-tick',{detail:{at:now,forced}}));
+  }
   async function boot(){
     bind();loadAlerts();renderAlerts();
-    // In parallel: quote and observed history; do not render synthetic prices.
     await Promise.allSettled([refreshQuotes(true),loadChart(),loadWorldTech(),loadThaiTech()]);
+    state.lastTechnicalCheck=Date.now();
     renderTechnicals();
-    // Refreshes only while the page is visible; not a background notification service.
-    setInterval(()=>{if(document.visibilityState==='visible')refreshQuotes(true);},60000);
-    setInterval(()=>{if(document.visibilityState==='visible'){state.charts.delete('thai:3M');state.charts.delete('world:3M');loadThaiTech();loadWorldTech();}},360000);
-    document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&(!state.lastSync||Date.now()-state.lastSync>60000))refreshQuotes(true);});
+    // Quotes: 60 s, active chart: 1/2/5 min, verified Pivot: 6 min.
+    setInterval(()=>runSyncTick(false),60000);
+    document.addEventListener('visibilitychange',()=>{
+      if(document.visibilityState==='visible')runSyncTick(false);
+    });
   }
   document.addEventListener('DOMContentLoaded',boot);
 })();
