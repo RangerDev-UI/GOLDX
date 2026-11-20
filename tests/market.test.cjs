@@ -38,6 +38,17 @@ test('falls back to ThaiGoldToday if Rakhagold is invalid',async()=>{
  const d=JSON.parse((await handler(event({mode:'quotes'}))).body);
  assert.equal(d.thai.sellBar,60000);assert.equal(d.thai.source,'ThaiGoldToday · อ้างอิงสมาคมค้าทองคำ');
 });
+test('picks most recently announced Thai quote, not whichever provider replies first',async()=>{
+ delete process.env.GTA_API_TOKEN;
+ fake([
+   ['/gold/latest',{data:{source:'gta',bar_buy:'59750',bar_sell:'59950',as_time:'2026-11-19T16:16:00',seq:'33'}}],
+   ['/api/gold-price',{current:{buyBar:60000,sellBar:60200,updatedAt:today,updateRound:1}}]
+ ]);
+ const r=await handler(event({mode:'quotes'})),d=JSON.parse(r.body);
+ assert.equal(d.thai.sellBar,60200);
+ assert.equal(d.thai.sourceType,'public-relay');
+ assert.equal(d.thai.source,'ThaiGoldToday · อ้างอิงสมาคมค้าทองคำ');
+});
 test('can use CHNWT as the third fallback; reject future or missing timestamps',async()=>{
  delete process.env.GTA_API_TOKEN;
  const nowTH=new Date().toLocaleString('en-GB',{timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
