@@ -1,34 +1,40 @@
-# GOLDX — Gold Market Intelligence
+# GOLDX — Gold Market Intelligence (Cloudflare Workers)
 
-เว็บไซต์เช็กราคาทองคำไทย 96.5% และทองคำโลก XAU/USD สไตล์ Luxury Black & Gold พร้อมกราฟ วิเคราะห์เทคนิค และเครื่องคำนวณทองคำ
+เว็บติดตาม **ทองคำแท่งไทย 96.5%** และทองคำโลก XAU/USD ในรูปแบบ Dark Gold Dashboard ใช้เฉพาะข้อมูลที่ได้รับจากแหล่งข้อมูลภายนอกจริง ไม่สร้างราคาหรือประวัติสมมติ
 
-## โครงสร้างโปรเจกต์
-- `index.html` — หน้าเว็บหลักแบบไฟล์เดียว รวม CSS/JavaScript สำหรับการแสดงผล (ไม่ต้องรัน build)
-- `favicon.svg` — ไอคอน GOLDX
-- `netlify.toml` — กำหนด Netlify Functions และ route `/api/market`
-- `netlify/functions/market.js` — ตัวกลางสำหรับดึงข้อมูลราคาจากผู้ให้บริการ (API ฝั่งเซิร์ฟเวอร์)
-- `netlify/functions/thai-feed.js` — เชื่อมหลายแหล่งราคาทองไทยและกรองประวัติราคาประกาศจริง
-- `tests/market.test.cjs` — ชุดทดสอบ Node.js 10 กรณี (`node --test tests/market.test.cjs`)
+## Cloudflare deployment
+- Website: https://goldx.rangerth.workers.dev/
+- GitHub branch: `main` (Cloudflare Workers Builds เชื่อมกับ GitHub เพื่อ Deploy อัตโนมัติ)
+- `wrangler.jsonc`: ชื่อ Worker `goldx`, โค้ดหลัก `worker.js`, assets แบบ allowlist โดย `.assetsignore`
+- `worker.js` รองรับ `/api/market` และคงรูปแบบตอบกลับของ `netlify/functions/market.js` เพื่อรักษาความเข้ากันได้
+- `GTA_API_TOKEN` เป็นตัวเลือกสำหรับผู้ได้รับอนุญาตเท่านั้น; ห้ามบันทึก token ลงในโค้ด/รีโป
+- `netlify.toml` เป็นไฟล์ของระบบเดิม เก็บไว้เพื่ออ้างอิง ไม่ใช่ค่าตั้งค่าที่ใช้ Deploy บน Cloudflare
 
-## Deploy บน Netlify
-1. Netlify > Add new project > Import an existing project > GitHub
-2. เลือก `RangerDev-UI/GOLDX`
-3. Build command: เว้นว่าง
-4. Publish directory: `.`
-5. Deploy แล้วตรวจ `https://<YOUR-SITE>/.netlify/functions/market?mode=quotes` ว่าดึงข้อมูลจากต้นทางได้หรือไม่
+## GOLDX 3.0
+1. **ราคาและ Daily Gold Pulse:** ราคาขายออกล่าสุดและรอบประกาศ; ถ้าข้อมูลประกาศรายรอบของ *วันเดียวกันตามเขตเวลาไทย* มีอย่างน้อย 2 จุด จะคำนวณการเปลี่ยนจากประกาศแรก สูงสุดและต่ำสุดที่แหล่งข้อมูลส่งมา ไม่อ้างว่าเป็น high/low ครบทั้งตลาด
+2. **กราฟราคาไทยและโลก:** กราฟเส้น/แท่งเทียน (เมื่อ OHLC ครบ) ช่วงเวลา 1D, 1W, 1M, 3M, 1Y พร้อมการส่งออก CSV
+3. **อินดิเคเตอร์:** เส้น EMA 20/50/200 บนกราฟราคา, RSI(14) และ MACD(12,26,9) แบบกราฟย่อย; แสดง — เมื่อข้อมูลไม่ครบจำนวนแท่งที่คำนวณได้
+4. **ปฏิทินและตารางทองไทย:** ดึง `/api/market?mode=chart&market=thai&period=1Y` เมื่อเลื่อนมาถึงส่วนนี้ แสดงวันในเดือนและ OHLC ของรายการ `quality=reported-daily-ohlc` เท่านั้น เลือกวันและเปลี่ยนหน้าในตารางได้
+5. **ฟีเจอร์เดิม:** กราฟแนวรับ–แนวต้าน Pivot, RSI/EMA/ATR พื้นฐาน, เครื่องคำนวณทอง และแจ้งเตือนเมื่อ *เปิดหน้านี้อยู่* ยังทำงานเหมือนเดิม
 
-## ข้อมูลราคา
-- ทองคำไทย: ใช้ข้อมูลจาก API สมาคมฯ เมื่อมี `GTA_API_TOKEN` หรือจากแหล่งสาธารณะ Rakhagold, ThaiGoldToday และ CHNWT โดยตรวจรูปแบบราคา/วันเวลาและเลือกประกาศที่ใหม่ที่สุด (API ที่ตอบเร็วที่สุดไม่ได้รับสิทธิ์ก่อน)
-- ไฟล์ราคาทองไทยจากผู้ให้บริการอื่น **ไม่ใช่ API ทางการ** แม้มีแหล่งอ้างอิงข้อมูลจากสมาคมค้าทองคำ และไม่แสดงราคาสมมติ
-- ทองคำโลก: XAUS; สำรอง Gold API
-- กราฟย้อนหลังทองโลก: XAUS chart/history (ขึ้นกับ API ต้นทาง)
-- กราฟย้อนหลังทองไทย: ใช้ API สาธารณะ Rakhagold โดยคัดเฉพาะรายการ `source=gta` จากประกาศจริง กรอง `source=est` ที่เป็นค่าประมาณออก (หรือ API ทางการเมื่อได้รับโทเคน)
-- แนวรับ–แนวต้านทองไทย: คำนวณ Classic Pivot จากแท่ง OHLC รายวันของวันก่อนที่เสร็จสมบูรณ์เท่านั้น; RSI/EMA/ATR คำนวณตามประวัติจริง ไม่ใช้การแปลงสัดส่วนจาก XAU/USD หากข้อมูลไม่เพียงพอจะแสดงขีด
-- ความสด: ราคาทองไทยอาจมีประกาศล่าสุดเป็นวันก่อนหน้า เว็บไซต์จะแจ้งเป็น *ประกาศก่อนหน้า* พร้อมวันเวลา; การตรวจทุก 60 วินาทีไม่ใช่การรับประกันการประกาศใหม่ทุกนาที
-- Netlify CDN: แคชราคาราว 65 วินาทีผ่าน `Netlify-CDN-Cache-Control` เพื่อจำกัดการเรียกต้นทาง
-- ทดสอบ API หลัง Deploy ที่ `/api/market?mode=quotes` และกราฟทองไทยที่ `/api/market?mode=chart&market=thai&period=3M` (แหล่งข้อมูลจริงอาจขัดข้องหรือเก่ากว่าตลาดปัจจุบัน)
-- ไม่แสดงราคาสมมติ เมื่อไม่มีข้อมูล หรือ API ไม่ตอบกลับ
+## โครงสร้าง
+- `index.html`: layout และโค้ดฟีเจอร์เดิม (ไม่มีขั้นตอน build frontend)
+- `goldx-pro.css`: สไตล์ใหม่ responsive สำหรับ Daily Pulse, indicator, calendar และ history table
+- `goldx-pro.js`: การแสดงผลฟีเจอร์ใหม่และการเชื่อม API เดิม
+- `goldx-indicators.js`: ฟังก์ชันคำนวณ EMA, RSI แบบ Wilder, MACD บนราคาจริง
+- `worker.js`: Cloudflare Worker, ใช้ logic เดิมใน `netlify/functions/`
+- `tests/market.test.cjs`, `tests/indicators.test.cjs`: ชุดทดสอบ API และสูตรอินดิเคเตอร์
 
-การรีเฟรชหน้าเว็บทุก 60 วินาทีคือความถี่ในการตรวจสอบข้อมูล ไม่ใช่การรับประกันว่า API ต้นทางจะออกประกาศราคาใหม่ทุกนาที
+## ทดสอบ
+```bash
+node --test tests/*.test.cjs
+npx wrangler deploy
+```
 
-> ข้อมูลและแนวรับ–แนวต้านเป็นข้อมูลเพื่อการศึกษา ไม่ใช่คำแนะนำการลงทุน
+ทดสอบ endpoint:
+- `/api/market?mode=quotes`
+- `/api/market?mode=chart&market=thai&period=1D`
+- `/api/market?mode=chart&market=thai&period=1Y`
+- `/api/market?mode=chart&market=world&period=3M`
+
+**คำเตือน:** ทองคำไทยอาจมีประกาศก่อนหน้า, แหล่งข้อมูลสาธารณะอาจล่าช้า/ไม่ตอบกลับ และทองคำโลกเป็นข้อมูล Spot อ้างอิง ไม่ใช่ราคาซื้อขายที่รับประกันได้ อินดิเคเตอร์เป็นการวิเคราะห์ทางสถิติ ไม่ใช่คำแนะนำลงทุน
