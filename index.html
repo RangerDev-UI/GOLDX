@@ -121,7 +121,7 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
         <div class="hero-copy"><span class="eyebrow"><span class="eyebrow-line"></span> THE GOLD STANDARD <span class="eyebrow-end">/ 2026</span></span>
           <h1>ทุกจังหวะของ <em>ทองคำ</em><br/>ในมุมมองที่เหนือกว่า</h1>
           <p>ติดตามราคาทองคำไทยและตลาดโลกในที่เดียว พร้อมข้อมูลเชิงเทคนิคที่ตรวจสอบแหล่งที่มาได้ เพื่อช่วยให้คุณตัดสินใจอย่างมีข้อมูล</p>
-          <div class="hero-meta"><span><span class="mini-dot"></span> อัปเดตทุก 60 วินาทีเมื่อเปิดหน้าเว็บ</span><span class="hero-meta-break"></span><span>ตรวจสอบล่าสุด <strong id="heroLastSync">—</strong></span></div><a class="hero-cta" href="#analysis-section">ดูกราฟย้อนหลัง <span aria-hidden="true">↗</span></a>
+          <div class="hero-meta"><span><span class="mini-dot"></span> อัปเดตทุก 60 วินาทีเมื่อเปิดหน้าเว็บ</span><span class="hero-meta-break"></span><span>ตรวจสอบล่าสุด <strong id="heroLastSync">—</strong></span></div><div class="gx-hero-links"><a class="hero-cta" href="#goldx-daily-section">ภาพรวมราคาวันนี้ <span aria-hidden="true">↗</span></a><a class="gx-hero-secondary" href="#analysis-section">กราฟและแนวรับ–แนวต้าน</a></div>
         </div>
         <div class="hero-art" aria-hidden="true"><div class="art-circle art-circle-1"></div><div class="art-circle art-circle-2"></div><div class="art-halo"></div><div class="gold-block gold-block-back"><span>GOLDX</span></div><div class="gold-block gold-block-front"><div class="block-brand">Au</div><div class="block-purity">999.9 <span>FINE GOLD</span></div><span class="block-mass">1 KILO</span></div><span class="art-cross">✦</span></div>
       </section>
@@ -182,10 +182,10 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
             <p id="gxAdvDataNote" class="gx-adv-note">ข้อมูลอินดิเคเตอร์ต้องอาศัยประวัติราคาจริง ไม่ใช่ข้อมูลจำลอง</p>
           </div>
         </div>
-        <aside class="technical-panel surface" id="technical-panel"><div class="panel-top compact"><div><span class="section-kicker">03 / TECHNICAL OUTLOOK</span><h2>มุมมองเชิงเทคนิค</h2></div><span class="tech-star">✳</span></div><div class="tech-mode"><span id="techMarketLabel">ทองคำโลก · XAU/USD</span><span class="technical-badge" id="technicalBadge">รอข้อมูล</span></div>
+        <aside class="technical-panel surface" id="technical-panel"><div class="panel-top compact"><div><span class="section-kicker">03 / TECHNICAL OUTLOOK</span><h2>มุมมองเชิงเทคนิค</h2></div><span class="tech-star">✳</span></div><div class="tech-mode"><span id="techMarketLabel">ทองคำโลก · XAU/USD</span><span class="technical-badge" id="technicalBadge">รอข้อมูล</span></div><div class="gx-pivot-status" id="pivotStatus" role="status" hidden></div>
           <div class="momentum-block"><span class="minor-label">MOMENTUM INDICATOR</span><strong id="momentumText">—</strong><div class="momentum-track"><span class="track-gradient"></span><i class="momentum-thumb" id="momentumThumb" style="left:50%"></i></div><div class="track-titles"><span>BEARISH</span><span>NEUTRAL</span><span>BULLISH</span></div></div>
           <div class="tech-levels"><div class="levels-head"><span>แนวรับ · แนวต้าน</span><span id="levelBasis">อิง Pivot รายวัน</span></div><div class="level-row resistance"><span><i class="level-mark"></i> แนวต้าน R2</span><strong id="r2">—</strong></div><div class="level-row resistance"><span><i class="level-mark"></i> แนวต้าน R1</span><strong id="r1">—</strong></div><div class="level-row pivot"><span><i class="level-mark"></i> Pivot</span><strong id="pivot">—</strong></div><div class="level-row support"><span><i class="level-mark"></i> แนวรับ S1</span><strong id="s1">—</strong></div><div class="level-row support"><span><i class="level-mark"></i> แนวรับ S2</span><strong id="s2">—</strong></div></div>
-          <div class="tech-indicators"><div><small>RSI (14)</small><strong id="rsiValue">—</strong></div><div><small>ATR (14)</small><strong id="atrValue">—</strong></div><div><small>EMA 20 / 50</small><strong id="emaValue">—</strong></div></div><p class="tech-disclaimer" id="techDisclaimer">คำนวณจากข้อมูลตลาดย้อนหลังจริง ไม่ใช่การทำนายราคาที่รับประกันผล</p>
+          <div class="tech-indicators"><div><small>RSI (14)</small><strong id="rsiValue">—</strong></div><div><small>ATR (14)</small><strong id="atrValue">—</strong></div><div><small>EMA 20 / 50</small><strong id="emaValue">—</strong><small class="gx-ema-info" id="emaValuesDetail">รอข้อมูล</small></div></div><p class="tech-disclaimer" id="techDisclaimer">คำนวณจากข้อมูลตลาดย้อนหลังจริง ไม่ใช่การทำนายราคาที่รับประกันผล</p>
         </aside>
       </section>
 
@@ -343,9 +343,10 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
       if(state.worldTech?.prevClose>0) setChange('worldChange',world.price-state.worldTech.prevClose,'USD',' / ปิดก่อนหน้า');
       else {setText('worldChange','รอข้อมูลปิดก่อนหน้า');$('worldChange').className='price-change neutral';}
     } else {indicateUnavailable('world');setText('silverRatio','—');}
-    const rate=thai?.fx||world?.fxUsdThb;
-    setText('fxRate',isNum(+rate)&&+rate>0?fmt(+rate,3):'—');
-    setText('fxDetail',thai?.fx?'จากแหล่งข้อมูลราคาทองไทย':world?.fxUsdThb?'จากแหล่งข้อมูล XAUS':'ไม่พบข้อมูลอัตราแลกเปลี่ยน');
+    const fx=data.fx,rate=isNum(fx?.usdThb)&&fx.usdThb>0?fx.usdThb:(isNum(thai?.fx)&&thai.fx>0?thai.fx:world?.fxUsdThb);
+    setText('fxRate',isNum(rate)&&rate>0?fmt(rate,3):'—');
+    const fxDate=fx?.asOf?(String(fx.asOf).length===10?fx.asOf:timeTH(fx.asOf)):'เวลาไม่ระบุ';
+    setText('fxDetail',isNum(rate)&&rate>0?(fx?.rateType==='daily-reference'?'อัตราอ้างอิงรายวัน · '+fxDate+' · ไม่ใช่ราคาเรียลไทม์':(fx?.source||'จากแหล่งข้อมูลทอง')+' · '+fxDate):'ยังไม่มี FX จากแหล่งที่ตรวจสอบได้');
     if(data.thai||data.world) {
       state.lastSync=new Date();
       setText('heroLastSync',timeTH(state.lastSync));
@@ -463,7 +464,7 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
       if(current!==state.chartRequest)return;
       $('priceChart').style.visibility='hidden';state.chartPoints=[];
       $('chartEmpty').hidden=false;
-      setText('chartEmptyMessage','ไม่สามารถตรวจสอบประวัติราคาจริงได้ในขณะนี้ — จะไม่แสดงข้อมูลประมาณการแทนราคาที่ประกาศจริง');
+      setText('chartEmptyMessage',state.market==='thai'&&state.period==='1D'?'ไม่มีข้อมูลประกาศราคาทองวันนี้อย่างน้อย 2 รอบจากแหล่งที่ตรวจสอบได้ · ไม่ใช้ข้อมูลย้อนหลัง 7 วันแอบแทนกราฟ 1 วัน':'ไม่พบประวัติราคาที่ตรวจสอบได้ในช่วงเวลาที่เลือก · ไม่แสดงข้อมูลประมาณการแทน');
       setText('chartSource','ไม่พบประวัติราคาจากแหล่งที่ตรวจสอบได้');
       setText('chartChange','—');$('chartXAxis').replaceChildren();
       window.dispatchEvent(new CustomEvent('goldx:history-error'));
@@ -508,33 +509,38 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
     const pivot=(high+low+close)/3;
     const rs={pivot,r1:2*pivot-low,r2:pivot+(high-low),s1:2*pivot-high,s2:pivot-(high-low)};
     const closes=completed.map(p=>p.c);
-    return {...rs,atr:calcATR(completed),rsi:calcRSI(closes),ema20:calcEMA(closes,20),ema50:calcEMA(closes,50),basis:prev.t,prevClose:prev.c};
+    return {...rs,atr:calcATR(completed),rsi:calcRSI(closes),ema20:calcEMA(closes,20),ema50:calcEMA(closes,50),observations:completed.length,basis:prev.t,prevClose:prev.c};
   }
   async function loadWorldTech() {
     try {
-      const data=await getChart('world','3M');
+      let data;
+      try{data=await getChart('world','1Y'); if(data.points.length<50)throw new Error('Annual history insufficient');}
+      catch(_e){data=await getChart('world','3M');}
       const tech=getWorldTechnicals(data.points);
-      if(!tech) throw new Error('Insufficient daily candles');
+      if(!tech)throw new Error('Insufficient daily candles');
       state.worldTech=tech;renderTechnicals();
       const price=state.quotes?.world?.price;
-      if(isNum(price)&&tech.prevClose>0){
-        const change=price-tech.prevClose;
-        setChange('worldChange',change,'USD',' / ปิดก่อนหน้า');
-      }
-    } catch(e) {
+      if(isNum(price)&&tech.prevClose>0)setChange('worldChange',price-tech.prevClose,'USD',' / ปิดก่อนหน้า');
+    }catch(e){
       state.worldTech=null;renderTechnicals();
       setText('worldChange','ไม่มีราคาปิดก่อนหน้าที่ตรวจสอบได้');
     }
   }
   async function loadThaiTech(){
     try {
-      const data=await getChart('thai','3M');
-      if(!data.isDaily||data.quality!=='reported-daily-ohlc')throw new Error('Thai daily verified OHLC not available');
+      let data;
+      try{
+        data=await getChart('thai','1Y');
+        if(!data.isDaily||data.quality!=='reported-daily-ohlc'||data.points.length<50)throw new Error('Annual OHLC insufficient');
+      }catch(_e){
+        data=await getChart('thai','3M');
+      }
+      if(!data.isDaily||data.quality!=='reported-daily-ohlc')throw new Error('Verified Thai daily OHLC not available');
       const tech=getWorldTechnicals(data.points,'thai');
       if(!tech)throw new Error('Insufficient completed Thai daily OHLC');
       state.thaiTech=tech;
       state.thaiTechMeta={source:data.source,count:data.points.length,coverage:data.coverage};
-    } catch(e){state.thaiTech=null;state.thaiTechMeta=null;}
+    }catch(e){state.thaiTech=null;state.thaiTechMeta=null;}
     renderTechnicals();
   }
   function techForCurrentMarket(){
@@ -546,6 +552,7 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
     setText('techMarketLabel',isThai?'ทองคำไทย · บาท / 1 บาททองคำ':'ทองคำโลก · XAU/USD');
     const data=techForCurrentMarket(),worldTech=state.worldTech;
     if(!data){
+      $('pivotStatus').hidden=true;setText('emaValuesDetail','ไม่มีข้อมูลย้อนหลังเพียงพอ');
       for(const id of ['r2','r1','pivot','s1','s2','rsiValue','atrValue','emaValue','bullScenario','baseScenario','bearScenario'])setText(id,'—');
       setText('momentumText','ยังไม่มีข้อมูล');setText('technicalBadge','รอข้อมูล');
       $('technicalBadge').className='technical-badge';setText('levelBasis','ต้องใช้ข้อมูลราคาจริง');
@@ -555,7 +562,8 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
     for(const k of ['r2','r1','pivot','s1','s2'])setText(k,fmt(data[k],isThai?0:2));
     setText('rsiValue',isNum(data.rsi)?fmt(data.rsi,1):'—');
     setText('atrValue',isNum(data.atr)?fmt(data.atr,isThai?0:2):'—');
-    setText('emaValue',isNum(data.ema20)&&isNum(data.ema50)?data.ema20>=data.ema50?'EMA20 > 50':'EMA20 < 50':'—');
+    setText('emaValue',isNum(data.ema20)&&isNum(data.ema50)?data.ema20>=data.ema50?'EMA20 ≥ EMA50':'EMA20 < EMA50':isNum(data.ema20)?'มี EMA20':'ข้อมูลไม่พอ');
+    setText('emaValuesDetail','EMA20: '+(isNum(data.ema20)?fmt(data.ema20,isThai?0:2):'ต้องมี 20 วัน')+' · EMA50: '+(isNum(data.ema50)?fmt(data.ema50,isThai?0:2):'ต้องมี 50 วัน')+' · '+data.observations+' วันข้อมูล');
     const rsi=data.rsi;
     $('momentumThumb').style.left=`${isNum(rsi)?Math.max(5,Math.min(95,rsi)):50}%`;
     const bias=!isNum(rsi)?'ไม่ทราบแนวโน้ม':rsi>=60?'โมเมนตัมแข็งแกร่ง':rsi<=40?'โมเมนตัมอ่อนแรง':'โมเมนตัมเป็นกลาง';
@@ -571,6 +579,24 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
       setText('techDisclaimer',`Classic Pivot: ใช้ High/Low/Close ของวันก่อน (${chartDate(data.basis)}); RSI, EMA, ATR(14) ใช้ข้อมูลย้อนหลังจริง ไม่ใช่คำทำนาย`);
     }
     const price=isThai?state.quotes?.thai?.sellBar:state.quotes?.world?.price;
+    const quote=isThai?state.quotes?.thai:state.quotes?.world;
+    const fresh=!!(quote&&quote.stale!==true&&(isThai?quote.announcedToday!==false:true));
+    const flag=$('pivotStatus');
+    flag.hidden=!isNum(price)||!fresh;
+    if(!flag.hidden){
+      flag.className='gx-pivot-status';
+      const basis=chartDate(data.basis);
+      const currency=isThai?'บาท':'USD';
+      if(price<data.s2){
+        flag.classList.add('gx-breach');
+        flag.textContent='⚠ ราคาล่าสุดต่ำกว่า S2 อยู่ '+fmt(data.s2-price,isThai?0:2)+' '+currency+' · ระดับ Pivot อ้างอิงวันที่ '+basis+' ไม่ใช่แนวรับใหม่';
+      }else if(price>data.r2){
+        flag.classList.add('gx-breakout');
+        flag.textContent='↗ ราคาสูงกว่า R2 อยู่ '+fmt(price-data.r2,isThai?0:2)+' '+currency+' · คำนวณจากวันก่อน ('+basis+')';
+      }else{
+        flag.textContent='ราคายังอยู่ในกรอบ S2–R2 ของ Pivot วันก่อน ('+basis+')';
+      }
+    }
     const atr=data.atr;
     const curr=isThai?'฿':'$';
     setText('baseScenario',isNum(price)?`${curr}${fmt(price,isThai?0:2)}`:'—');
