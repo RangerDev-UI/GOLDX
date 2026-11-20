@@ -11,7 +11,7 @@ test('Design 02 is the public visible cream homepage with FX at the top',()=>{
  assert.match(html,/class="il-fx"/);
  assert.match(html,/id="ilFX"/);
  assert.match(html,/GOLD MARKET JOURNAL/);
- assert.match(html,/ราคาทองคำ<br>ที่ดูแล้วเข้าใจทันที/);
+ assert.match(html,/<h1>ราคาทองคำ<\/h1>/);
  assert.match(css,/background:#faf7ee/);
  assert.match(css,/body>\.site-shell,body>#toast,body>#mobileCover\{display:none!important\}/);
  assert.match(html,/<div class="site-shell" inert aria-hidden="true">/);
@@ -34,6 +34,16 @@ test('Selected design has no old panels, fake prices or competing Sidebar in its
  assert.match(visible,/id="ilOrnSellDelta"/);
  assert.match(visible,/id="ilReferenceSource"/);
  assert.match(visible,/id="ilWorldGram"/);
+ assert.match(visible,/class="il-world-feature"/);
+ assert.match(visible,/class="il-thai-heading"/);
+ const worldPosition=visible.indexOf('id="ilWorldSpot"');
+ const thaiCardPosition=visible.indexOf('class="il-gold-grid"');
+ const ornamentPosition=visible.indexOf('id="ilOrnTitle"');
+ assert.ok(worldPosition>0&&worldPosition<thaiCardPosition,'XAU/USD card appears before Thai cards');
+ assert.ok(thaiCardPosition<ornamentPosition,'Bullion and ornament cards remain');
+ assert.doesNotMatch(visible,/ที่ดูแล้วเข้าใจทันที/);
+ assert.match(css,/\.il-world-feature\{display:grid/);
+ assert.match(css,/@media\(max-width:680px\)/);
  const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);
  assert.equal(ids.length,new Set(ids).size);
 });
