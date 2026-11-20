@@ -9,7 +9,7 @@ const set=(id,v)=>{const x=$(id);if(x)x.textContent=v};
 const day=t=>new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(t));
 const today=()=>day(Date.now());
 const dateText=t=>new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',day:'numeric',month:'short',year:'numeric'}).format(new Date(t));
-const S={quote:null,ticks:[],tickSource:'',dayBar:null,previousClose:null,dailySource:'',chart:null,indicator:null,history:[],source:'',status:'idle',month:null,selected:null,page:0};
+const S={quote:null,ticks:[],tickSource:'',dayBar:null,previousClose:null,dailySource:'',chart:null,indicator:null,history:[],source:'',status:'idle',month:null,selected:null,page:0,historyLoaded:false,historyBusy:false,dailyBusy:false,lastDailyCheck:0,lastHistoryCheck:0};
 const PAGE=12;
 async function getJSON(url){
  const c=new AbortController(),timer=setTimeout(()=>c.abort(),12000);
@@ -48,6 +48,10 @@ function renderToday(){
   'ไม่มีประกาศรายรอบหรือข้อมูล OHLC วันนี้เพียงพอ · ไม่แสดงตัวเลขประมาณการ');
 }
 async function loadToday(){
+ if(S.dailyBusy)return;
+ S.dailyBusy=true;
+ S.lastDailyCheck=Date.now();
+ try{
  const outcomes=await Promise.allSettled([
   getJSON('/api/market?mode=chart&market=thai&period=1D'),
   getJSON('/api/market?mode=chart&market=thai&period=1W')
@@ -77,6 +81,10 @@ async function loadToday(){
   }
  }
  renderToday();
+ } finally {
+   S.dailyBusy=false;
+   set('gxDayCheckedAt','ตรวจสรุปรายวันล่าสุด '+new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(S.lastDailyCheck))+' น. · เวลาอ้างอิงราคาอยู่ที่แหล่งข้อมูล');
+ }
 }
 /* ===== Indicator panels and EMA overlays aligned to the existing chart ===== */
 const svg=(tag,attrs)=>{const n=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [k,v]of Object.entries(attrs))n.setAttribute(k,String(v));return n};
