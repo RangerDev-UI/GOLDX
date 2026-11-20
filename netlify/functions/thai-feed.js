@@ -52,9 +52,13 @@ async function quote(json){
    if(d.status!=='success'||!c)throw new Error('CHNWT invalid response');
    return markQuote({buyBar:n(c.price?.gold_bar?.buy),sellBar:n(c.price?.gold_bar?.sell),buyOrnament:n(c.price?.gold?.buy),sellOrnament:n(c.price?.gold?.sell),change:null,changePercent:null,round:n(/ครั้งที่\s*(\d+)/.exec(c.update_time||'')?.[1]),updatedAt:parseChnwtDate(c.update_date,c.update_time),source:'CHNWT · ข้อมูลประกาศราคาทองคำไทย',sourceUrl:'https://github.com/max180643/thai-gold-api',sourceType:'public-relay',spot:null,fx:null,marketOpen:null});
  });
- // Concurrent failover prevents one unresponsive provider from blocking the entire dashboard.
- try{return await Promise.any(providers.map(p=>p()));}
- catch(e){console.warn('Thai public/official quote providers all unavailable');throw new Error('Thai quote providers unavailable');}
+ // Compare validated announcements: prefer newest genuine timestamp over quickest upstream.
+ // Requests run concurrently; a slow or broken provider never makes up a replacement price.
+ const results=await Promise.allSettled(providers.map(p=>p()));
+ const candidates=results.filter(r=>r.status==='fulfilled').map(r=>r.value);
+ if(!candidates.length){console.warn('Thai public/official quote providers all unavailable');throw new Error('Thai quote providers unavailable');}
+ candidates.sort((a,b)=>Date.parse(b.updatedAt)-Date.parse(a.updatedAt) || (a.sourceType==='official'?-1:b.sourceType==='official'?1:0));
+ return candidates[0];
 }
 function verifiedDaily(rows){
  if(!Array.isArray(rows))return [];
