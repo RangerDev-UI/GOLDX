@@ -391,9 +391,16 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
         const raw=await getJson(`https://xaus.com/api/v1/chart?symbol=xau&${query}`);
         data={market:'world',period,points:raw.points||raw.data?.points||raw.candles||[],source:'XAUS / Chart API'};
       } catch(e2) {
-        if(period==='1D'||period==='1W') {
+        if(period==='1D') {
           const raw=await getJson('https://xaus.com/api/v1/intraday?symbol=xau&hours=48');
-          data={market:'world',period,points:raw.points||[],source:'XAUS / Intraday'};
+          const latest=Date.now()-24*3600*1000;
+          data={market:'world',period,points:(raw.points||[]).filter(p=>{
+            const t=p.t??p.d??p.datetime;
+            const when=typeof t==='number'?(t<1e12?t*1000:t):Date.parse(t);
+            return Number.isFinite(when)&&when>=latest;
+          }),source:'XAUS / Intraday · ย้อนหลังไม่เกิน 24 ชม.'};
+        } else if(period==='1W'){
+          throw new Error('ข้อมูลกราฟทองโลก 1 สัปดาห์ยังไม่พร้อม');
         } else {
           const raw=await getJson('https://xaus.com/api/v1/history');
           data={market:'world',period,points:(raw.points||[]).slice(-(period==='1M'?32:period==='3M'?95:370)),source:'XAUS / History'};
