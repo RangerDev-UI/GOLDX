@@ -1,0 +1,124 @@
+/* GOLDX IVORY LEDGER — faithful live adaptation of Design 02.
+   The original terminal DOM stays in the repository for rollback,
+   but is not shown or initialized on the Ivory landing page. */
+:root{color-scheme:light}
+html{background:#faf7ee}
+body{margin:0!important;min-height:100vh;background:#faf7ee!important;color:#292c30!important;font-family:'Noto Sans Thai','DM Sans',system-ui,sans-serif!important;font-size:14px}
+body>.svg-defs,body>.site-shell,body>#toast,body>#mobileCover{display:none!important}
+body>svg.svg-defs{display:none!important}
+.ivory-ledger{min-height:100vh;display:flex;flex-direction:column;background:#faf7ee;color:#292c30;width:100%;max-width:1600px;margin:0 auto;padding:0 clamp(18px,3.3vw,56px) 26px}
+.ivory-ledger *{box-sizing:border-box}
+.ivory-ledger h1,.ivory-ledger h2,.ivory-ledger h3,.ivory-ledger p{margin:0}
+.ivory-ledger button{font-family:inherit;cursor:pointer}
+.il-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px 0 21px;border-bottom:1px solid #d7cebd}
+.il-brand{display:flex;flex-direction:column;gap:4px;text-decoration:none;color:inherit;white-space:nowrap}
+.il-brand-name{font-family:'DM Sans','Noto Sans Thai',sans-serif;font-size:28px;font-weight:800;line-height:1;letter-spacing:1.2px}
+.il-brand-name span{font-weight:400;color:#a78550}
+.il-brand-byline{font-size:9px;letter-spacing:2.1px;color:#7c796f}
+.il-header-right{display:flex;align-items:center;gap:16px;min-width:0}
+.il-fx{text-align:right;min-width:0;max-width:240px;border-right:1px solid #d7cbb8;padding-right:17px}
+.il-fx-label{display:block;font-size:10px;font-weight:700;letter-spacing:.95px;color:#96836a;white-space:nowrap}
+.il-fx-value{display:block;color:#343331;font:800 25px/1.26 'DM Sans',system-ui,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.6px}
+.il-fx-source{display:block;color:#857e73;font-size:10px;line-height:1.35;overflow-wrap:anywhere}
+.il-api{display:flex;align-items:center;gap:5px;color:#436c58;font-size:10px;font-weight:800;line-height:1.3;max-width:175px}
+.il-api-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#b79f77;flex-shrink:0}
+.il-api[data-state=ok]{color:#27714e}
+.il-api[data-state=ok] .il-api-dot{background:#2d9066}
+.il-api[data-state=warning]{color:#946c3e}
+.il-api[data-state=warning] .il-api-dot{background:#c7954c}
+.il-api[data-state=bad]{color:#a84d4d}
+.il-api[data-state=bad] .il-api-dot{background:#b85b5b}
+.il-refresh{width:35px;height:35px;display:grid;place-items:center;border-radius:50%;background:#faf7ee;color:#715b3e;border:1px solid #d8cebf;font-size:18px;flex-shrink:0;transition:background .15s}
+.il-refresh:hover{background:#eee8dc}
+.il-refresh:disabled{opacity:.4;cursor:wait}
+.il-subnav{display:flex;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid #d8cdbd;font-size:11px;color:#8c7a60}
+.il-subnav strong{color:#9c6d35;white-space:nowrap}
+.il-subnav span:nth-child(2){margin-left:auto;text-align:right}
+.il-subnav time{white-space:nowrap}
+.il-main{width:100%;flex:1}
+.il-intro{padding:clamp(25px,4vw,43px) 0 24px}
+.il-eyebrow{display:block;color:#9f7035;font-size:10px;letter-spacing:2.3px;font-weight:800;margin-bottom:12px}
+.il-intro h1{font-size:clamp(36px,4.6vw,61px);font-weight:800;letter-spacing:-1.8px;line-height:1.26}
+.il-intro p{margin-top:9px;color:#7e776f;font-size:12px;line-height:1.75}
+.il-market{border-top:2px solid #3b3730}
+.il-quote{display:grid;grid-template-columns:63px minmax(210px,1fr) minmax(235px,1.2fr);align-items:center;gap:13px;padding:29px 7px 29px;border-bottom:1px solid #dad1c4;min-width:0}
+.il-index{color:#b9a88d;font-family:Georgia,serif;font-size:29px;font-weight:400}
+.il-meta{min-width:0}
+.il-meta h2{font-size:18px;font-weight:800;line-height:1.4}
+.il-meta p{font-size:11px;color:#91877c;margin-top:5px;line-height:1.6}
+.il-bid{font-size:12px;margin-top:12px;color:#797770;line-height:1.6}
+.il-bid strong{font-family:'DM Sans','Noto Sans Thai',sans-serif;font-weight:800;color:#353330;font-variant-numeric:tabular-nums}
+.il-meta-source{display:block;font-size:10px;line-height:1.5;color:#969080;margin-top:9px;overflow-wrap:anywhere}
+.il-number{text-align:right;min-width:0}
+.il-number strong{display:block;font:800 clamp(34px,4.1vw,56px)/1.25 'DM Sans','Noto Sans Thai',sans-serif;letter-spacing:-1.6px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.il-number.thai strong{color:#9e6e2b}
+.il-number.world strong{color:#405f78}
+.il-number small{display:block;font-size:11px;color:#817d77;margin-top:6px;line-height:1.5;overflow-wrap:anywhere}
+.il-orn{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:23px}
+.il-orn-card{display:flex;flex-direction:column;gap:6px;border:1px solid #ddd4c6;padding:18px 20px;background:#f1ede5;border-radius:4px;min-width:0}
+.il-orn-card small{font-size:11px;color:#877c70}
+.il-orn-card strong{font:800 clamp(22px,2.5vw,31px)/1.35 'DM Sans','Noto Sans Thai',sans-serif;color:#2f3132;font-variant-numeric:tabular-nums}
+.il-orn-card .il-orn-note{font-size:10px;color:#90887c;line-height:1.55}
+.il-notice{margin:18px 0 0;padding:12px 14px;border:1px solid #e1d1b4;background:#f6f1e6;color:#87623f;border-radius:5px;font-size:11px;line-height:1.6}
+.il-notice[hidden]{display:none!important}
+.il-footer{border-top:1px solid #d7cebd;padding-top:15px;margin-top:24px;color:#8d8579;font-size:11px;line-height:1.75;display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.il-footer p{max-width:860px}
+.il-footer a{color:#95662d;text-decoration:underline;text-underline-offset:2px}
+.il-checked{white-space:nowrap;font-family:'DM Sans','Noto Sans Thai',sans-serif}
+@media(min-width:1400px){
+ .il-intro{padding:50px 0 31px}
+ .il-quote{padding:32px 7px}
+}
+@media(max-width:850px){
+ .ivory-ledger{padding-left:25px;padding-right:25px}
+ .il-brand-name{font-size:22px}
+ .il-intro h1{font-size:clamp(34px,5.3vw,47px)}
+ .il-quote{grid-template-columns:47px minmax(150px,1fr) minmax(185px,1fr)}
+ .il-number strong{font-size:clamp(30px,4.3vw,42px)}
+}
+@media(max-width:590px){
+ .ivory-ledger{padding:0 18px 21px}
+ .il-header{gap:7px;padding:18px 0}
+ .il-brand-name{font-size:21px}
+ .il-brand-byline{font-size:8px;letter-spacing:1px}
+ .il-header-right{gap:9px}
+ .il-fx{padding-right:10px;max-width:136px}
+ .il-fx-label{font-size:8px;letter-spacing:.2px}
+ .il-fx-value{font-size:20px}
+ .il-fx-source{font-size:8px;max-width:120px}
+ .il-api{font-size:9px;max-width:92px}
+ .il-refresh{width:28px;height:28px;font-size:15px}
+ .il-subnav{font-size:9px;gap:7px}
+ .il-subnav span:nth-child(2){display:none}
+ .il-intro{padding:28px 0 25px}
+ .il-eyebrow{font-size:9px;letter-spacing:2px}
+ .il-intro h1{font-size:clamp(33px,8vw,43px)}
+ .il-intro p{font-size:11px}
+ .il-quote{grid-template-columns:35px minmax(0,1fr);gap:8px 9px;padding:25px 0}
+ .il-index{font-size:21px;align-self:start;margin-top:1px}
+ .il-meta h2{font-size:16px}
+ .il-meta p{font-size:10px}
+ .il-bid{font-size:11px;margin-top:8px}
+ .il-meta-source{font-size:9px}
+ .il-number{grid-column:2;text-align:left}
+ .il-number strong{font-size:clamp(34px,9vw,44px);white-space:normal;overflow-wrap:anywhere}
+ .il-number small{font-size:10px;margin-top:3px}
+ .il-orn{gap:9px;margin-top:18px}
+ .il-orn-card{padding:12px}
+ .il-orn-card small{font-size:9px}
+ .il-orn-card strong{font-size:clamp(18px,5.5vw,25px);overflow-wrap:anywhere}
+ .il-orn-card .il-orn-note{font-size:9px}
+ .il-footer{font-size:10px}
+ .il-checked{white-space:normal}
+}
+@media(max-width:370px){
+ .ivory-ledger{padding-left:12px;padding-right:12px}
+ .il-brand-name{font-size:18px}
+ .il-fx-label{font-size:7px}
+ .il-fx-value{font-size:18px}
+ .il-api{max-width:66px;font-size:8px}
+ .il-refresh{width:25px;height:25px}
+ .il-quote{grid-template-columns:28px minmax(0,1fr)}
+ .il-number strong{font-size:31px}
+}
+@media(prefers-reduced-motion:reduce){.il-refresh{transition:none}}
