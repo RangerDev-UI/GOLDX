@@ -122,3 +122,52 @@ body>svg.svg-defs{display:none!important}
  .il-number strong{font-size:31px}
 }
 @media(prefers-reduced-motion:reduce){.il-refresh{transition:none}}
+
+
+/* Gold bid/ask price pair + independently verified comparison to the prior announcement */
+.il-market{border-top:0}
+.il-gold-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.il-metal-card{background:#fffdf8;border:1px solid #dfd5c5;border-radius:12px;padding:clamp(18px,2.6vw,29px);min-width:0;box-shadow:0 13px 30px #493a2511}
+.il-bullion-card{border-top:3px solid #ae8243}
+.il-ornament-panel{border-top:3px solid #86969f}
+.il-metal-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:9px}
+.il-card-number{font-size:9px;letter-spacing:1.45px;color:#987e59;font-weight:800}
+.il-metal-tag{font-size:10px;font-weight:800;background:#f2e9d6;color:#8b6738;border-radius:5px;padding:5px 8px}
+.il-ornament-panel .il-metal-tag{background:#eaf0f0;color:#5b7180}
+.il-metal-card h2{font-size:clamp(19px,1.8vw,25px);letter-spacing:-.5px;line-height:1.4;font-weight:800;color:#2e302f}
+.il-metal-caption{font-size:11px;color:#8b8276;margin:5px 0 17px!important;line-height:1.6}
+.il-price-list{border-top:1px solid #e6dfd3}
+.il-price-line{padding:14px 0 13px;border-bottom:1px solid #e6dfd3;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:3px 8px}
+.il-price-line>span{font-size:12px;color:#77766f;white-space:nowrap}
+.il-price-line>strong{font:800 clamp(23px,2.3vw,34px)/1.25 'DM Sans','Noto Sans Thai',sans-serif;letter-spacing:-.9px;color:#383733;font-variant-numeric:tabular-nums;text-align:right;overflow-wrap:anywhere;min-width:0}
+.il-price-line.il-sell-line>strong{color:#a47635}
+.il-ornament-panel .il-price-line.il-sell-line>strong{color:#536e7c}
+.il-day-change{display:block;grid-column:1/-1;text-align:right;color:#8f8a82;font-size:11px;line-height:1.5;font-weight:600}
+.il-day-change[data-tone=up]{color:#31805e}
+.il-day-change[data-tone=down]{color:#b85d54}
+.il-day-change[data-tone=flat]{color:#737a73}
+.il-day-change[data-tone=missing]{color:#a09889}
+.il-metal-origin{display:block;font-size:10px;color:#8f877b;line-height:1.6;margin-top:13px;overflow-wrap:anywhere}
+.il-compare-info{display:flex;align-items:center;justify-content:space-between;gap:8px 15px;padding:14px 2px 19px;border-bottom:1px solid #ded5c9;font-size:11px;color:#756d62;flex-wrap:wrap}
+.il-compare-info>span:first-child{color:#8d6b3c;font-weight:800}
+.il-compare-source{color:#998f81;max-width:100%;overflow-wrap:anywhere}
+.il-world-quote{border-top:0;margin-top:4px}
+.il-world-quote .il-number strong{color:#536c81}
+@media(max-width:950px){
+ .il-gold-grid{gap:10px}
+ .il-metal-card{padding:18px 17px}
+ .il-price-line>strong{font-size:clamp(22px,3.2vw,31px)}
+}
+@media(max-width:680px){
+ .il-gold-grid{grid-template-columns:1fr;gap:11px}
+ .il-metal-card{padding:18px}
+ .il-price-line{grid-template-columns:minmax(0,1fr) auto}
+ .il-price-line>strong{font-size:clamp(27px,6.4vw,36px)}
+ .il-compare-info{padding:12px 1px 14px;gap:5px}
+ .il-world-quote{border-top:0}
+}
+@media(max-width:380px){
+ .il-metal-card{padding:15px 13px}
+ .il-price-line>strong{font-size:26px}
+ .il-card-number{font-size:8px}
+}
