@@ -98,6 +98,7 @@ async function quotes() {
   const thai = thaiResult.status === 'fulfilled' ? thaiResult.value : null;
   const world = worldResult.status === 'fulfilled' ? worldResult.value : null;
   return response({ fetchedAt:new Date().toISOString(), thai, world,
+    warnings:{thai:thai?.stale ? 'ประกาศล่าสุดที่ตรวจสอบได้เป็นประกาศก่อนหน้า ไม่ใช่ราคาประกาศวันนี้' : null},
     errors:{ thai:thai ? null : 'ไม่สามารถดึงราคาทองไทยจากแหล่งข้อมูลได้',
       world:world ? null : 'ไม่สามารถดึงราคาทองโลกจากแหล่งข้อมูลได้' }
   }, thai || world ? 200 : 503, TTL.quotes);
