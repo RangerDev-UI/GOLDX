@@ -20,13 +20,9 @@ function health(){
  set('gx4HealthThai',!hasT?'ไม่มีข้อมูล':ft?'ประกาศวันนี้ · '+bkkTime(t.updatedAt):'ประกาศก่อนหน้า / อาจล่าช้า',!hasT?'bad':ft?'ok':'warning');
  set('gx4HealthWorld',!hasW?'ไม่มีข้อมูล':fw?'เช็กได้ · '+bkkTime(w.updatedAt):'ราคาอาจล่าช้า',!hasW?'bad':fw?'ok':'warning');
  set('gx4HealthFX',!fx?'ไม่มีข้อมูล':fx.label+(fx.asOf?' · '+String(fx.asOf).slice(0,10):''),!fx?'bad':fx.label==='อัตราอ้างอิงรายวัน'?'warning':'ok');
- set('gx4PairThai',hasT?'฿'+fmt(t.sellBar):'—');
- set('gx4PairWorld',hasW?'$'+fmt(w.price,2):'—');
- set('gx4PairFX',fx?fmt(fx.rate,3):'—');
  const count=Number(hasT)+Number(hasW)+Number(!!fx);
  const tone=count===0?'bad':count===3&&ft&&fw?'ok':'warning';
  set('gx4HealthBadge',count===0?'ยังไม่มีข้อมูล':count===3?'ข้อมูลครบ 3 กลุ่ม':'ข้อมูล '+count+'/3 กลุ่ม',tone);
- set('gx4HeadlineStatus',count===0?'ข้อมูลยังไม่พร้อม':count===3&&ft&&fw?'ข้อมูลจากต้นทางพร้อม':'บางแหล่งอาจล่าช้า',tone);
  const sources=[t?.source?'ไทย: '+t.source:null,w?.source?'โลก: '+w.source:null,fx?.source?'FX: '+fx.source:null].filter(Boolean).join(' • ');
  set('gx4HealthSource',(sources||'รอแหล่งข้อมูล')+' · ตรวจเช็ก '+(d?.fetchedAt?bkkTime(d.fetchedAt):'—')+' · ไม่ใช่ Streaming');
 }
