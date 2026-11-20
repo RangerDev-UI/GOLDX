@@ -60,6 +60,7 @@ function crosshair(){
  svg.addEventListener('pointerleave',()=>line.style.display='none');
 }
 document.addEventListener('DOMContentLoaded',()=>{
+ if(document.body?.classList?.contains('ivory-enabled'))return; // Preserve old widgets for rollback without initializing them.
  const control=$('gx4DefaultMarket'),initial=saved();
  control.value=initial;
  control.addEventListener('change',()=>{if(!['thai','world'].includes(control.value))return;save(control.value);window.dispatchEvent(new CustomEvent('goldx4:set-market',{detail:{market:control.value}}))});
