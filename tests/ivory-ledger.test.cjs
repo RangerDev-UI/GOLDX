@@ -90,6 +90,8 @@ test('It prints sourced prices and warns about daily FX, stale quotes or failed 
  assert.match(el('ilFXSource').textContent,/อ้างอิงรายวัน/);
  assert.match(el('ilThaiChange').textContent,/ราคาปิดวันที่/);
  assert.match(el('ilThaiBuyDelta').textContent,/↑ \+200 บาท/);
+ assert.match(el('ilThaiBuyDelta').textContent,/วันก่อน ฿59,650/);
+ assert.match(el('ilOrnSellDelta').textContent,/วันก่อน ฿60,550/);
  assert.match(el('ilThaiSellDelta').textContent,/↑ \+200 บาท/);
  assert.match(el('ilOrnBuyDelta').textContent,/↑ \+290 บาท/);
  assert.match(el('ilOrnSellDelta').textContent,/↑ \+200 บาท/);
