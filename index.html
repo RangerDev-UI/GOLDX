@@ -529,6 +529,8 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
     if(asDate(completed.at(-1))>=(zone==='thai'?todayTH:todayUTC))completed.pop();
     if(completed.length<15)return null;
     const prev=completed.at(-1),high=prev.h,low=prev.l,close=prev.c;
+    // Do not present a very old daily candle as yesterday's Pivot.
+    if(Date.now()-Date.parse(prev.t)>14*86400000)return null;
     const pivot=(high+low+close)/3;
     const rs={pivot,r1:2*pivot-low,r2:pivot+(high-low),s1:2*pivot-high,s2:pivot-(high-low)};
     const closes=completed.map(p=>p.c);
