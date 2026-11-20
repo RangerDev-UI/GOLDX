@@ -100,3 +100,19 @@ body{background:radial-gradient(ellipse 55% 28% at 70% -3%,#9b703517,transparent
 @media(max-width:700px){.gx-daily{padding:18px 14px;margin-top:12px}.gx-section-head{flex-direction:column;gap:9px}.gx-section-head h2{font-size:19px}.gx-daily-grid{gap:8px}.gx-pulse-card{padding:13px 11px}.gx-pulse-card strong{font-size:clamp(17px,4.8vw,24px)}.gx-indicator-grid{grid-template-columns:1fr}.gx-history-section{margin:21px 0}.gx-calendar,.gx-table-card{padding:16px 13px}.gx-toggle{font-size:10px;padding:7px}.gx-adv{margin-top:17px}.hero h1{letter-spacing:-.7px}}
 @media(max-width:380px){.gx-pulse-card strong{font-size:16px}.gx-day{height:34px}.gx-calendar-week,.gx-calendar-days{gap:3px}.gx-pagination>div{gap:4px}}
 @media(prefers-reduced-motion:reduce){.gx-skeleton{animation:none}.quote-card,.hero-cta,.nav-link{transition:none!important}}
+
+/* GOLDX market-data clarity and more useful landing navigation */
+.gx-hero-links{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:20px}
+.gx-hero-links .hero-cta{margin-top:0}
+.gx-hero-secondary{display:inline-flex;align-items:center;min-height:41px;padding:9px 14px;text-decoration:none;border:1px solid #a07b4e78;border-radius:10px;color:#f2d09d;font-weight:800;font-size:12px;background:#261f183d;transition:border-color .2s}
+.gx-hero-secondary:hover{border-color:#e9c289}
+.gx-pivot-status{border:1px solid #645b4b;border-left:3px solid #cfb17b;border-radius:9px;padding:10px 11px;margin:0 0 16px;color:#e4cfaa;font-size:11px;line-height:1.75;background:#141a20}
+.gx-pivot-status[hidden]{display:none}
+.gx-pivot-status.gx-breach{border-left-color:#f19488;color:#ffb5a8}
+.gx-pivot-status.gx-breakout{border-left-color:#8bdcb6;color:#a6e7c8}
+.gx-ema-info{display:block;margin-top:7px;color:#acb5c0;font-weight:500;font-size:10px;line-height:1.65;white-space:normal}
+#fxDetail{max-width:100%;overflow-wrap:anywhere;line-height:1.5}
+.hero{min-height:248px}
+.hero .hero-art{transform:scale(.94);transform-origin:center center}
+.technical-panel .tech-disclaimer{font-size:10px;line-height:1.85}
+@media(max-width:700px){.hero{min-height:255px}.gx-hero-links{gap:8px}.gx-hero-secondary{font-size:11px;padding:9px 11px}.gx-pivot-status{font-size:10px}.gx-ema-info{font-size:9px}}
