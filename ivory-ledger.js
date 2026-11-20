@@ -52,7 +52,7 @@ function setDelta(id,current,prior){
  }
  const diff=Math.round((current-prior)*100)/100;
  const amount=fmt(Math.abs(diff),Number.isInteger(diff)?0:2);
- node.textContent=diff===0?'เทียบวันก่อนหน้า 0 บาท':(diff>0?'↑ +':'↓ −')+amount+' บาท จากวันก่อนหน้า';
+ node.textContent='วันก่อน '+priceTH(prior)+' · '+(diff===0?'ไม่เปลี่ยนแปลง':(diff>0?'↑ +':'↓ −')+amount+' บาท');
  node.dataset.tone=diff===0?'flat':diff>0?'up':'down';
 }
 function renderPrevious(){
