@@ -93,11 +93,27 @@ async function worldQuote() {
       sourceType:'indicative', perGram:price/31.1034768, silver:null, ratio:null, fxUsdThb:null };
   } catch(e) { throw new Error(`World providers unavailable: ${lastError?.message}; ${e.message}`); }
 }
+async function fxReference(){
+  // Daily reference only; not a live executable FX rate.
+  const d=await json('https://api.frankfurter.dev/v2/rate/usd/thb');
+  const rate=num(d.rate),date=String(d.date||'');
+  if(!isPositive(rate)||rate<10||rate>100||!/^\d{4}-\d{2}-\d{2}$/.test(date))throw new Error('Invalid USD/THB reference');
+  const age=(Date.now()-Date.parse(date+'T00:00:00Z'))/86400000;
+  if(!Number.isFinite(age)||age<-.9||age>10)throw new Error('Stale USD/THB reference');
+  return {usdThb:rate,asOf:date,source:'Frankfurter · อัตราแลกเปลี่ยนอ้างอิง',sourceUrl:'https://frankfurter.dev/',rateType:'daily-reference'};
+}
 async function quotes() {
   const [thaiResult, worldResult] = await Promise.allSettled([thaiFeed.quote(json),worldQuote()]);
   const thai = thaiResult.status === 'fulfilled' ? thaiResult.value : null;
   const world = worldResult.status === 'fulfilled' ? worldResult.value : null;
-  return response({ fetchedAt:new Date().toISOString(), thai, world,
+  let fx=null;
+  if(isPositive(thai?.fx))fx={usdThb:thai.fx,asOf:thai.updatedAt,source:thai.source,sourceUrl:thai.sourceUrl,rateType:'provider-quote'};
+  else if(isPositive(world?.fxUsdThb))fx={usdThb:world.fxUsdThb,asOf:world.updatedAt,source:world.source,sourceUrl:world.sourceUrl,rateType:'provider-quote'};
+  else{
+    try{fx=await fxReference();}
+    catch(e){console.warn('FX reference unavailable:',e.message);}
+  }
+  return response({ fetchedAt:new Date().toISOString(), thai, world, fx,
     warnings:{thai:thai?.stale ? 'ประกาศล่าสุดที่ตรวจสอบได้เป็นประกาศก่อนหน้า ไม่ใช่ราคาประกาศวันนี้' : null},
     errors:{ thai:thai ? null : 'ไม่สามารถดึงราคาทองไทยจากแหล่งข้อมูลได้',
       world:world ? null : 'ไม่สามารถดึงราคาทองโลกจากแหล่งข้อมูลได้' }
