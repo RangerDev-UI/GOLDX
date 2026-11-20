@@ -8,7 +8,8 @@ const html=read('index.html');
 const css=read('goldx4.css');
 const js=read('goldx4.js');
 const pro=read('goldx-pro.js');
-const main=html.slice(html.indexOf('<main>'),html.indexOf('</main>')+7);
+const archivedStart=html.indexOf('<main>');
+const main=html.slice(archivedStart,html.indexOf('</main>',archivedStart)+7); // Ivory has an earlier <main class=...>.
 function ids(s){return [...s.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]);}
 test('Main markup is balanced; every ID remains unique',()=>{
  const stack=[],voids=new Set(['br','hr','input','img','meta','link','source','area','embed','wbr','col']);
