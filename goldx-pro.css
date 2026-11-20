@@ -116,3 +116,30 @@ body{background:radial-gradient(ellipse 55% 28% at 70% -3%,#9b703517,transparent
 .hero .hero-art{transform:scale(.94);transform-origin:center center}
 .technical-panel .tech-disclaimer{font-size:10px;line-height:1.85}
 @media(max-width:700px){.hero{min-height:255px}.gx-hero-links{gap:8px}.gx-hero-secondary{font-size:11px;padding:9px 11px}.gx-pivot-status{font-size:10px}.gx-ema-info{font-size:9px}}
+
+/* Nearby recorded levels are presented separately from previous-session Classic Pivot. */
+.gx-near-zone{margin:16px 0 18px;padding:15px 0 18px;border-top:1px solid #3a424e;border-bottom:1px solid #3a424e}
+.gx-near-head{display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap}
+.gx-near-head strong{font-size:12px;line-height:1.4;font-weight:800;color:#f6e7cd}
+.gx-near-badge{font-size:9px;font-weight:800;color:#91dfb9;border:1px solid #5798776e;border-radius:6px;padding:5px 7px;background:#21493842}
+.gx-near-badge.gx-near-warning{color:#efc18d;border-color:#9872437d;background:#51412436}
+.gx-near-context{font-size:10px;color:#adb5c0;line-height:1.65;margin:8px 0 13px}
+.gx-near-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.gx-near-card{background:linear-gradient(140deg,#1b232d,#141920);border-radius:11px;border:1px solid #374453;padding:12px;min-width:0}
+.gx-near-card.support{border-color:#44806977}
+.gx-near-card.resistance{border-color:#98614f80}
+.gx-near-card h4{font-size:10px;font-weight:800;color:#d6e0d8;line-height:1.5;margin:0 0 11px}
+.gx-near-card.resistance h4{color:#e3bcb3}
+.gx-near-level{display:flex;flex-direction:column;gap:5px;padding:0 0 10px;margin-bottom:10px;border-bottom:1px solid #313b46}
+.gx-near-level:last-child{padding:0;margin:0;border-bottom:0}
+.gx-near-level span{font-size:9px;color:#a1adb7}
+.gx-near-level strong{font-size:17px;font-weight:800;font-variant-numeric:tabular-nums;color:#8ce0b1;white-space:nowrap}
+.gx-near-card.resistance .gx-near-level strong{color:#f3a99b}
+.gx-near-level small{font-size:9px;line-height:1.55;color:#aeb9c2;overflow-wrap:anywhere}
+.gx-near-foot{font-size:9px;line-height:1.65;margin:11px 1px 0;color:#a5aab1}
+.tech-levels .levels-head>span:first-child{font-size:11px;color:#f1cb8d;font-weight:800}
+.tech-levels .gx-pivot-crossed>span,.tech-levels .gx-pivot-crossed>strong{color:#d1a3a0!important}
+.tech-levels .gx-pivot-crossed .level-mark{background:#ee938c!important}
+@media(max-width:1160px){.gx-near-level strong{font-size:15px}}
+@media(max-width:720px){.gx-near-grid{grid-template-columns:1fr 1fr}.gx-near-card{padding:10px}.gx-near-level strong{font-size:15px}}
+@media(max-width:410px){.gx-near-grid{grid-template-columns:1fr}.gx-near-level strong{font-size:17px}.gx-near-level{margin-bottom:8px;padding-bottom:8px}}
