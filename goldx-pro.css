@@ -143,3 +143,23 @@ body{background:radial-gradient(ellipse 55% 28% at 70% -3%,#9b703517,transparent
 @media(max-width:1160px){.gx-near-level strong{font-size:15px}}
 @media(max-width:720px){.gx-near-grid{grid-template-columns:1fr 1fr}.gx-near-card{padding:10px}.gx-near-level strong{font-size:15px}}
 @media(max-width:410px){.gx-near-grid{grid-template-columns:1fr}.gx-near-level strong{font-size:17px}.gx-near-level{margin-bottom:8px;padding-bottom:8px}}
+
+
+/* GOLDX coordinated refresh: timestamps are API check times, not quotation timestamps. */
+.gx-chart-meta{display:flex;align-items:flex-end;flex-direction:column;gap:4px;min-width:0;max-width:60%;text-align:right}
+.gx-chart-meta .chart-data-source{max-width:100%;overflow-wrap:anywhere}
+.gx-chart-check,.gx-checked{font-size:10px;line-height:1.6;color:#a4afb9;letter-spacing:.06px}
+.gx-chart-check{color:#d7bd8e}
+.gx-checked{margin-top:9px}
+.gx-sync-note{display:inline-block;color:#c5b497;font-size:10px;line-height:1.65;max-width:460px}
+.gx-history-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.gx-history-actions button{white-space:nowrap}
+.gx-history-actions button:hover:not(:disabled){border-color:#c99c59;background:#3d3427}
+#gxHistoryRefresh:disabled{opacity:.4;cursor:progress}
+@media(max-width:730px){
+ .gx-chart-meta{max-width:100%;align-items:flex-start;text-align:left}
+ .chart-info{flex-wrap:wrap;gap:12px}
+ .gx-checked{font-size:9px}
+ .gx-history-actions{width:100%}
+ .gx-sync-note{display:block;width:100%}
+}
