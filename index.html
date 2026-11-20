@@ -184,7 +184,22 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
         </div>
         <aside class="technical-panel surface" id="technical-panel"><div class="panel-top compact"><div><span class="section-kicker">03 / TECHNICAL OUTLOOK</span><h2>มุมมองเชิงเทคนิค</h2></div><span class="tech-star">✳</span></div><div class="tech-mode"><span id="techMarketLabel">ทองคำโลก · XAU/USD</span><span class="technical-badge" id="technicalBadge">รอข้อมูล</span></div><div class="gx-pivot-status" id="pivotStatus" role="status" hidden></div>
           <div class="momentum-block"><span class="minor-label">MOMENTUM INDICATOR</span><strong id="momentumText">—</strong><div class="momentum-track"><span class="track-gradient"></span><i class="momentum-thumb" id="momentumThumb" style="left:50%"></i></div><div class="track-titles"><span>BEARISH</span><span>NEUTRAL</span><span>BULLISH</span></div></div>
-          <div class="tech-levels"><div class="levels-head"><span>แนวรับ · แนวต้าน</span><span id="levelBasis">อิง Pivot รายวัน</span></div><div class="level-row resistance"><span><i class="level-mark"></i> แนวต้าน R2</span><strong id="r2">—</strong></div><div class="level-row resistance"><span><i class="level-mark"></i> แนวต้าน R1</span><strong id="r1">—</strong></div><div class="level-row pivot"><span><i class="level-mark"></i> Pivot</span><strong id="pivot">—</strong></div><div class="level-row support"><span><i class="level-mark"></i> แนวรับ S1</span><strong id="s1">—</strong></div><div class="level-row support"><span><i class="level-mark"></i> แนวรับ S2</span><strong id="s2">—</strong></div></div>
+          <section class="gx-near-zone" id="gxNearZone" aria-label="ระดับราคาจากจุดสูงต่ำย้อนหลัง">
+            <div class="gx-near-head"><strong>ระดับอ้างอิงใกล้ราคาปัจจุบัน</strong><span class="gx-near-badge" id="gxNearBadge">รอข้อมูล</span></div>
+            <p class="gx-near-context" id="gxNearContext">อิงจุดต่ำและสูงย้อนหลังจริง ไม่ใช่คำแนะนำซื้อขาย</p>
+            <div class="gx-near-grid">
+              <div class="gx-near-card support"><h4>จุดต่ำย้อนหลังใต้ราคา</h4>
+                <div class="gx-near-level"><span>ใกล้สุด</span><strong id="gxNearSupport1">—</strong><small id="gxNearSupport1Meta">รอข้อมูล</small></div>
+                <div class="gx-near-level"><span>ถัดไป</span><strong id="gxNearSupport2">—</strong><small id="gxNearSupport2Meta">รอข้อมูล</small></div>
+              </div>
+              <div class="gx-near-card resistance"><h4>จุดสูงย้อนหลังเหนือราคา</h4>
+                <div class="gx-near-level"><span>ใกล้สุด</span><strong id="gxNearResistance1">—</strong><small id="gxNearResistance1Meta">รอข้อมูล</small></div>
+                <div class="gx-near-level"><span>ถัดไป</span><strong id="gxNearResistance2">—</strong><small id="gxNearResistance2Meta">รอข้อมูล</small></div>
+              </div>
+            </div>
+            <p class="gx-near-foot" id="gxNearFoot">หากไม่พบระดับต่ำกว่าราคา จะไม่สร้างตัวเลขขึ้นมาทดแทน</p>
+          </section>
+          <div class="tech-levels"><div class="levels-head"><span>Classic Pivot · วันก่อน</span><span id="levelBasis">อิง Pivot รายวัน</span></div><div class="level-row resistance"><span><i class="level-mark"></i> แนวต้าน R2</span><strong id="r2">—</strong></div><div class="level-row resistance"><span><i class="level-mark"></i> แนวต้าน R1</span><strong id="r1">—</strong></div><div class="level-row pivot"><span><i class="level-mark"></i> Pivot</span><strong id="pivot">—</strong></div><div class="level-row support"><span><i class="level-mark"></i> <span id="pivotS1Label">แนวรับ S1</span></span><strong id="s1">—</strong></div><div class="level-row support"><span><i class="level-mark"></i> <span id="pivotS2Label">แนวรับ S2</span></span><strong id="s2">—</strong></div></div>
           <div class="tech-indicators"><div><small>RSI (14)</small><strong id="rsiValue">—</strong></div><div><small>ATR (14)</small><strong id="atrValue">—</strong></div><div><small>EMA 20 / 50</small><strong id="emaValue">—</strong><small class="gx-ema-info" id="emaValuesDetail">รอข้อมูล</small></div></div><p class="tech-disclaimer" id="techDisclaimer">คำนวณจากข้อมูลตลาดย้อนหลังจริง ไม่ใช่การทำนายราคาที่รับประกันผล</p>
         </aside>
       </section>
@@ -216,6 +231,7 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
 </div>
 <div id="toast" class="toast" aria-live="polite" role="status"></div>
 <div id="mobileCover" class="mobile-cover" hidden></div>
+<script src="/goldx-levels.js"></script>
 <script>
 /* GOLDX — client dashboard. No mock or simulated market prices. */
 (() => {
@@ -526,10 +542,12 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
       const tech=getWorldTechnicals(data.points);
       if(!tech)throw new Error('Insufficient daily candles');
       state.worldTech=tech;renderTechnicals();
+      window.dispatchEvent(new CustomEvent('goldx:reference-data',{detail:{market:'world',points:data.isDaily===true?data.points:null,source:data.source||null}}));
       const price=state.quotes?.world?.price;
       if(isNum(price)&&tech.prevClose>0)setChange('worldChange',price-tech.prevClose,'USD',' / ปิดก่อนหน้า');
     }catch(e){
       state.worldTech=null;renderTechnicals();
+      window.dispatchEvent(new CustomEvent('goldx:reference-data',{detail:{market:'world',points:null}}));
       setText('worldChange','ไม่มีราคาปิดก่อนหน้าที่ตรวจสอบได้');
     }
   }
@@ -547,7 +565,9 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
       if(!tech)throw new Error('Insufficient completed Thai daily OHLC');
       state.thaiTech=tech;
       state.thaiTechMeta={source:data.source,count:data.points.length,coverage:data.coverage};
-    }catch(e){state.thaiTech=null;state.thaiTechMeta=null;}
+      window.dispatchEvent(new CustomEvent('goldx:reference-data',{detail:{market:'thai',points:data.points,source:data.source||null}}));
+    }catch(e){state.thaiTech=null;state.thaiTechMeta=null;
+      window.dispatchEvent(new CustomEvent('goldx:reference-data',{detail:{market:'thai',points:null}}));}
     renderTechnicals();
   }
   function techForCurrentMarket(){
@@ -653,7 +673,8 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
   function setMarket(market){
     if(state.market===market)return;
     state.market=market;
-    $$('[data-market]').forEach(b=>{const active=b.dataset.market===market;b.classList.toggle('is-selected',active);b.setAttribute('aria-selected',String(active));});
+    window.dispatchEvent(new CustomEvent('goldx:market-changed',{detail:{market}}));
+    $('[data-market]').forEach(b=>{const active=b.dataset.market===market;b.classList.toggle('is-selected',active);b.setAttribute('aria-selected',String(active));});
     loadChart();renderTechnicals();
   }
   function activateNav(name){
@@ -796,6 +817,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 })();
 
 </script>
+<script src="/goldx-near-ui.js" defer></script>
 <script src="/goldx-indicators.js" defer></script>
 <script src="/goldx-pro.js" defer></script>
 </body>
