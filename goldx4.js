@@ -30,7 +30,7 @@ function health(){
  const sources=[t?.source?'ไทย: '+t.source:null,w?.source?'โลก: '+w.source:null,fx?.source?'FX: '+fx.source:null].filter(Boolean).join(' • ');
  set('gx4HealthSource',(sources||'รอแหล่งข้อมูล')+' · ตรวจเช็ก '+(d?.fetchedAt?bkkTime(d.fetchedAt):'—')+' · ไม่ใช่ Streaming');
 }
-const priceAt=id=>{const x=Number(($ (id)?.textContent||'').replace(/,/g,'').replace(/[^\\d.\\-]/g,''));return ok(x)?x:null};
+const priceAt=id=>{const x=Number(($(id)?.textContent||'').replace(/,/g,'').replace(/[^0-9.-]/g,''));return ok(x)?x:null};
 function brief(){
  const thai=state.market==='thai',q=state.quotes?.[state.market],price=thai?q?.sellBar:q?.price;
  set('gx4BriefMarket',thai?'ทองไทย':'XAU/USD');
