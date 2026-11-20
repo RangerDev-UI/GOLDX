@@ -35,3 +35,40 @@ test('official webpage can supersede yesterday public relay',async()=>{
   assert.equal(q.sellBar,56750);assert.equal(q.sourceType,'official-public-page');
  }finally{global.fetch=oldFetch;}
 });
+
+function listing(rows){
+ const table=rows.map(row=>'<tr>'+row.map(c=>`<td>${c}</td>`).join('')+'</tr>').join('');
+ return '<!DOCTYPE html><html><body><h3>การปรับเปลี่ยนระหว่างวัน</h3><table><thead><tr><th>วันที่</th><th>เวลา</th><th>ครั้งที่</th></tr></thead><tbody>'+table+'</tbody></table></body></html>';
+}
+test('official daily change table parses dated rows and chooses newest timestamp',()=>{
+ const doc=listing([
+  ['20/11/2569','11:28','30','56,750.00','56,950.00','55,622.04','57,750.00','3,538.00','33.97','-50'],
+  ['20/11/2569','12:31','40','56,550.00','56,750.00','55,424.96','57,550.00','3,524.00','33.98','-100'],
+  ['19/11/2569','16:16','33','59,750.00','59,950.00','58,547.92','60,750.00','3,733.00','33.89','-50']
+ ]);
+ const q=Thai.officialTableQuote(doc);
+ assert.equal(q.sellBar,56750);assert.equal(q.buyBar,56550);
+ assert.equal(q.round,40);assert.equal(q.stale,false);
+ assert.equal(q.updatedAt,'2026-11-20T05:31:00.000Z');
+ assert.equal(q.sourceType,'official-public-page');
+});
+test('public table source takes precedence over stale relay and adds source diagnostics',async()=>{
+ const old=global.fetch;
+ const doc=listing([['20/11/2569','12:31','40','56,550.00','56,750.00','55,424.96','57,550.00','3,524.00','33.98','-100']]);
+ try{
+  global.fetch=async(url)=>String(url).includes('UpdatePriceList.aspx')?{ok:true,text:async()=>doc}:Promise.reject(new Error('blocked'));
+  const q=await Thai.quote(async (url)=>{
+   if(String(url).includes('rakhagold'))return {data:{source:'gta',bar_buy:59750,bar_sell:59950,as_time:'2026-11-19T16:16:00'}};
+   throw new Error('provider unavailable');
+  });
+  assert.equal(q.sellBar,56750);assert.equal(q.stale,false);
+  assert.equal(q.feedChecks.some(x=>x.name==='GTA classic table'&&x.ok),true);
+  assert.equal(q.feedChecks.some(x=>x.name==='Rakhagold'&&x.ok&&x.stale),true);
+ }finally{global.fetch=old;}
+});
+test('malformed table, prices reversed, and unrelated dates are rejected',()=>{
+ assert.throws(()=>Thai.officialTableQuote(listing([
+  ['20/11/2569','12:31','40','58,750','56,750','55,424.96','57,550.00','3,524','33.98','-100']
+ ])));
+ assert.throws(()=>Thai.officialTableQuote('<html><body><table><tr><td>sports</td></tr></table></body></html>'));
+});
