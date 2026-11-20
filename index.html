@@ -125,7 +125,7 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
         </div>
         <div class="hero-art" aria-hidden="true"><div class="art-circle art-circle-1"></div><div class="art-circle art-circle-2"></div><div class="art-halo"></div><div class="gold-block gold-block-back"><span>GOLDX</span></div><div class="gold-block gold-block-front"><div class="block-brand">Au</div><div class="block-purity">999.9 <span>FINE GOLD</span></div><span class="block-mass">1 KILO</span></div><span class="art-cross">✦</span></div>
       </section>
-      <div class="section-caption"><div><span class="section-kicker">01 / LIVE MARKET</span><h2>ราคาทองคำปัจจุบัน</h2></div><span class="muted-caption">ราคาตามเวลาจริงของแหล่งข้อมูล · ไม่ใช่ราคาเสนอซื้อขาย</span></div>
+      <div class="section-caption"><div><span class="section-kicker">01 / LIVE MARKET</span><h2>ราคาทองคำปัจจุบัน</h2></div><span class="muted-caption">ราคาล่าสุดที่แหล่งข้อมูลส่งมา · อาจมี Cache หรือประกาศล่าช้า · ไม่ใช่ Streaming</span></div>
       <section class="quote-grid" aria-label="ราคาทองคำไทยและทองคำโลก">
         <article class="quote-card thai-quote" id="thai-card">
           <div class="quote-top"><span class="quote-icon quote-icon-thai">฿</span><div class="quote-title"><span class="quote-name">THAILAND GOLD</span><h3>ทองคำไทย <span>96.5%</span></h3></div><span class="small-tag">THB / BAHT</span></div>
@@ -756,7 +756,7 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
   function runSyncTick(forced=false){
     if(!forced&&document.visibilityState!=='visible')return;
     const now=Date.now();
-    refreshQuotes(!forced);
+    if(forced||!state.lastSync||now-state.lastSync>=60000)refreshQuotes(!forced);
     if(forced||now-state.lastChartCheck>=chartCadence(state.period))refreshActiveChart(true);
     if(forced||now-state.lastTechnicalCheck>=360000)refreshTechnicalData();
     window.dispatchEvent(new CustomEvent('goldx:sync-tick',{detail:{at:now,forced}}));
