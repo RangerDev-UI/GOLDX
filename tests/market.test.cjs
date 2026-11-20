@@ -53,7 +53,7 @@ test('can use CHNWT as the third fallback; reject future or missing timestamps',
  delete process.env.GTA_API_TOKEN;
  const nowTH=new Date().toLocaleString('en-GB',{timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false});
  const [day,month,year]=nowTH.slice(0,10).split('/');
- fake([['thai-gold-api/latest',{status:'success',response:{update_date:`${day}/${month}/${Number(year)+543}`,update_time:'เวลา 12:00 น. (ครั้งที่ 2)',price:{gold:{buy:'58,000',sell:'60,000'},gold_bar:{buy:'59,750',sell:'59,950'}}}}]]);
+ fake([['thai-gold-api/latest',{status:'success',response:{update_date:`${day}/${month}/${Number(year)+543}`,update_time:'เวลา 00:00 น. (ครั้งที่ 2)',price:{gold:{buy:'58,000',sell:'60,000'},gold_bar:{buy:'59,750',sell:'59,950'}}}}]]);
  const d=JSON.parse((await handler(event({mode:'quotes'}))).body);
  assert.equal(d.thai.sellBar,59950);assert.equal(d.thai.round,2);
 });
@@ -126,7 +126,7 @@ test('Official public table can supply recorded intraday prices today',async()=>
  const [y,m,d]=thaiNow.slice(0,10).split('-'),dateLabel=d+'/'+m+'/'+(Number(y)+543);
  const row=(time,seq,buy,sell)=>'<tr><td>'+dateLabel+'</td><td>'+time+'</td><td>'+seq+
   '</td><td>'+buy+'</td><td>'+sell+'</td><td>'+(buy-1000)+'</td><td>'+(sell+800)+'</td><td>3550</td><td>33.4</td></tr>';
- const html='<html><body><table>'+row('09:05',1,57250,57450)+row('10:05',2,57350,57550)+'</table></body></html>';
+ const html='<html><body><table>'+row('00:00',1,57250,57450)+row('00:01',2,57350,57550)+'</table></body></html>';
  fake([['/gold/today',{data:[]}],['UpdatePriceList.aspx',html]]);
  const r=await handler(event({mode:'chart',market:'thai',period:'1D'})),result=JSON.parse(r.body);
  assert.equal(r.statusCode,200);
