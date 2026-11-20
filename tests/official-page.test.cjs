@@ -72,3 +72,21 @@ test('malformed table, prices reversed, and unrelated dates are rejected',()=>{
  ])));
  assert.throws(()=>Thai.officialTableQuote('<html><body><table><tr><td>sports</td></tr></table></body></html>'));
 });
+test('GTA public SSE page handles ornament tax-base label and retains exact source URL', async()=>{
+ const oldFetch=global.fetch;
+ const d=html(thaiDate(new Date()), '56,950.00', '57,150.00')
+   .replace('รับซื้อ55,424.96','ฐานภาษี55,803.96').replace('ขายออก57,550.00','ขายออก57,950.00');
+ try {
+  global.fetch=async(url)=>String(url).startsWith('https://sse.goldtraders.or.th/')
+    ? {ok:true,status:200,text:async()=>d}:Promise.reject(new Error('HTTP 403'));
+  const q=await Thai.quote(async (url)=>{
+   if(String(url).includes('rakhagold'))return {data:{source:'gta',bar_buy:59750,bar_sell:59950,as_time:'2026-11-19T16:16:00'}};
+   throw new Error('Provider HTTP 402');
+  });
+  assert.equal(q.sellBar,57150);assert.equal(q.buyBar,56950);assert.equal(q.sellOrnament,57950);
+  assert.equal(q.buyOrnament,55803.96);
+  assert.equal(q.sourceUrl,'https://sse.goldtraders.or.th/');
+  assert.equal(q.stale,false);
+  assert.equal(q.feedChecks.some(x=>x.name==='GTA public SSE page'&&x.ok),true);
+ } finally {global.fetch=oldFetch;}
+});
