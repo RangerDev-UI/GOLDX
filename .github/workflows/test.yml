@@ -16,3 +16,5 @@ jobs:
           node-version: '22'
       - name: Test market gateway and indicators
         run: node --test tests/*.test.cjs
+      - name: Validate Cloudflare Worker bundling without deploying
+        run: npx --yes wrangler@4.165.0 deploy --dry-run --outdir=/tmp/goldx-worker-bundle
