@@ -1,6 +1,6 @@
 /* GOLDX PWA: cache only the static application shell, never live market/API data. */
-const CACHE='goldx4-static-v4';
-const STATIC=['/','/index.html','/favicon.svg','/goldx-pro.css','/goldx4.css','/goldx4.js','/ivory-ledger.css','/ivory-ledger.js','/goldx-pro.js','/goldx-indicators.js','/goldx-levels.js','/goldx-near-ui.js'];
+const CACHE='goldx4-static-v5';
+const STATIC=['/','/index.html','/favicon.svg','/goldx-pro.css','/goldx4.css','/goldx4.js','/ivory-ledger.css','/ivory-ledger.js','/goldx-pro.js','/goldx-indicators.js','/goldx-levels.js','/goldx-near-ui.js','/calculator.html','/history.html','/my-gold.html','/compare.html','/goldx-tools.css','/goldx-tools.js'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{
  const cache=await caches.open(CACHE);
  await Promise.allSettled(STATIC.map(path=>cache.add(path)));
@@ -20,10 +20,10 @@ self.addEventListener('fetch',event=>{
   event.respondWith((async()=>{
    try{
     const response=await fetch(request);
-    if(response.ok){const cache=await caches.open(CACHE);await cache.put('/index.html',response.clone());}
+    if(response.ok){const cache=await caches.open(CACHE);await cache.put(url.pathname==='/'?'/index.html':url.pathname,response.clone());}
     return response;
    }catch{
-    return await caches.match('/index.html')||new Response('GOLDX ออฟไลน์: ไม่สามารถตรวจสอบราคาได้',{status:503,headers:{'Content-Type':'text/plain; charset=utf-8'}});
+    return await caches.match(url.pathname==='/'?'/index.html':url.pathname)||new Response('GOLDX ออฟไลน์: ไม่สามารถเปิดหน้านี้ได้',{status:503,headers:{'Content-Type':'text/plain; charset=utf-8'}});
    }
   })());
   return;
