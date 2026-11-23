@@ -74,6 +74,9 @@ function renderPrevious(){
   write('ilThaiChange','เทียบกับวันก่อนหน้า: ไม่มีข้อมูลอ้างอิง');
   write('ilReferenceSource',state.previousError||'ไม่มีบันทึกครบทั้ง 4 ราคาสำหรับวันก่อนหน้า');
  }
+ if(typeof document.dispatchEvent==='function'&&typeof CustomEvent==='function'){
+  document.dispatchEvent(new CustomEvent('goldx:previous',{detail:{previous:prev,thai:t}}));
+ }
 }
 async function loadPrevious(quote){
  const before=dayKey(quote?.updatedAt);
@@ -145,6 +148,9 @@ function paint(d){
  }
  state.last=d;
  renderPrevious();
+ if(typeof document.dispatchEvent==='function'&&typeof CustomEvent==='function'){
+  document.dispatchEvent(new CustomEvent('goldx:quotes',{detail:d}));
+ }
 }
 async function refresh(manual=false){
  if(state.busy||(!manual&&document.visibilityState==='hidden'))return;
