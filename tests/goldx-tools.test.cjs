@@ -18,7 +18,7 @@ test('History is the sole remaining gold tool route: price data real, removed pa
   assert.ok(!home.includes('href="/'+removed+'.html"'));
   assert.ok(!html.includes('href="/'+removed+'.html"'));
  }
- assert.match(sw,/goldx4-static-v6/);
+ assert.match(sw,/goldx4-static-v7/);
  assert.ok(sw.includes('editorial-bold.js'));
  assert.doesNotThrow(()=>new Function(script));
 });
