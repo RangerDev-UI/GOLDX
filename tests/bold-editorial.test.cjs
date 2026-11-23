@@ -23,6 +23,20 @@ test('Approved bold editorial keeps official data and new red/black responsive d
  assert.doesNotMatch(visible,/53,450|54,250|2,045\.30|34\.62/,'reference mockup numbers may not appear');
  assert.doesNotThrow(()=>new Function(src));
 });
+test('Both GOLDX navigation bars show Home and Price History only',()=>{
+ const history=read('history.html');
+ const homeNav=html.match(/<nav class="ed-nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1]||'';
+ const historyNav=history.match(/<nav class="nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1]||'';
+ for(const nav of [homeNav,historyNav]){
+  assert.equal((nav.match(/<a\b/g)||[]).length,2);
+  assert.match(nav,/หน้าแรก/);
+  assert.match(nav,/ราคาย้อนหลัง/);
+  assert.doesNotMatch(nav,/รายละเอียดราคา|แหล่งข้อมูล|#ed-market|#ed-sources/);
+ }
+ const visible=html.slice(html.indexOf('<div class="ivory-ledger ed"'),html.indexOf('<div class="site-shell"'));
+ assert.match(visible,/id="ed-market"/);
+ assert.match(visible,/id="ed-sources"/);
+});
 function fixture(success){
  const nodes=new Map(),events=new Map(),calls=[];
  const make=()=>({textContent:'',value:'',hidden:false,attrs:{},dataset:{},children:[],style:{},
