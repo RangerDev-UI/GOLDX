@@ -159,3 +159,47 @@ body.ivory-enabled .ivory-ledger.ed{display:block;min-height:100vh;max-width:169
  .ed-card-head h2{font-size:20px}
  .ed-secondary-price strong{font-size:33px}
 }
+
+
+/* Gold History: reuse exactly the Bold Editorial header and visual language. */
+body.ed[data-page=history]{background:#fbf8f2;color:#191919}
+body.ed[data-page=history] .shell{width:100%;max-width:1690px;padding:0 clamp(16px,2.2vw,44px) 32px}
+body.ed[data-page=history] .ed-topbar{min-height:82px;margin-bottom:0}
+body.ed[data-page=history] .ed-logo{color:#101010}
+body.ed[data-page=history] .ed-logo span{color:#c4000e}
+body.ed[data-page=history] .ed-nav a{color:#181818}
+body.ed[data-page=history] .ed-nav a.ed-active{color:#fff;background:#b7040b}
+body.ed[data-page=history] .hero{padding:clamp(30px,4vw,55px) 0 23px;min-height:0;margin:0 0 17px;border-bottom:3px solid #191919}
+body.ed[data-page=history] .hero h1{font-size:clamp(39px,5.7vw,78px);font-weight:900;letter-spacing:-2.8px;line-height:1.15;color:#111}
+body.ed[data-page=history] .hero p{font-size:clamp(11px,1.2vw,15px);line-height:1.8;color:#726b65;margin-top:9px}
+body.ed[data-page=history] .ed-history-period-row{display:flex;justify-content:flex-end;align-items:center;margin-bottom:17px}
+body.ed[data-page=history] .ranges{background:#ede8e2;border-radius:4px;padding:4px}
+body.ed[data-page=history] .ranges button{border-radius:2px;font-size:12px;padding:9px 15px}
+body.ed[data-page=history] .ranges button[aria-pressed=true]{background:#bf000b;color:#fff}
+body.ed[data-page=history] .grid{gap:15px}
+body.ed[data-page=history] .panel{border-radius:4px;background:#fffdfa;box-shadow:0 6px 14px #36271d0b;padding:clamp(16px,2vw,25px)}
+body.ed[data-page=history] .grid.two>.panel:first-child{border-top:3px solid #1a1a1a}
+body.ed[data-page=history] .grid.two>.panel:last-child{border-top:3px solid #b9000b}
+body.ed[data-page=history] .panel h2{font-size:clamp(18px,2vw,24px);font-weight:850;line-height:1.4;color:#1d1d1d}
+body.ed[data-page=history] .panel h3{font-size:17px;font-weight:850;color:#1d1d1d}
+body.ed[data-page=history] .section-head{margin:25px 0 12px}
+body.ed[data-page=history] .section-head h2{font-size:clamp(20px,2.3vw,28px);font-weight:900;color:#171717}
+body.ed[data-page=history] .keynum{font-size:clamp(20px,2.3vw,29px);color:#b9000b}
+body.ed[data-page=history] .chart-area{min-height:220px}
+body.ed[data-page=history] .source{font-size:10px;color:#817971;line-height:1.65}
+body.ed[data-page=history] .notice{background:#f5f1ec;border-color:#e6d9cf;color:#746d67}
+body.ed[data-page=history] th{background:#1d1d1d;color:#fff}
+body.ed[data-page=history] td{border-bottom-color:#e6ded8}
+body.ed[data-page=history] .footer{margin-top:30px;border-top:1px solid #d7cfc7;color:#7a736c}
+body.ed[data-page=history] .footer a{color:#b5000b;text-decoration:none;font-weight:800}
+@media(max-width:920px){
+ body.ed[data-page=history] .ed-topbar{padding-top:12px}
+}
+@media(max-width:560px){
+ body.ed[data-page=history] .shell{padding:0 13px 25px}
+ body.ed[data-page=history] .hero{padding:30px 0 19px;margin-bottom:15px}
+ body.ed[data-page=history] .hero h1{font-size:clamp(35px,9vw,49px);letter-spacing:-1.7px}
+ body.ed[data-page=history] .ed-history-period-row{justify-content:flex-start;overflow-x:auto}
+ body.ed[data-page=history] .ranges button{padding:8px 10px;font-size:11px}
+ body.ed[data-page=history] .ed-nav{justify-content:space-between}
+}
