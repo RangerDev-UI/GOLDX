@@ -1,6 +1,6 @@
 /* GOLDX PWA: cache only the static application shell, never live market/API data. */
-const CACHE='goldx4-static-v5';
-const STATIC=['/','/index.html','/favicon.svg','/goldx-pro.css','/goldx4.css','/goldx4.js','/ivory-ledger.css','/ivory-ledger.js','/goldx-pro.js','/goldx-indicators.js','/goldx-levels.js','/goldx-near-ui.js','/calculator.html','/history.html','/my-gold.html','/compare.html','/goldx-tools.css','/goldx-tools.js'];
+const CACHE='goldx4-static-v6';
+const STATIC=['/','/index.html','/favicon.svg','/goldx-pro.css','/goldx4.css','/goldx4.js','/ivory-ledger.css','/ivory-ledger.js','/goldx-pro.js','/goldx-indicators.js','/goldx-levels.js','/goldx-near-ui.js','/history.html','/goldx-tools.css','/goldx-tools.js','/editorial-bold.css','/editorial-bold.js'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{
  const cache=await caches.open(CACHE);
  await Promise.allSettled(STATIC.map(path=>cache.add(path)));
@@ -16,6 +16,9 @@ self.addEventListener('fetch',event=>{
  if(request.method!=='GET')return;
  const url=new URL(request.url);
  if(url.origin!==self.location.origin||url.pathname.startsWith('/api/')||url.pathname.startsWith('/.netlify/'))return;
+ if(['/calculator.html','/my-gold.html','/compare.html'].includes(url.pathname)){
+  event.respondWith(Response.redirect(new URL('/',self.location.origin).href,302));return;
+ }
  if(request.mode==='navigate'){
   event.respondWith((async()=>{
    try{
