@@ -95,3 +95,16 @@ tr:last-child td{border-bottom:0}td.num,th.num{text-align:right;font-variant-num
 @media(max-width:1050px){.topbar{align-items:flex-start;flex-direction:column;gap:9px;padding:17px 0 12px}.nav{justify-content:flex-start}.hero{padding-top:33px}}
 @media(max-width:780px){.split,.two,.three,.four{grid-template-columns:1fr}.gold-art{width:135px;height:90px}.gold-art::before{right:22px}.gold-art::after{right:32px;top:35px}.hero h1{font-size:39px}.value-tiles{grid-template-columns:1fr 1fr}.shell{padding:0 17px 26px}.panel{padding:18px}}
 @media(max-width:560px){.logo b{font-size:25px}.logo small{font-size:8px}.nav{overflow-x:auto;max-width:100%;flex-wrap:nowrap;padding:0 0 9px;justify-content:flex-start}.nav a{font-size:11px;padding:7px 9px}.hero{padding:23px 0 20px}.hero h1{font-size:34px}.hero p{font-size:11px}.gold-art{display:none}.radio-row.three-way{grid-template-columns:1fr 1fr 1fr}.choice{font-size:10px;padding:12px 5px}.field-row{grid-template-columns:1fr}.tile{padding:14px}.tile strong{font-size:24px}.kpi-num{font-size:24px}.section-head h2{font-size:17px}.footer{margin-top:24px}}
+
+/* Standalone history page aligned with Bold Editorial brand — active history only */
+body[data-page=history]{background:#fbf8f2;color:#161616}
+body[data-page=history] .shell{background:#fbf8f2}
+body[data-page=history] .logo b span{color:#c0000e}
+body[data-page=history] .nav a[aria-current=page]{background:#bc030e;color:#fff}
+body[data-page=history] .nav a:hover{background:#f6e2dd;color:#a10009}
+body[data-page=history] .hero .eyebrow{color:#b6000b}
+body[data-page=history] .hero h1{color:#121212}
+body[data-page=history] .ranges button[aria-pressed=true]{background:#bf000b}
+body[data-page=history] .kpi{border-top-color:#bf000b}
+body[data-page=history] .keynum{color:#b9000b}
+body[data-page=history] .panel{background:#fffdf9}
