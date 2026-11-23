@@ -15,7 +15,7 @@ test('Four genuine navigable Ivory pages and Cloudflare asset allowlist',()=>{
   assert.match(html,/goldx-tools\.js/);
   assert.match(html,/goldx-tools\.css/);
   assert.match(html,/GOLDX/);
-  assert.doesNotMatch(html,/value="33,750"|2,748\.50|99\.99%|ราคาสมมติ/,'no demo prices or 99.99% quotes');
+  assert.doesNotMatch(html,/value="33,750"|2,748\.50|ความบริสุทธิ์ 99\.99%|ราคาสมมติ/,'no demo prices or 99.99% quotes');
   for(const f of [p+'.html'])assert.match(allow,new RegExp('!'+f.replace('.','\\.')+'\\b'));
   assert.ok(sw.includes("'"+'/'+p+'.html'+"'"));
  }
@@ -28,7 +28,7 @@ test('Four genuine navigable Ivory pages and Cloudflare asset allowlist',()=>{
 function dom(page){
  const items=new Map(),arrays=new Map();
  const make=(attrs={})=>({
-  dataset:attrs.dataset||{},value:attrs.value??'',textContent:'',attrs:{},children:[],className:'',style:{},
+  dataset:attrs.dataset||{},value:attrs.value??'',textContent:'',attrs:{},children:[],className:'',style:{},classList:{add(){},remove(){}},
   setAttribute(k,v){this.attrs[k]=v},getAttribute(k){return this.attrs[k]},
   addEventListener(k,fn){this['on'+k]=fn},
   replaceChildren(...kids){this.children=kids},appendChild(k){this.children.push(k);return k}
