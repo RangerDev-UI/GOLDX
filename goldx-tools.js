@@ -111,9 +111,9 @@ function history(){
   }
   const line=points.map((p,i)=>x(i)+','+y(p.c)).join(' ');
   const fill='M '+x(0)+','+(H-B)+' L '+points.map((p,i)=>x(i)+','+y(p.c)).join(' L ')+' L '+x(points.length-1)+','+(H-B)+' Z';
-  node('path',{d:fill,fill:world?'#dce9f0':'#f4e6c7',opacity:.85});
-  node('polyline',{points:line,fill:'none',stroke:world?'#52758d':'#b98b3e','stroke-width':2.8,'stroke-linecap':'round','stroke-linejoin':'round'});
-  const last=points.at(-1);node('circle',{cx:x(points.length-1),cy:y(last.c),r:4.5,fill:world?'#52758d':'#b98b3e'});
+  node('path',{d:fill,fill:world?'#dce9f0':'#f6e0df',opacity:.85});
+  node('polyline',{points:line,fill:'none',stroke:world?'#52758d':'#bd0010','stroke-width':2.8,'stroke-linecap':'round','stroke-linejoin':'round'});
+  const last=points.at(-1);node('circle',{cx:x(points.length-1),cy:y(last.c),r:4.5,fill:world?'#52758d':'#bd0010'});
   for(let i=0;i<4;i++){
    const ix=Math.round((points.length-1)*i/3),p=points[ix];
    node('text',{x:x(ix),y:H-13,'font-size':10,'text-anchor':i===0?'start':i===3?'end':'middle',fill:'#92897d'},dateTH(p.t).replace(/ \d{4}$/,''));
@@ -173,10 +173,10 @@ function history(){
  for(const b of document.querySelectorAll('[data-period]'))b.addEventListener('click',()=>{
   period=b.dataset.period;
   for(const x of document.querySelectorAll('[data-period]'))x.setAttribute('aria-pressed',String(x===b));
-  set('history-range-label',({'1W':'7 วัน','1M':'30 วัน','3M':'3 เดือน','1Y':'1 ปี'})[period]+' · ข้อมูลตามต้นทาง');
+  set('history-range-label',({'1W':'7 วัน','1M':'30 วัน','3M':'3 เดือน','1Y':'1 ปี'})[period]);
   load();
  });
- set('history-range-label','30 วัน · ข้อมูลตามต้นทาง');
+ set('history-range-label','30 วัน');
  load();
 }
 
