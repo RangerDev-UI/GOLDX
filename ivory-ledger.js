@@ -130,7 +130,7 @@ function paint(d){
  write('ilFXSource',fx?((fx.daily?'อ้างอิงรายวัน':'จากผู้ให้บริการ')+' · '+(fx.asOf?(String(fx.asOf).length===10?dateTH(fx.asOf+'T12:00:00+07:00'):dateTH(fx.asOf)+' '+timeTH(fx.asOf)):'ไม่ระบุเวลา')):'ยังไม่มีข้อมูลค่าเงิน');
  el('ilFX')?.setAttribute('title',fx?fx.source:'ยังไม่มีแหล่งข้อมูล');
 
- write('ilWorldChange','Spot Gold · ราคาอ้างอิง ไม่ใช่ราคาซื้อขายจริง');
+ write('ilWorldChange','ราคาอ้างอิง');
  const thValid=positive(thai?.sellBar),worldValid=positive(world?.price);
  if(!thValid&&!worldValid){
   setStatus('ยังไม่พบข้อมูลราคา','bad');
