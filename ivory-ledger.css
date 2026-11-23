@@ -226,3 +226,9 @@ html,body{background:#faf7f0!important}
  .il-world-figure>strong{font-size:38px}
  .il-thai-heading h2{font-size:15px}
 }
+
+/* GOLDX new utility navigation — clear on desktop, horizontally scrollable on mobile */
+.il-tool-nav{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid #e4dacc}
+.il-tool-nav a{display:inline-block;text-decoration:none;font-size:11px;font-weight:800;color:#7a6545;background:#f3eade;border:1px solid #e8dcc8;border-radius:7px;padding:8px 12px;white-space:nowrap;transition:background .12s}
+.il-tool-nav a:hover{background:#e9dbbd}
+@media(max-width:590px){.il-tool-nav{flex-wrap:nowrap;overflow-x:auto;gap:6px;scrollbar-width:thin}.il-tool-nav a{font-size:10px;padding:8px 10px}}
