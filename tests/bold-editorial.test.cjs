@@ -26,7 +26,7 @@ test('Approved bold editorial keeps official data and new red/black responsive d
 test('Both GOLDX navigation bars show Home and Price History only',()=>{
  const history=read('history.html');
  const homeNav=html.match(/<nav class="ed-nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1]||'';
- const historyNav=history.match(/<nav class="nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1]||'';
+ const historyNav=history.match(/<nav class="ed-nav"[^>]*>([\s\S]*?)<\/nav>/)?.[1]||'';
  for(const nav of [homeNav,historyNav]){
   assert.equal((nav.match(/<a\b/g)||[]).length,2);
   assert.match(nav,/หน้าแรก/);
@@ -45,7 +45,7 @@ test('History and homepage use the same GOLDX Bold Editorial masthead with conci
  for(const header of [homeHeader,historyHeader]){
   assert.match(header,/class="ed-logo"/);
   assert.match(header,/class="ed-nav"/);
-  assert.equal((header.match(/<a href=/g)||[]).length,3,'Logo and two nav links');
+  assert.equal((header.match(/<a\b/g)||[]).length,3,'Logo and two nav links');
   assert.doesNotMatch(header,/GOLD MARKET JOURNAL|THAILAND<br>GOLD MARKET|รายละเอียดราคา|แหล่งข้อมูล/);
  }
  assert.match(history,/class="ed" data-page="history"/);
