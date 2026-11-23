@@ -37,6 +37,32 @@ test('Both GOLDX navigation bars show Home and Price History only',()=>{
  assert.match(visible,/id="ed-market"/);
  assert.match(visible,/id="ed-sources"/);
 });
+test('History and homepage use the same GOLDX Bold Editorial masthead with concise copy',()=>{
+ const history=read('history.html');
+ const visible=html.slice(html.indexOf('<div class="ivory-ledger ed"'),html.indexOf('<div class="site-shell"'));
+ const homeHeader=visible.match(/<header class="ed-topbar">([\s\S]*?)<\/header>/)?.[1]||'';
+ const historyHeader=history.match(/<header class="ed-topbar">([\s\S]*?)<\/header>/)?.[1]||'';
+ for(const header of [homeHeader,historyHeader]){
+  assert.match(header,/class="ed-logo"/);
+  assert.match(header,/class="ed-nav"/);
+  assert.equal((header.match(/<a href=/g)||[]).length,3,'Logo and two nav links');
+  assert.doesNotMatch(header,/GOLD MARKET JOURNAL|THAILAND<br>GOLD MARKET|รายละเอียดราคา|แหล่งข้อมูล/);
+ }
+ assert.match(history,/class="ed" data-page="history"/);
+ assert.match(history,/href="\/editorial-bold\.css"/);
+ assert.match(css,/body\.ed\[data-page=history\] \.ed-topbar/);
+ assert.doesNotMatch(visible,/GOLD MARKET \/ DAILY EDITION/);
+ assert.doesNotMatch(visible,/ไม่มีข้อมูลจำลอง|ข้อมูลย้อนหลังต้องตรงกับวันที่ประกาศ/);
+ assert.doesNotMatch(visible,/ขายออก \/ 1 บาททองคำ/);
+ assert.match(visible,/id="ilThaiOrigin"/);
+ assert.match(visible,/id="ilReferenceSource" hidden/);
+ assert.match(visible,/id="ilLastChecked"/);
+ assert.match(visible,/รับซื้อ/);
+ assert.match(visible,/บาทต่อบาททองคำ/);
+ assert.match(history,/ทองคำแท่งไทย 96\.5%/);
+ assert.match(history,/ทองโลก XAU\/USD/);
+ assert.doesNotMatch(history,/GOLD HISTORY|เลือกช่วงเวลาที่ต้องการดู|GOLD MARKET JOURNAL/);
+});
 function fixture(success){
  const nodes=new Map(),events=new Map(),calls=[];
  const make=()=>({textContent:'',value:'',hidden:false,attrs:{},dataset:{},children:[],style:{},
