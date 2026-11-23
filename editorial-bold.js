@@ -24,13 +24,12 @@ function updateSummary(){
  const label=direction.tone==='up'?'ปรับขึ้น':direction.tone==='down'?'ปรับลง':direction.tone==='flat'?'ทรงตัว':'ติดตามราคา';
  if(hero){hero.textContent=label;hero.dataset.tone=direction.tone}
  if(arrow)arrow.textContent=direction.tone==='up'?'↗':direction.tone==='down'?'↘':'→';
- set('edHeroSub','ทองไทย 96.5% · Spot Gold · ค่าเงินดอลลาร์ · อ้างอิงราคาจากระบบ GOLDX');
  if(direction.tone==='missing'){
   set('edStoryHeading','ราคาทองคำไทยอ้างอิงล่าสุด');
-  set('edStoryBody','ทองคำแท่งขายออก '+baht(thai.sellBar)+' · '+(thai.source||'แหล่งข้อมูลที่ระบุ')+' · ประกาศ '+dateTH(thai.updatedAt)+' · ยังไม่มีข้อมูลเปรียบเทียบวันก่อนหน้าที่ตรวจสอบได้');
+  set('edStoryBody','ขายออก '+baht(thai.sellBar)+' · ประกาศ '+dateTH(thai.updatedAt)+' · ยังไม่มีข้อมูลวันก่อนหน้า');
  }else{
   set('edStoryHeading',direction.tone==='up'?'ทองคำแท่งปรับขึ้นจากวันประกาศก่อน':direction.tone==='down'?'ทองคำแท่งปรับลงจากวันประกาศก่อน':'ทองคำแท่งทรงตัวจากวันประกาศก่อน');
-  set('edStoryBody','ทองคำแท่งขายออก '+baht(thai.sellBar)+' · '+direction.label+' · เทียบประกาศ '+dateTH(prior.updatedAt)+' · ใช้ข้อมูลที่ตรวจสอบได้');
+  set('edStoryBody','ขายออก '+baht(thai.sellBar)+' · '+direction.label+' · เทียบ '+dateTH(prior.updatedAt));
  }
 }
 function svgChart(points){
