@@ -174,7 +174,8 @@ async function refresh(manual=false){
   clearTimeout(timeout);
   state.busy=false;
   state.lastChecked=Date.now();
-  write('ilLastChecked','ตรวจล่าสุด '+timeTH(state.lastChecked));
+  write('ilLastChecked','ตรวจระบบล่าสุด '+dateTH(state.lastChecked)+' '+timeTH(state.lastChecked));
+   write('ilDate','ตรวจระบบ '+timeTH(state.lastChecked));
   if(button){button.disabled=false;button.removeAttribute('aria-busy');}
  }
 }
