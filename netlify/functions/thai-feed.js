@@ -16,6 +16,9 @@ function thaiTime(value){
 function dateTH(value){return new Intl.DateTimeFormat('sv-SE',{timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(value));}
 function validQuote(q){
  if(!q||!positive(q.sellBar)||!positive(q.buyBar)||q.buyBar>q.sellBar||q.sellBar>300000||q.buyBar<5000)return false;
+  if(q.buyOrnament!=null&&(!positive(q.buyOrnament)||q.buyOrnament<5000||q.buyOrnament>350000))return false;
+  if(q.sellOrnament!=null&&(!positive(q.sellOrnament)||q.sellOrnament<5000||q.sellOrnament>350000))return false;
+  if(positive(q.buyOrnament)&&positive(q.sellOrnament)&&q.buyOrnament>q.sellOrnament)return false;
  if(!q.updatedAt||Date.parse(q.updatedAt)>Date.now()+300000||Date.parse(q.updatedAt)<Date.parse('2020-01-01'))return false;
  return true;
 }
