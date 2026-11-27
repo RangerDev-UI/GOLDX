@@ -83,6 +83,32 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
 
+<style id="gx-health-style">
+/* Compact API health strip in the existing GOLDX Bold Editorial visual system */
+.ed .gx-health{margin:9px 0 0;border:1px solid #ded6ce;background:#fffdfa;border-radius:4px;color:#25211e;font-family:'Noto Sans Thai','DM Sans',system-ui,sans-serif}
+.ed .gx-health summary{list-style:none;cursor:pointer;display:flex;gap:9px;align-items:center;min-height:34px;padding:6px 11px;font-size:11px}
+.ed .gx-health summary::-webkit-details-marker{display:none}
+.ed .gx-health summary:focus-visible{outline:2px solid #c4000e;outline-offset:2px}
+.ed .gx-health summary>strong{font-family:'DM Sans',sans-serif;font-weight:850;font-size:10px;letter-spacing:.07em}
+.ed .gx-health summary #gx-health-summary{color:#766b63;font-weight:600;min-width:0}
+.ed .gx-health-dot{width:7px;height:7px;flex:none;border-radius:50%;background:#c5a15b}
+.ed .gx-health[data-health="ok"] .gx-health-dot{background:#278657}
+.ed .gx-health[data-health="warn"] .gx-health-dot{background:#c38b36}
+.ed .gx-health[data-health="bad"] .gx-health-dot{background:#c4000e}
+.ed .gx-health-expand{margin-left:auto;color:#786f68;font-size:10px;white-space:nowrap}
+.ed .gx-health-expand:after{content:" ▾"}.ed .gx-health[open] .gx-health-expand:after{content:" ▴"}
+.ed .gx-health-body{border-top:1px solid #e5ded5;padding:12px}
+.ed .gx-health-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.ed .gx-health-grid>div{display:flex;flex-direction:column;gap:4px;border:1px solid #ebe3db;background:#fbf8f2;padding:9px;border-radius:3px;min-width:0}
+.ed .gx-health-grid span{font-size:10px;color:#796e67}
+.ed .gx-health-grid strong{font-size:12px;color:#24201d;font-weight:800}
+.ed .gx-health-grid strong[data-health="warn"]{color:#a47329}
+.ed .gx-health-grid strong[data-health="bad"]{color:#c4000e}
+.ed .gx-health-grid strong[data-health="ok"]{color:#23764d}
+.ed .gx-health-grid small{font-size:10px;color:#82776e;overflow-wrap:anywhere}
+.ed #gx-health-meta{font-size:10px;color:#786d65;margin:9px 0 0;line-height:1.5}
+@media(max-width:580px){.ed .gx-health-grid{grid-template-columns:1fr}.ed .gx-health summary{gap:6px;font-size:10px;padding:7px}.ed .gx-health-expand{font-size:9px}}
+</style>
 </head>
 <body class="ivory-enabled">
 <svg width="0" height="0" aria-hidden="true" class="svg-defs" xmlns="http://www.w3.org/2000/svg"><defs>
@@ -109,6 +135,17 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
     <div class="ed-top-status"><span class="ed-top-dot" aria-hidden="true"></span><span id="ilStatus" role="status" aria-live="polite">กำลังตรวจสอบราคา</span><span id="ilApi" data-state="warning" hidden></span><span id="ilDate" class="ed-header-date">—</span></div>
     <button class="il-refresh ed-refresh" id="ilRefresh" type="button" title="อัปเดตราคาล่าสุด" aria-label="อัปเดตราคาล่าสุด">↻</button>
   </header>
+  <details class="gx-health" id="gx-health" aria-label="สถานะความสดของข้อมูล GOLDX">
+    <summary><span class="gx-health-dot" id="gx-health-dot"></span><strong>API HEALTH</strong><span id="gx-health-summary">กำลังตรวจสอบข้อมูล</span><span class="gx-health-expand">รายละเอียด</span></summary>
+    <div class="gx-health-body">
+      <div class="gx-health-grid">
+        <div><span>ทองไทย 96.5%</span><strong id="gx-health-thai">รอข้อมูล</strong><small id="gx-health-thai-time">—</small></div>
+        <div><span>ทองโลก XAU/USD</span><strong id="gx-health-world">รอข้อมูล</strong><small id="gx-health-world-time">—</small></div>
+        <div><span>USD/THB</span><strong id="gx-health-fx">รอข้อมูล</strong><small id="gx-health-fx-time">—</small></div>
+      </div>
+      <p id="gx-health-meta">ตรวจเฉพาะข้อมูลที่ GOLDX ได้รับจาก API เดิม ไม่ส่งคำขอเพิ่ม</p>
+    </div>
+  </details>
 
   <main class="ed-layout">
     <aside class="ed-left">
@@ -1028,6 +1065,65 @@ document.addEventListener('DOMContentLoaded',()=>{
 <script src="/goldx-pro.js" defer></script>
 <script src="/goldx4.js" defer></script>
 <script src="/editorial-bold.js" defer></script>
+<script id="gx-health-script">
+/* UI-only status from the existing quote event. No duplicate fetches. */
+(()=>{
+'use strict';
+const el=id=>document.getElementById(id);
+const box=el('gx-health'); if(!box)return;
+let latest=null,receivedAt=0,failed=false;
+const stamp=value=>{if(!value)return null;const d=new Date(value);return Number.isFinite(+d)?+d:null};
+const time=value=>{const t=stamp(value);return t===null?'ไม่ระบุเวลา':new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit',hour12:false}).format(t)};
+const dateKey=t=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Bangkok',year:'numeric',month:'2-digit',day:'2-digit'}).format(t);
+const yes=n=>typeof n==='number'&&Number.isFinite(n)&&n>0;
+function setPart(id,tone,label,when){
+  const node=el('gx-health-'+id);node.textContent=label;node.dataset.health=tone;
+  el('gx-health-'+id+'-time').textContent=when;
+  return tone;
+}
+function repaint(){
+ if(failed){box.dataset.health='bad';el('gx-health-summary').textContent='เชื่อมต่อ API ไม่สำเร็จ';el('gx-health-meta').textContent='คำขอล่าสุดล้มเหลว · ตัวเลขบนเว็บอาจเป็นข้อมูลก่อนหน้า';return}
+ if(!latest){box.dataset.health='warn';el('gx-health-summary').textContent='กำลังตรวจสอบข้อมูล';return}
+ const now=Date.now(),d=latest,thai=d.thai,world=d.world,fx=d.fx;
+ const thaiAt=stamp(thai?.updatedAt), worldAt=stamp(world?.updatedAt);
+ const thaiValid=yes(thai?.sellBar)&&thaiAt!==null;
+ const thaiIsToday=thaiValid&&dateKey(thaiAt)===dateKey(now)&&thai?.stale!==true&&thai?.announcedToday!==false;
+ const th=setPart('thai',!thaiValid?'bad':thaiIsToday?'ok':'warn',
+   !thaiValid?'ไม่มีข้อมูล':thaiIsToday?'ประกาศวันนี้':'ประกาศก่อนหน้า',
+   'ประกาศ '+time(thai?.updatedAt));
+ const wAge=worldAt===null?Infinity:now-worldAt;
+ const wValid=yes(world?.price)&&worldAt!==null;
+ const wFresh=wValid&&!world?.stale&&wAge>=-300000&&wAge<=180000;
+ const w=setPart('world',!wValid?'bad':wFresh?'ok':'warn',
+   !wValid?'ไม่มีข้อมูล':wFresh?'ข้อมูลล่าสุด':'ข้อมูลล่าช้า',
+   'ข้อมูล ณ '+time(world?.updatedAt));
+ const fxVal=fx?.usdThb ?? thai?.fx ?? world?.fxUsdThb;
+ const rateType=fx?.rateType;
+ const fxAt=fx?.asOf||(yes(thai?.fx)?thai?.updatedAt:world?.updatedAt);
+ const fxDateOnly=typeof fxAt==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(fxAt);
+ const fxT=stamp(fxDateOnly?fxAt+'T12:00:00+07:00':fxAt);
+ const fxAge=fxT===null?Infinity:now-fxT;
+ const fxValid=yes(fxVal)&&fxT!==null;
+ const daily=rateType==='daily-reference';
+ const fxFresh=fxValid&&!daily&&fxAge>=-300000&&fxAge<=180000;
+ const x=setPart('fx',!fxValid?'bad':daily?'warn':fxFresh?'ok':'warn',
+   !fxValid?'ไม่มีข้อมูล':daily?'เรตรายวัน':fxFresh?'ข้อมูลล่าสุด':'เรตอ้างอิง / อาจล่าช้า',
+   fxDateOnly?'อ้างอิงวันที่ '+fxAt:'ข้อมูล ณ '+time(fxAt));
+ const failedParts=[th,w,x].filter(t=>t==='bad').length;
+ const warnings=[th,w,x].filter(t=>t==='warn').length;
+ const responseAge=now-receivedAt;
+ const delayed=responseAge>150000;
+ box.dataset.health=failedParts?'bad':warnings||delayed?'warn':'ok';
+ el('gx-health-summary').textContent=failedParts?failedParts+' แหล่งข้อมูลไม่พร้อม':delayed?'ไม่ได้ตรวจใหม่เกิน 2.5 นาที':warnings?warnings+' รายการต้องตรวจสอบ':'ข้อมูลพร้อมใช้งาน';
+ const checked=new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit',hour12:false}).format(receivedAt);
+ el('gx-health-meta').textContent='รับผล API ล่าสุด '+checked+' น. · ตรวจสถานะทุก 30 วินาทีโดยไม่เรียก API เพิ่ม · ราคาประกาศไทยไม่ได้วิ่งทุกวินาที';
+}
+document.addEventListener('goldx:quotes',ev=>{latest=ev.detail;receivedAt=Date.now();failed=false;repaint()});
+document.addEventListener('goldx:quotes-error',()=>{failed=true;repaint()});
+setInterval(repaint,30000);
+repaint();
+})();
+</script>
 <script src="/ivory-ledger.js" defer></script>
 
 
