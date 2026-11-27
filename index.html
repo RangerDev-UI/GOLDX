@@ -82,33 +82,7 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-<style id="gx-live-css">
-/* GOLDX Bold Editorial — live card uses the same ivory, ink and red accents. */
-.ed .gx-live-panel{margin:15px 0 18px;padding:19px 21px 15px;background:#fffdfa;color:#171717;border:1px solid #d0c9c2;border-radius:4px;box-shadow:0 4px 8px #44302512;font-family:'Noto Sans Thai','DM Sans',system-ui,sans-serif}
-.ed .gx-live-header,.ed .gx-live-main,.ed .gx-live-foot{display:flex;justify-content:space-between;gap:18px}
-.ed .gx-live-header{align-items:center}
-.ed .gx-live-kicker{font-size:10px;letter-spacing:.12em;color:#b90008;font-weight:850}
-.ed .gx-live-header h2{font-size:clamp(18px,1.8vw,23px)!important;line-height:1.35;margin:5px 0 0!important;color:#171717!important;font-weight:850;letter-spacing:-.4px}
-.ed .gx-live-small{font-size:11px;font-weight:500;color:#776d66;letter-spacing:0}
-.ed .gx-live-indicator{font-size:10px;border:1px solid #cfc3b8;border-radius:3px;padding:7px 10px;color:#6c655e;white-space:nowrap;background:#faf7f2;font-weight:700}
-.ed .gx-live-indicator.gx-connected{border-color:#a1c6b1;color:#24774f;background:#edf8ef}
-.ed .gx-live-indicator.gx-stale{border-color:#e2c9a4;color:#9f6d2d;background:#fff8ed}
-.ed .gx-live-main{align-items:center;margin-top:15px}
-.ed .gx-live-main>div:first-child{flex:1;min-width:0}
-.ed .gx-live-label{font-size:11px;color:#77706a;font-weight:600}
-.ed .gx-live-value{display:flex;align-items:baseline;gap:10px;margin:5px 0}
-.ed .gx-live-value strong{font-family:'DM Sans','Noto Sans Thai',system-ui,sans-serif;font-size:clamp(30px,4.2vw,46px);letter-spacing:-.04em;line-height:1.2;color:#131313;white-space:nowrap;font-weight:850;font-variant-numeric:tabular-nums}
-.ed .gx-live-value span{font-size:13px;color:#77706a}
-.ed .gx-live-change{font-size:11px;color:#77706a}
-.ed .gx-live-change.up{color:#207a4b}.ed .gx-live-change.down{color:#c4000e}
-.ed .gx-live-chart-wrap{width:43%;min-width:150px;max-width:380px}
-.ed .gx-live-chart-wrap svg{width:100%;height:105px;display:block;background:linear-gradient(0deg,#fbf8f2,transparent)}
-.ed .gx-live-chart-caption{font-size:10px;color:#847b73}
-.ed .gx-live-foot{border-top:1px solid #ded5ca;padding-top:13px;margin-top:17px;flex-wrap:wrap;font-size:11px;color:#77706a}
-.ed .gx-live-foot strong{color:#181818;margin-left:4px;font-weight:800}
-.ed .gx-live-disclaimer{font-size:10px;color:#776f69;line-height:1.6;margin:12px 0 0}
-@media(max-width:620px){.ed .gx-live-panel{padding:15px}.ed .gx-live-header{align-items:flex-start}.ed .gx-live-header h2{font-size:17px!important}.ed .gx-live-main{display:block}.ed .gx-live-chart-wrap{width:100%;max-width:none;margin-top:14px}.ed .gx-live-chart-wrap svg{height:80px}.ed .gx-live-value strong{font-size:36px}}
-</style>
+
 </head>
 <body class="ivory-enabled">
 <svg width="0" height="0" aria-hidden="true" class="svg-defs" xmlns="http://www.w3.org/2000/svg"><defs>
@@ -191,22 +165,6 @@ body{background:radial-gradient(ellipse 72% 30% at 72% -5%,#ba914518,transparent
           <div class="ed-main-move" id="edOrnDaily" aria-live="polite">รอตรวจราคาวันก่อนหน้า</div>
           <div class="ed-spread">ส่วนต่างรับซื้อ–ขายออก <strong id="edOrnSpread">—</strong></div>
         </article>
-      </section>
-
-      <section class="gx-live-panel" id="gx-live-thai" aria-labelledby="gx-live-heading">
-        <div class="gx-live-header">
-          <div><span class="gx-live-kicker">GOLDX · THAI GOLD LIVE</span><h2 id="gx-live-heading">ราคาทองไทยเคลื่อนไหว <span class="gx-live-small">96.5% · ประมาณการ</span></h2></div>
-          <span class="gx-live-indicator" id="gx-live-status">กำลังตรวจข้อมูล</span>
-        </div>
-        <div class="gx-live-main">
-          <div><div class="gx-live-label">ราคาประมาณการต่อ 1 บาททองคำ</div><div class="gx-live-value"><strong id="gx-live-price">—</strong><span>บาท</span></div>
-          <div class="gx-live-change" id="gx-live-change">รอ Gold Spot และ USD/THB</div></div>
-          <div class="gx-live-chart-wrap"><svg id="gx-live-chart" viewBox="0 0 360 112" role="img" aria-label="เส้นราคาโดยประมาณระหว่างเปิดหน้านี้" preserveAspectRatio="none"><path id="gx-live-area" fill="rgba(40,155,114,.12)"></path><polyline id="gx-live-line" fill="none" stroke="#23996d" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"></polyline></svg><span class="gx-live-chart-caption">กราฟจากจุดข้อมูลจริงขณะเปิดหน้านี้</span></div>
-        </div>
-        <div class="gx-live-foot">
-          <span>ราคาประกาศสมาคม <strong id="gx-live-official">—</strong></span><span>Spot <strong id="gx-live-spot">—</strong></span><span>USD/THB <strong id="gx-live-fx">—</strong></span>
-        </div>
-        <p class="gx-live-disclaimer" id="gx-live-note">ราคาประมาณการอิงการเปลี่ยนแปลงของ Spot และค่าเงินจากจุดอ้างอิงเริ่มต้น ไม่ใช่ราคาซื้อขายจริง · รอข้อมูลใหม่เพื่อเปลี่ยนราคา</p>
       </section>
 
       <section class="ed-secondary-row" aria-label="ทองโลกและอัตราแลกเปลี่ยน">
@@ -1072,76 +1030,6 @@ document.addEventListener('DOMContentLoaded',()=>{
 <script src="/editorial-bold.js" defer></script>
 <script src="/ivory-ledger.js" defer></script>
 
-<script id="gx-live-js">
-(() => {
-  'use strict';
-  const $=id=>document.getElementById(id);
-  const panel=$('gx-live-thai'); if(!panel)return;
-  const fmt=(n,d=2)=>Number(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});
-  const valid=n=>Number.isFinite(Number(n))&&Number(n)>0;
-  const samples=[];
-  let baseline=null, previous=null, busy=false;
-  function draw(){
-    const line=$('gx-live-line'),area=$('gx-live-area');
-    if(samples.length<2){line.setAttribute('points','');area.setAttribute('d','');return}
-    const values=samples.map(s=>s.v), lo=Math.min(...values),hi=Math.max(...values),range=Math.max(hi-lo,1);
-    const xy=values.map((v,i)=>[i*360/(values.length-1),9+(hi-v)*90/range]);
-    line.setAttribute('points',xy.map(p=>p.join(',')).join(' '));
-    area.setAttribute('d','M'+xy.map(p=>p.join(' ')).join(' L')+' L360 112 L0 112Z');
-    const goingUp=values.at(-1)>=values[0];
-    line.setAttribute('stroke',goingUp?'#46c596':'#ed918a');
-    area.setAttribute('fill',goingUp?'rgba(40,155,114,.13)':'rgba(214,104,95,.12)');
-  }
-  function status(label,klass=''){
-    $('gx-live-status').textContent=label;
-    $('gx-live-status').className='gx-live-indicator '+klass;
-  }
-  async function poll(){
-    if(busy)return;busy=true;
-    try{
-      const res=await fetch('/api/market?mode=quotes',{cache:'no-store'});
-      if(!res.ok)throw Error('ราคาไม่พร้อม');
-      const data=await res.json(),thai=data.thai,world=data.world;
-      const spot=Number(world?.price);
-      const fx=Number(data.fx?.usdThb||thai?.fx||world?.fxUsdThb);
-      if(valid(thai?.sellBar))$('gx-live-official').textContent=fmt(thai.sellBar);
-      $('gx-live-spot').textContent=valid(spot)?'
-</html>+fmt(spot):'—';
-      $('gx-live-fx').textContent=valid(fx)?fmt(fx,3):'—';
-      const time=Date.parse(world?.updatedAt||'');
-      const fresh=world?.stale!==true&&Number.isFinite(time)&&Date.now()-time<180000;
-      if(!valid(thai?.sellBar)||!valid(spot)||!valid(fx)||!fresh){
-        status('ข้อมูลไม่สด','gx-stale');
-        $('gx-live-note').textContent='ข้อมูล Gold Spot ไม่พร้อมหรือเก่าเกิน 3 นาที · หยุดคำนวณและคงราคาล่าสุดไว้ (ไม่สร้างราคาจำลอง)';
-        return;
-      }
-      const stamp=String(thai.updatedAt||'')+'|'+String(thai.sellBar);
-      if(!baseline||baseline.stamp!==stamp){
-        baseline={stamp,thai:Number(thai.sellBar),product:spot*fx};samples.length=0;previous=null;
-      }
-      // Approximate change since the initial observed reference, not a dealer price.
-      const estimate=baseline.thai*(spot*fx/baseline.product);
-      if(!Number.isFinite(estimate)||estimate<=0)throw Error('คำนวณไม่ได้');
-      const last=previous;
-      if(last!==estimate){
-        samples.push({v:estimate,t:Date.now()});if(samples.length>60)samples.shift();
-        draw();previous=estimate;
-      }
-      $('gx-live-price').textContent=fmt(estimate);
-      const delta=estimate-baseline.thai;
-      const change=$('gx-live-change');change.className='gx-live-change '+(delta>0?'up':delta<0?'down':'');
-      change.textContent=(delta>0?'+':delta<0?'−':'')+fmt(Math.abs(delta))+' บาท ('+(delta>=0?'+':'')+(delta/baseline.thai*100).toFixed(2)+'%) จากจุดอ้างอิง';
-      status('เชื่อมต่อข้อมูลแล้ว','gx-connected');
-      const when=new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(time));
-      $('gx-live-note').textContent='ราคาประมาณการจากราคาประกาศ ณ จุดอ้างอิง × การเปลี่ยนแปลง Spot และ USD/THB · ไม่ใช่ราคาซื้อขายจริง · ราคาตลาดล่าสุด '+when+' น. · ตรวจข้อมูลทุก 30 วินาที';
-    }catch(e){
-      status('เชื่อมต่อไม่ได้','gx-stale');
-      $('gx-live-note').textContent='ไม่สามารถดึงข้อมูลตลาดได้ในขณะนี้ · ระบบไม่สร้างราคาเพิ่มเอง';
-    }finally{busy=false}
-  }
-  poll();setInterval(()=>{if(!document.hidden)poll()},30000);
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden)poll()});
-})();
-</script>
+
 </body>
 </html>
