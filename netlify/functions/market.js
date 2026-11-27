@@ -72,7 +72,7 @@ async function thaiQuote() {
   };
 }
 async function worldQuote() {
-  let lastError;
+  let lastError, fallbackStale=null;
   try {
     const d = await json('https://xaus.com/api/v1/spot?compact=1');
     const price = num(d.spot_usd_oz);
@@ -84,7 +84,8 @@ async function worldQuote() {
       sourceType:'indicative', perGram:num(d.per_gram_usd), silver:num(d.silver_usd_oz),
       ratio:num(d.gold_silver_ratio), fxUsdThb:num(d.fx_rates?.THB) };
     if(!quality.validateWorld(quote)) throw new Error('XAUS quote failed validation');
-    return quote;
+    if(!quote.stale)return quote;
+    fallbackStale=quote; // Check secondary source if primary data is old.
   } catch(e) { lastError=e; }
   try {
     const d = await json('https://api.gold-api.com/price/XAU');
@@ -95,8 +96,9 @@ async function worldQuote() {
       source:'Gold API · XAU/USD', sourceUrl:'https://gold-api.com/docs',
       sourceType:'indicative', perGram:price/31.1034768, silver:null, ratio:null, fxUsdThb:null };
     if(!quality.validateWorld(quote))throw new Error('Gold API quote failed validation');
+    if(fallbackStale && (quote.stale || Date.parse(quote.updatedAt)<Date.parse(fallbackStale.updatedAt)))return fallbackStale;
     return quote;
-  } catch(e) { throw new Error(`World providers unavailable: ${lastError?.message}; ${e.message}`); }
+  } catch(e) { if(fallbackStale)return fallbackStale; throw new Error(`World providers unavailable: ${lastError?.message}; ${e.message}`); }
 }
 async function fxReference(){
   // Daily reference only; not a live executable FX rate.
@@ -114,13 +116,14 @@ async function quotes() {
   const thai = quality.validateThai(rawThai) ? rawThai : null;
   const world = quality.validateWorld(rawWorld) ? rawWorld : null;
   let fx=null;
-  if(isPositive(thai?.fx))fx={usdThb:thai.fx,asOf:thai.updatedAt,source:thai.source,sourceUrl:thai.sourceUrl,rateType:'provider-quote'};
-  else if(isPositive(world?.fxUsdThb))fx={usdThb:world.fxUsdThb,asOf:world.updatedAt,source:world.source,sourceUrl:world.sourceUrl,rateType:'provider-quote'};
-  else{
-    try{fx=await fxReference();}
+  const fxCandidates=[];
+  if(isPositive(thai?.fx))fxCandidates.push({usdThb:thai.fx,asOf:thai.updatedAt,source:thai.source,sourceUrl:thai.sourceUrl,rateType:'provider-quote'});
+  if(isPositive(world?.fxUsdThb))fxCandidates.push({usdThb:world.fxUsdThb,asOf:world.updatedAt,source:world.source,sourceUrl:world.sourceUrl,rateType:'provider-quote'});
+  fx=fxCandidates.find(candidate=>quality.validateFx(candidate))||null;
+  if(!fx){
+    try{const daily=await fxReference();if(quality.validateFx(daily))fx=daily;}
     catch(e){console.warn('FX reference unavailable:',e.message);}
   }
-  if(!quality.validateFx(fx))fx=null;
   const checkedAt=new Date().toISOString();
   const dataHealth=quality.health(thai,world,fx);
   return response({ fetchedAt:checkedAt, checkedAt, thai, world, fx, health:dataHealth,
