@@ -3,6 +3,7 @@
  */
 'use strict';
 const thaiFeed = require('./thai-feed.js');
+const quality = require('./quote-quality.js');
 const TTL = { quotes: 65, chart: 280, thaiHistory: 300 };
 const PERIODS = {
   '1D': { range: '1d', interval: '5m' },
@@ -79,18 +80,22 @@ async function worldQuote() {
     const asOf = validTime(d.price_as_of || d.data_state?.as_of || d.updated_at);
     const stale = d.stale === true || d.data_state?.status === 'stale' ||
       (asOf ? Date.now() - Date.parse(asOf) > 180000 : true);
-    return { price, updatedAt:asOf, stale, source:'XAUS · XAU/USD', sourceUrl:'https://xaus.com/api/',
+    const quote={ price, updatedAt:asOf, stale, source:'XAUS · XAU/USD', sourceUrl:'https://xaus.com/api/',
       sourceType:'indicative', perGram:num(d.per_gram_usd), silver:num(d.silver_usd_oz),
       ratio:num(d.gold_silver_ratio), fxUsdThb:num(d.fx_rates?.THB) };
+    if(!quality.validateWorld(quote)) throw new Error('XAUS quote failed validation');
+    return quote;
   } catch(e) { lastError=e; }
   try {
     const d = await json('https://api.gold-api.com/price/XAU');
     const price = num(d.price);
     if (!isPositive(price)) throw new Error('Gold-API invalid price');
     const asOf = validTime(d.updatedAt || d.updated_at);
-    return { price, updatedAt:asOf, stale:!asOf || Date.now()-Date.parse(asOf)>180000,
+    const quote={ price, updatedAt:asOf, stale:!asOf || Date.now()-Date.parse(asOf)>180000,
       source:'Gold API · XAU/USD', sourceUrl:'https://gold-api.com/docs',
       sourceType:'indicative', perGram:price/31.1034768, silver:null, ratio:null, fxUsdThb:null };
+    if(!quality.validateWorld(quote))throw new Error('Gold API quote failed validation');
+    return quote;
   } catch(e) { throw new Error(`World providers unavailable: ${lastError?.message}; ${e.message}`); }
 }
 async function fxReference(){
@@ -104,8 +109,10 @@ async function fxReference(){
 }
 async function quotes() {
   const [thaiResult, worldResult] = await Promise.allSettled([thaiFeed.quote(json),worldQuote()]);
-  const thai = thaiResult.status === 'fulfilled' ? thaiResult.value : null;
-  const world = worldResult.status === 'fulfilled' ? worldResult.value : null;
+  const rawThai = thaiResult.status === 'fulfilled' ? thaiResult.value : null;
+  const rawWorld = worldResult.status === 'fulfilled' ? worldResult.value : null;
+  const thai = quality.validateThai(rawThai) ? rawThai : null;
+  const world = quality.validateWorld(rawWorld) ? rawWorld : null;
   let fx=null;
   if(isPositive(thai?.fx))fx={usdThb:thai.fx,asOf:thai.updatedAt,source:thai.source,sourceUrl:thai.sourceUrl,rateType:'provider-quote'};
   else if(isPositive(world?.fxUsdThb))fx={usdThb:world.fxUsdThb,asOf:world.updatedAt,source:world.source,sourceUrl:world.sourceUrl,rateType:'provider-quote'};
@@ -113,7 +120,10 @@ async function quotes() {
     try{fx=await fxReference();}
     catch(e){console.warn('FX reference unavailable:',e.message);}
   }
-  return response({ fetchedAt:new Date().toISOString(), thai, world, fx,
+  if(!quality.validateFx(fx))fx=null;
+  const checkedAt=new Date().toISOString();
+  const dataHealth=quality.health(thai,world,fx);
+  return response({ fetchedAt:checkedAt, checkedAt, thai, world, fx, health:dataHealth,
     warnings:{thai:thai?.stale ? 'ประกาศล่าสุดที่ตรวจสอบได้เป็นประกาศก่อนหน้า ไม่ใช่ราคาประกาศวันนี้' : null},
     errors:{ thai:thai ? null : 'ไม่สามารถดึงราคาทองไทยจากแหล่งข้อมูลได้',
       world:world ? null : 'ไม่สามารถดึงราคาทองโลกจากแหล่งข้อมูลได้' }
