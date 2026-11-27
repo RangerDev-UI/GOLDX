@@ -167,6 +167,7 @@ async function refresh(manual=false){
   paint(data);
   void loadPrevious(data.thai);
  }catch(error){
+  document.dispatchEvent(new CustomEvent('goldx:quotes-error',{detail:{message:'quote fetch failed'}}));
   setStatus(state.last?'เชื่อมต่อไม่ได้ · ข้อมูลเก่า':'เชื่อมต่อไม่ได้','bad');
   const warning=el('ilNotice');
   if(warning){warning.hidden=false;warning.textContent=state.last?'ไม่สามารถตรวจข้อมูลใหม่ได้ ตัวเลขที่แสดงเป็นข้อมูลที่ได้รับก่อนหน้า ไม่ใช่ราคาปัจจุบัน':'ไม่สามารถดึงราคาทองได้ในขณะนี้ โปรดตรวจการเชื่อมต่อและลองอีกครั้ง';}
