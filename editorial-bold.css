@@ -212,7 +212,7 @@ body.ivory-enabled .ivory-ledger.ed{max-width:1480px;padding-inline:clamp(18px,3
 .ed .ed-nav a{transform:none;border-radius:5px;font-size:12px;font-weight:750;padding:10px 13px}
 .ed .ed-nav a span{transform:none}
 .ed .ed-nav a.ed-active{background:#ba0711}
-.ed .ed-layout{grid-template-columns:minmax(0,28%) minmax(0,72%);gap:clamp(20px,2.8vw,40px);padding-top:29px}
+.ed .ed-layout{grid-template-columns:minmax(0,28fr) minmax(0,72fr);gap:clamp(20px,2.8vw,40px);padding-top:29px}
 .ed .ed-hero{min-height:0;display:block;padding:12px 0 0}
 .ed .ed-hero h1{font-size:clamp(38px,4vw,65px);letter-spacing:-2.1px;line-height:1.15;white-space:normal}
 .ed .ed-hero h1 em{font-size:clamp(40px,4.2vw,70px);line-height:1.16}
@@ -248,7 +248,7 @@ body.ivory-enabled .ivory-ledger.ed{max-width:1480px;padding-inline:clamp(18px,3
 .ed .ed-source-strip{margin-top:13px;border-top-color:#e4ddd5}
 .ed .gx-health{border-color:#e7e0d8;background:#fffdfa;box-shadow:none}
 @media(max-width:1050px){
- .ed .ed-layout{grid-template-columns:minmax(0,31%) minmax(0,69%);gap:18px}
+ .ed .ed-layout{grid-template-columns:minmax(0,31fr) minmax(0,69fr);gap:18px}
  .ed .ed-hero h1{font-size:clamp(35px,4.4vw,53px)}
  .ed .ed-hero h1 em{font-size:clamp(38px,5vw,59px)}
  .ed .ed-up-arrow{font-size:44px}
