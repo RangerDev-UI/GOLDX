@@ -32,6 +32,8 @@ function staleWorld(q){
 function fxQuote(d){
  const raw=d?.fx;
  if(positive(raw?.usdThb))return {value:raw.usdThb,source:raw.source||'แหล่งข้อมูลอัตราแลกเปลี่ยน',asOf:raw.asOf||null,daily:raw.rateType==='daily-reference'};
+ // Never show rejected upstream FX values.
+ if(d?.health)return null;
  if(positive(d?.thai?.fx))return {value:d.thai.fx,source:d.thai.source||'ผู้ให้บริการทองไทย',asOf:d.thai.updatedAt,daily:false};
  if(positive(d?.world?.fxUsdThb))return {value:d.world.fxUsdThb,source:d.world.source||'ผู้ให้บริการทองโลก',asOf:d.world.updatedAt,daily:false};
  return null;
@@ -118,6 +120,7 @@ async function loadPrevious(quote){
 }
 function paint(d){
  const thai=d?.thai,world=d?.world,fx=fxQuote(d);
+ const quality=d?.health?.fields||{};
  write('ilThaiSell',priceTH(thai?.sellBar));
  write('ilThaiBuy',priceTH(thai?.buyBar));
  write('ilWorldSpot',positive(world?.price)?'$'+fmt(world.price,2):'—');
@@ -138,10 +141,12 @@ function paint(d){
   el('ilNotice').hidden=false;
  }else{
   const warnings=[];
-  if(thValid&&staleThai(thai))warnings.push('ทองไทยเป็นประกาศก่อนหน้า');
-  if(worldValid&&staleWorld(world))warnings.push('ทองโลกอาจล่าช้า');
+  if(thValid&&(quality.thai==='stale'||staleThai(thai)))warnings.push('ทองไทยเป็นประกาศก่อนหน้า');
+  if(worldValid&&(quality.world==='stale'||staleWorld(world)))warnings.push('ทองโลกอาจล่าช้า');
   if(!thValid)warnings.push('ราคาทองไทยไม่พร้อม');
   if(!worldValid)warnings.push('ราคาทองโลกไม่พร้อม');
+   if(quality.fx==='unavailable')warnings.push('ค่าเงินไม่พร้อม');
+   if(['stale','reference'].includes(quality.fx))warnings.push('ค่าเงินเป็นข้อมูลอ้างอิงหรืออาจล่าช้า');
   setStatus(warnings.length?'ข้อมูลบางส่วนอาจล่าช้า':'ข้อมูลพร้อมใช้งาน',warnings.length?'warning':'ok');
   const notice=el('ilNotice');
   if(notice){notice.hidden=!warnings.length;if(warnings.length)notice.textContent=warnings.join(' · ')+' · ตรวจสอบเวลาและแหล่งข้อมูลก่อนนำไปใช้';}
