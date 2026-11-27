@@ -1086,24 +1086,24 @@ function repaint(){
  if(!latest){box.dataset.health='warn';el('gx-health-summary').textContent='กำลังตรวจสอบข้อมูล';return}
  const now=Date.now(),d=latest,thai=d.thai,world=d.world,fx=d.fx;
  const thaiAt=stamp(thai?.updatedAt), worldAt=stamp(world?.updatedAt);
- const thaiValid=yes(thai?.sellBar)&&thaiAt!==null;
+ const thaiValid=yes(thai?.sellBar)&&thaiAt!==null&&d.health?.fields?.thai!=='unavailable';
  const thaiIsToday=thaiValid&&dateKey(thaiAt)===dateKey(now)&&thai?.stale!==true&&thai?.announcedToday!==false;
  const th=setPart('thai',!thaiValid?'bad':thaiIsToday?'ok':'warn',
    !thaiValid?'ไม่มีข้อมูล':thaiIsToday?'ประกาศวันนี้':'ประกาศก่อนหน้า',
    'ประกาศ '+time(thai?.updatedAt));
  const wAge=worldAt===null?Infinity:now-worldAt;
- const wValid=yes(world?.price)&&worldAt!==null;
+ const wValid=yes(world?.price)&&worldAt!==null&&d.health?.fields?.world!=='unavailable';
  const wFresh=wValid&&!world?.stale&&wAge>=-300000&&wAge<=180000;
  const w=setPart('world',!wValid?'bad':wFresh?'ok':'warn',
    !wValid?'ไม่มีข้อมูล':wFresh?'ข้อมูลล่าสุด':'ข้อมูลล่าช้า',
    'ข้อมูล ณ '+time(world?.updatedAt));
- const fxVal=fx?.usdThb ?? thai?.fx ?? world?.fxUsdThb;
+ const fxVal=fx?.usdThb ?? (d.health?null:(thai?.fx ?? world?.fxUsdThb));
  const rateType=fx?.rateType;
  const fxAt=fx?.asOf||(yes(thai?.fx)?thai?.updatedAt:world?.updatedAt);
  const fxDateOnly=typeof fxAt==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(fxAt);
  const fxT=stamp(fxDateOnly?fxAt+'T12:00:00+07:00':fxAt);
  const fxAge=fxT===null?Infinity:now-fxT;
- const fxValid=yes(fxVal)&&fxT!==null;
+ const fxValid=yes(fxVal)&&fxT!==null&&d.health?.fields?.fx!=='unavailable';
  const daily=rateType==='daily-reference';
  const fxFresh=fxValid&&!daily&&fxAge>=-300000&&fxAge<=180000;
  const x=setPart('fx',!fxValid?'bad':daily?'warn':fxFresh?'ok':'warn',
@@ -1116,7 +1116,8 @@ function repaint(){
  box.dataset.health=failedParts?'bad':warnings||delayed?'warn':'ok';
  el('gx-health-summary').textContent=failedParts?failedParts+' แหล่งข้อมูลไม่พร้อม':delayed?'ไม่ได้ตรวจใหม่เกิน 2.5 นาที':warnings?warnings+' รายการต้องตรวจสอบ':'ข้อมูลพร้อมใช้งาน';
  const checked=new Intl.DateTimeFormat('th-TH',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit',hour12:false}).format(receivedAt);
- el('gx-health-meta').textContent='รับผล API ล่าสุด '+checked+' น. · ตรวจสถานะทุก 30 วินาทีโดยไม่เรียก API เพิ่ม · ราคาประกาศไทยไม่ได้วิ่งทุกวินาที';
+ const checkedSource=d.checkedAt||d.fetchedAt;
+  el('gx-health-meta').textContent='เซิร์ฟเวอร์ตรวจข้อมูล '+time(checkedSource)+' · หน้าเว็บรับผล '+checked+' น. · เวลาประกาศแสดงแยกตามแหล่ง';
 }
 document.addEventListener('goldx:quotes',ev=>{latest=ev.detail;receivedAt=Date.now();failed=false;repaint()});
 document.addEventListener('goldx:quotes-error',()=>{failed=true;repaint()});
